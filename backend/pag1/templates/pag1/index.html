@@ -1,0 +1,1445 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAIXAO MODAS - Loja de Roupas Femininas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rosa-claro': '#f9c8d0',
+                        'rosa-escuro': '#f4a6b3',
+                        'rosa-hover': '#f0b8c2'
+                    }
+                }
+            }
+        }
+    </script>
+  <link rel="stylesheet" href="{% static 'pag1/styles.css' %}">
+  <script src="{% static 'pag1/scripts.js' %}"></script>
+  
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Cabeçalho Fixo -->
+    <header class="fixed top-0 left-0 right-0 bg-white shadow-lg z-50 border-b-2 border-rosa-claro">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <!-- Espaço para Logo da Loja -->
+                    <div class="w-16 h-16 bg-gradient-to-br from-rosa-claro to-rosa-escuro rounded-xl flex items-center justify-center border-2 border-white shadow-lg">
+                        <span class="text-white font-bold text-2xl">LOGO</span>
+                    </div>
+                    <h1 class="text-3xl font-bold bg-gradient-to-r from-rosa-escuro to-pink-600 bg-clip-text text-transparent">
+                        PAIXAO MODAS
+                    </h1>
+                </div>
+                
+                <!-- Barra de Pesquisa e Filtros -->
+                <div class="flex-1 max-w-2xl mx-6">
+                    <div class="flex items-center space-x-3">
+                                                 <!-- Barra de Pesquisa -->
+                         <div class="flex-1 relative">
+                             <input 
+                                 type="text" 
+                                 id="searchInput"
+                                 placeholder="Buscar roupas..." 
+                                 class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-full focus:outline-none focus:border-rosa-claro focus:ring-2 focus:ring-rosa-claro/20 transition-all duration-300 text-lg"
+                                 autocomplete="off"
+                             >
+                             <svg class="absolute left-4 top-3 w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                             </svg>
+                             
+                             <!-- Dropdown de Sugestões -->
+                             <div id="searchSuggestions" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-80 overflow-y-auto z-50 hidden">
+                                 <!-- Sugestões serão inseridas aqui -->
+                             </div>
+                         </div>
+                        
+                        <!-- Filtro de Categoria -->
+                        <select id="categoryFilter" class="px-6 py-3 border-2 border-gray-200 rounded-full focus:outline-none focus:border-rosa-claro focus:ring-2 focus:ring-rosa-claro/20 transition-all duration-300 text-lg bg-white min-w-[180px]">
+                            <option value="">Todas as categorias</option>
+                            <option value="vestido">Vestidos</option>
+                            <option value="calca">Calças</option>
+                            <option value="blusa">Blusas</option>
+                            <option value="saia">Saias</option>
+                            <option value="conjunto">Conjuntos</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="pt-24 pb-16">
+        <div class="container mx-auto px-4">
+                         <!-- Seção de Destaque - Novidades -->
+             <section class="mb-20">
+                 <div class="text-center mb-12 fade-in sticky top-24 z-40 bg-gray-50 py-6 -mx-4 px-4">
+                     <h2 class="text-5xl font-bold bg-gradient-to-r from-rosa-escuro to-pink-600 bg-clip-text text-transparent mb-4 mt-16">
+                         ✨ NOVIDADES DA COLEÇÃO ✨
+                     </h2>
+                     <p class="text-xl text-gray-600 max-w-3xl mx-auto">As peças mais desejadas e tendências da temporada</p>
+                 </div>
+                
+                                <!-- Carrossel de Cards de Destaque -->
+                <div class="relative overflow-hidden rounded-2xl mb-16">
+                    <!-- Container do Carrossel -->
+                    <div id="carouselContainer" class="flex transition-transform duration-700 ease-in-out">
+                        <!-- Slide 1 - Vestido de Festa -->
+                        <div class="featured-card group min-w-full">
+                            <div class="card-container relative overflow-hidden rounded-2xl shadow-2xl">
+                                <!-- Efeito de brilho -->
+                                <div class="shine-effect"></div>
+                                
+                                <!-- Imagem de Fundo -->
+                                <div class="h-96 bg-gradient-to-br from-rosa-claro via-pink-200 to-rosa-escuro relative">
+                                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-500"></div>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <span class="text-white font-bold text-2xl opacity-80">VESTIDO DE FESTA</span>
+                                    </div>
+                                    <!-- Elementos decorativos flutuantes -->
+                                    <div class="absolute top-4 right-4 bg-white/90 text-rosa-escuro px-3 py-1 rounded-full text-sm font-bold tag-pulse">
+                                        NOVO
+                                    </div>
+                                    <div class="absolute bottom-4 left-4 bg-white/90 text-rosa-escuro px-3 py-1 rounded-full text-sm font-bold">
+                                        R$ 299,90
+                                    </div>
+                                </div>
+                                
+                                <!-- Overlay com informações -->
+                                <div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100">
+                                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                        <h3 class="text-2xl font-bold mb-2">Vestido Longo Elegante</h3>
+                                        <p class="text-white/90 mb-4">Perfeito para eventos especiais e festas</p>
+                                        <div class="flex items-center space-x-2 mb-4">
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">P</span>
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">M</span>
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">G</span>
+                                        </div>
+                                        <button 
+                                            onclick="abrirWhatsApp('Vestido Longo Elegante')"
+                                            class="action-button bg-white text-rosa-escuro px-6 py-3 rounded-full font-bold hover:bg-rosa-claro"
+                                        >
+                                            💫 Comprar Agora
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Slide 2 - Conjunto Casual -->
+                        <div class="featured-card group min-w-full">
+                            <div class="card-container relative overflow-hidden rounded-2xl shadow-2xl">
+                                <!-- Efeito de brilho -->
+                                <div class="shine-effect"></div>
+                                
+                                <!-- Imagem de Fundo -->
+                                <div class="h-96 bg-gradient-to-br from-blue-200 via-purple-200 to-pink-200 relative">
+                                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-500"></div>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <span class="text-gray-800 font-bold text-2xl opacity-80">CONJUNTO CASUAL</span>
+                                    </div>
+                                    <!-- Elementos decorativos flutuantes -->
+                                    <div class="absolute top-4 right-4 bg-white/90 text-purple-600 px-3 py-1 rounded-full text-sm font-bold tag-bounce">
+                                        TRENDING
+                                    </div>
+                                    <div class="absolute bottom-4 left-4 bg-white/90 text-purple-600 px-3 py-1 rounded-full text-sm font-bold">
+                                        R$ 189,90
+                                    </div>
+                                </div>
+                                
+                                <!-- Overlay com informações -->
+                                <div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100">
+                                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                        <h3 class="text-2xl font-bold mb-2">Conjunto Sport Elegante</h3>
+                                        <p class="text-white/90 mb-4">Conforto e estilo para o dia a dia</p>
+                                        <div class="flex items-center space-x-2 mb-4">
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">M</span>
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">G</span>
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">GG</span>
+                                        </div>
+                                        <button 
+                                            onclick="abrirWhatsApp('Conjunto Sport Elegante')"
+                                            class="action-button bg-white text-purple-600 px-6 py-3 rounded-full font-bold hover:bg-purple-100"
+                                        >
+                                            🚀 Comprar Agora
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Slide 3 - Calça Premium -->
+                        <div class="featured-card group min-w-full">
+                            <div class="card-container relative overflow-hidden rounded-2xl shadow-2xl">
+                                <!-- Efeito de brilho -->
+                                <div class="shine-effect"></div>
+                                
+                                <!-- Imagem de Fundo -->
+                                <div class="h-96 bg-gradient-to-r from-amber-200 via-orange-200 to-red-200 relative">
+                                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-500"></div>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <span class="text-gray-800 font-bold text-3xl opacity-80">CALÇA PREMIUM</span>
+                                    </div>
+                                    <!-- Elementos decorativos flutuantes -->
+                                    <div class="absolute top-4 right-4 bg-white/90 text-orange-600 px-3 py-1 rounded-full text-sm font-bold tag-ping">
+                                        EXCLUSIVO
+                                    </div>
+                                    <div class="absolute bottom-4 left-4 bg-white/90 text-orange-600 px-3 py-1 rounded-full text-sm font-bold">
+                                        R$ 249,90
+                                    </div>
+                                </div>
+                                
+                                <!-- Overlay com informações -->
+                                <div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100">
+                                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                        <h3 class="text-2xl font-bold mb-2">Calça Palazzo Premium</h3>
+                                        <p class="text-white/90 mb-4">Elegância e sofisticação em cada detalhe</p>
+                                        <div class="flex items-center space-x-2 mb-4">
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">P</span>
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">M</span>
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">G</span>
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">GG</span>
+                                        </div>
+                                        <button 
+                                            onclick="abrirWhatsApp('Calça Palazzo Premium')"
+                                            class="action-button bg-white text-orange-600 px-6 py-3 rounded-full font-bold hover:bg-orange-100"
+                                        >
+                                            ⭐ Comprar Agora
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Slide 4 - Blusa de Luxo -->
+                        <div class="featured-card group min-w-full">
+                            <div class="card-container relative overflow-hidden rounded-2xl shadow-2xl">
+                                <!-- Efeito de brilho -->
+                                <div class="shine-effect"></div>
+                                
+                                <!-- Imagem de Fundo -->
+                                <div class="h-96 bg-gradient-to-br from-emerald-200 via-teal-200 to-cyan-200 relative">
+                                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-500"></div>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <span class="text-gray-800 font-bold text-2xl opacity-80">BLUSA DE LUXO</span>
+                                    </div>
+                                    <!-- Elementos decorativos flutuantes -->
+                                    <div class="absolute top-4 right-4 bg-white/90 text-teal-600 px-3 py-1 rounded-full text-sm font-bold tag-pulse">
+                                        PREMIUM
+                                    </div>
+                                    <div class="absolute bottom-4 left-4 bg-white/90 text-teal-600 px-3 py-1 rounded-full text-sm font-bold">
+                                        R$ 179,90
+                                    </div>
+                                </div>
+                                
+                                <!-- Overlay com informações -->
+                                <div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100">
+                                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                        <h3 class="text-2xl font-bold mb-2">Blusa de Seda Premium</h3>
+                                        <p class="text-white/90 mb-4">Elegância e sofisticação para ocasiões especiais</p>
+                                        <div class="flex items-center space-x-2 mb-4">
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">P</span>
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">M</span>
+                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">G</span>
+                                        </div>
+                                        <button 
+                                            onclick="abrirWhatsApp('Blusa de Seda Premium')"
+                                            class="action-button bg-white text-teal-600 px-6 py-3 rounded-full font-bold hover:bg-teal-100"
+                                        >
+                                            ✨ Comprar Agora
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Botões de Navegação -->
+                    <button id="prevBtn" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    
+                    <button id="nextBtn" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Indicadores de Slide -->
+                    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+                        <button class="w-3 h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator active" data-slide="0"></button>
+                        <button class="w-3 h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator" data-slide="1"></button>
+                        <button class="w-3 h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator" data-slide="2"></button>
+                        <button class="w-3 h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator" data-slide="3"></button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Título da Seção -->
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Nossa Coleção</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Descubra as últimas tendências em moda feminina com qualidade e estilo incomparáveis</p>
+            </div>
+
+            <!-- Grid de Produtos -->
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Os produtos serão inseridos aqui via JavaScript -->
+            </div>
+
+            <!-- Mensagem quando não há produtos -->
+            <div id="noProducts" class="hidden text-center py-12">
+                <div class="text-gray-400 text-6xl mb-4">👗</div>
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">Nenhum produto encontrado</h3>
+                <p class="text-gray-500">Tente ajustar os filtros ou a busca</p>
+            </div>
+        </div>
+    </main>
+
+         <!-- Modal de Seleção de Tamanho -->
+     <div id="sizeModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+             <div class="flex items-center justify-between mb-4">
+                 <h3 class="text-xl font-bold text-gray-800">Selecionar Tamanho</h3>
+                 <button onclick="fecharModalTamanho()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+             </div>
+             
+             <div id="modalContent" class="space-y-4">
+                 <!-- Conteúdo será inserido via JavaScript -->
+             </div>
+         </div>
+     </div>
+     
+     <!-- Carrinho Flutuante -->
+     <div id="carrinhoFlutuante" class="fixed bottom-6 right-6 z-40">
+         <div class="bg-white rounded-full shadow-2xl border-2 border-rosa-claro p-4 cursor-pointer hover:scale-110 transition-all duration-300" onclick="abrirCarrinho()">
+             <div class="relative">
+                 <svg class="w-8 h-8 text-rosa-escuro" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                 </svg>
+                 <span id="carrinhoContador" class="absolute -top-2 -right-2 bg-rosa-escuro text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold">0</span>
+             </div>
+         </div>
+     </div>
+     
+     <!-- Modal do Carrinho -->
+     <div id="carrinhoModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+         <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+             <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                 <h3 class="text-2xl font-bold text-gray-800">🛒 Seu Carrinho</h3>
+                 <button onclick="fecharCarrinho()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+             </div>
+             
+             <div id="carrinhoItens" class="p-6 max-h-96 overflow-y-auto">
+                 <!-- Itens do carrinho serão inseridos aqui -->
+             </div>
+             
+             <div class="p-6 border-t border-gray-200 bg-gray-50">
+                 <div class="flex items-center justify-between mb-4">
+                     <span class="text-lg font-semibold text-gray-800">Total:</span>
+                     <span id="carrinhoTotal" class="text-2xl font-bold text-rosa-escuro">R$ 0,00</span>
+                 </div>
+                 
+                 <button id="btnFinalizarCompra" onclick="finalizarCompra()" class="w-full bg-gradient-to-r from-rosa-claro to-rosa-escuro hover:from-rosa-escuro hover:to-pink-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                     💬 Finalizar Compra no WhatsApp
+                 </button>
+             </div>
+         </div>
+     </div>
+     
+     <!-- Rodapé -->
+     <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Sobre -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-rosa-claro">PAIXAO MODAS</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Sua loja de confiança para roupas femininas elegantes e modernas. 
+                        Qualidade e estilo em cada peça.
+                    </p>
+                </div>
+                
+                <!-- Redes Sociais -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-rosa-claro">Redes Sociais</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-rosa-claro transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-rosa-claro transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-rosa-claro transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Contato -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-rosa-claro">Contato</h4>
+                    <p class="text-gray-300 mb-2">📧 contato@pmodas.com</p>
+                    <p class="text-gray-300 mb-2">📱 (11) 99999-9999</p>
+                    <p class="text-gray-300">📍 São Paulo, SP</p>
+                </div>
+            </div>
+            
+            <!-- Direitos Autorais -->
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 PAIXAO MODAS. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+  <script>
+      // Dados dos produtos
+  const produtos = [
+    {
+        id: 1,
+        nome: "Vestido Floral Elegante",
+        preco: 89.90,
+        categoria: "vestido",
+        tamanhos: ["P", "M", "G", "GG"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 2,
+        nome: "Calça Jeans Skinny",
+        preco: 129.90,
+        categoria: "calca",
+        tamanhos: ["P", "M", "G"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 3,
+        nome: "Blusa de Seda Premium",
+        preco: 69.90,
+        categoria: "blusa",
+        tamanhos: ["P", "M", "G", "GG"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 4,
+        nome: "Saia Midi Plissada",
+        preco: 79.90,
+        categoria: "saia",
+        tamanhos: ["P", "M", "G"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 5,
+        nome: "Conjunto Sport Elegante",
+        preco: 149.90,
+        categoria: "conjunto",
+        tamanhos: ["M", "G", "GG"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 6,
+        nome: "Vestido Longo de Festa",
+        preco: 199.90,
+        categoria: "vestido",
+        tamanhos: ["P", "M", "G"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 7,
+        nome: "Calça Palazzo Premium",
+        preco: 159.90,
+        categoria: "calca",
+        tamanhos: ["P", "M", "G", "GG"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 8,
+        nome: "Blusa Crop Top Casual",
+        preco: 49.90,
+        categoria: "blusa",
+        tamanhos: ["P", "M", "G"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 9,
+        nome: "Vestido Curto Casual",
+        preco: 119.90,
+        categoria: "vestido",
+        tamanhos: ["P", "M", "G", "GG"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 10,
+        nome: "Calça Reta Elegante",
+        preco: 139.90,
+        categoria: "calca",
+        tamanhos: ["P", "M", "G"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 11,
+        nome: "Blusa de Luxo Festiva",
+        preco: 179.90,
+        categoria: "blusa",
+        tamanhos: ["P", "M", "G", "GG"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 12,
+        nome: "Saia Longa Elegante",
+        preco: 99.90,
+        categoria: "saia",
+        tamanhos: ["P", "M", "G"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 13,
+        nome: "Conjunto de Festa",
+        preco: 229.90,
+        categoria: "conjunto",
+        tamanhos: ["M", "G", "GG"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 14,
+        nome: "Vestido de Seda",
+        preco: 159.90,
+        categoria: "vestido",
+        tamanhos: ["P", "M", "G"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 15,
+        nome: "Calça Jeans Reta",
+        preco: 119.90,
+        categoria: "calca",
+        tamanhos: ["P", "M", "G", "GG"],
+        imagem: "FOTO AQUI"
+    },
+    {
+        id: 16,
+        nome: "Blusa Crop Top Festiva",
+        preco: 89.90,
+        categoria: "blusa",
+        tamanhos: ["P", "M", "G"],
+        imagem: "FOTO AQUI"
+    }
+];
+
+// Elementos do DOM
+const productsGrid = document.getElementById('productsGrid');
+const searchInput = document.getElementById('searchInput');
+const categoryFilter = document.getElementById('categoryFilter');
+const noProducts = document.getElementById('noProducts');
+
+// Função para formatar preço
+function formatarPreco(preco) {
+    return preco.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+}
+
+         // Sistema de Carrinho
+ let carrinho = [];
+ let produtoSelecionado = null;
+ 
+ // Função para abrir WhatsApp
+ function abrirWhatsApp(nomeProduto) {
+     const mensagem = encodeURIComponent(`Olá! Tenho interesse no produto ${nomeProduto}. Pode me dar mais informações?`);
+     const numeroWhatsApp = '5589994077754'; // Substitua pelo número real
+     window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
+ }
+ 
+ // Função para adicionar produto ao carrinho
+ function adicionarAoCarrinho(produtoId) {
+     const produto = produtos.find(p => p.id === produtoId);
+     if (produto) {
+         produtoSelecionado = produto;
+         abrirModalTamanho();
+     }
+ }
+ 
+ // Função para abrir modal de seleção de tamanho
+ function abrirModalTamanho() {
+     const modal = document.getElementById('sizeModal');
+     const modalContent = document.getElementById('modalContent');
+     
+     modalContent.innerHTML = `
+         <div class="text-center mb-4">
+             <h4 class="text-lg font-semibold text-gray-800 mb-2">${produtoSelecionado.nome}</h4>
+             <p class="text-2xl font-bold text-rosa-escuro">${formatarPreco(produtoSelecionado.preco)}</p>
+         </div>
+         
+         <div class="mb-4">
+             <p class="text-sm text-gray-600 mb-3">Selecione o tamanho:</p>
+             <div class="grid grid-cols-2 gap-3">
+                 ${produtoSelecionado.tamanhos.map(tamanho => `
+                     <button 
+                         onclick="selecionarTamanho('${tamanho}')"
+                         class="py-3 px-4 border-2 border-gray-200 rounded-lg hover:border-rosa-claro hover:bg-rosa-claro/10 transition-all duration-300 text-gray-700 font-medium hover:text-rosa-escuro"
+                     >
+                         ${tamanho}
+                     </button>
+                 `).join('')}
+             </div>
+         </div>
+         
+         <div class="flex space-x-3">
+             <button 
+                 onclick="fecharModalTamanho()"
+                 class="flex-1 py-3 px-4 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300"
+             >
+                 Cancelar
+             </button>
+         </div>
+     `;
+     
+     modal.classList.remove('hidden');
+ }
+ 
+ // Função para fechar modal de tamanho
+ function fecharModalTamanho() {
+     document.getElementById('sizeModal').classList.add('hidden');
+     produtoSelecionado = null;
+ }
+ 
+ // Função para selecionar tamanho e adicionar ao carrinho
+ function selecionarTamanho(tamanho) {
+     if (produtoSelecionado) {
+         const itemCarrinho = {
+             id: produtoSelecionado.id,
+             nome: produtoSelecionado.nome,
+             preco: produtoSelecionado.preco,
+             tamanho: tamanho,
+             categoria: produtoSelecionado.categoria,
+             quantidade: 1
+         };
+         
+         // Verificar se o produto já está no carrinho com o mesmo tamanho
+         const itemExistente = carrinho.find(item => 
+             item.id === itemCarrinho.id && item.tamanho === itemCarrinho.tamanho
+         );
+         
+         if (itemExistente) {
+             itemExistente.quantidade += 1;
+         } else {
+             carrinho.push(itemCarrinho);
+         }
+         
+         atualizarCarrinho();
+         fecharModalTamanho();
+         
+         // Mostrar notificação
+         mostrarNotificacao('Produto adicionado ao carrinho!');
+     }
+ }
+ 
+ // Função para mostrar notificação
+ function mostrarNotificacao(mensagem) {
+     const notificacao = document.createElement('div');
+     notificacao.className = 'fixed top-6 right-6 bg-rosa-claro text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+     notificacao.textContent = mensagem;
+     
+     document.body.appendChild(notificacao);
+     
+     setTimeout(() => {
+         notificacao.style.transform = 'translateX(0)';
+     }, 100);
+     
+     setTimeout(() => {
+         notificacao.style.transform = 'translateX-full';
+         setTimeout(() => {
+             document.body.removeChild(notificacao);
+         }, 300);
+     }, 3000);
+ }
+ 
+ // Função para atualizar carrinho
+ function atualizarCarrinho() {
+     const contador = document.getElementById('carrinhoContador');
+     const total = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
+     
+     contador.textContent = total;
+     contador.classList.toggle('hidden', total === 0);
+     
+     // Salvar no localStorage
+     localStorage.setItem('carrinho', JSON.stringify(carrinho));
+ }
+ 
+ // Função para abrir carrinho
+ function abrirCarrinho() {
+     if (carrinho.length === 0) {
+         mostrarNotificacao('Seu carrinho está vazio!');
+         return;
+     }
+     
+     const modal = document.getElementById('carrinhoModal');
+     const carrinhoItens = document.getElementById('carrinhoItens');
+     const carrinhoTotal = document.getElementById('carrinhoTotal');
+     const btnFinalizar = document.getElementById('btnFinalizarCompra');
+     
+     // Renderizar itens do carrinho
+     carrinhoItens.innerHTML = carrinho.map((item, index) => `
+         <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 mb-3">
+             <div class="flex-1">
+                 <h4 class="font-semibold text-gray-800">${item.nome}</h4>
+                 <p class="text-sm text-gray-600">Tamanho: ${item.tamanho} | Categoria: ${item.categoria}</p>
+                 <p class="text-rosa-escuro font-semibold">${formatarPreco(item.preco)}</p>
+             </div>
+             
+             <div class="flex items-center space-x-3">
+                 <div class="flex items-center space-x-2">
+                     <button 
+                         onclick="alterarQuantidade(${index}, -1)"
+                         class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors duration-200"
+                     >
+                         <span class="text-gray-600 font-bold">-</span>
+                     </button>
+                     <span class="w-8 text-center font-semibold">${item.quantidade}</span>
+                     <button 
+                         onclick="alterarQuantidade(${index}, 1)"
+                         class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors duration-200"
+                     >
+                         <span class="text-gray-600 font-bold">+</span>
+                     </button>
+                 </div>
+                 
+                 <button 
+                     onclick="removerItem(${index})"
+                     class="text-red-500 hover:text-red-700 transition-colors duration-200"
+                 >
+                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                     </svg>
+                 </button>
+             </div>
+         </div>
+     `).join('');
+     
+     // Calcular e mostrar total
+     const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+     carrinhoTotal.textContent = formatarPreco(total);
+     
+     // Habilitar/desabilitar botão de finalizar
+     btnFinalizar.disabled = carrinho.length === 0;
+     
+     modal.classList.remove('hidden');
+ }
+ 
+ // Função para fechar carrinho
+ function fecharCarrinho() {
+     document.getElementById('carrinhoModal').classList.add('hidden');
+ }
+ 
+ // Função para alterar quantidade
+ function alterarQuantidade(index, delta) {
+     const item = carrinho[index];
+     const novaQuantidade = item.quantidade + delta;
+     
+     if (novaQuantidade <= 0) {
+         removerItem(index);
+     } else {
+         item.quantidade = novaQuantidade;
+         atualizarCarrinho();
+         
+         // Atualizar display do carrinho se estiver aberto
+         if (!document.getElementById('carrinhoModal').classList.contains('hidden')) {
+             abrirCarrinho();
+         }
+     }
+ }
+ 
+ // Função para remover item
+ function removerItem(index) {
+     carrinho.splice(index, 1);
+     atualizarCarrinho();
+     
+     // Atualizar display do carrinho se estiver aberto
+     if (!document.getElementById('carrinhoModal').classList.contains('hidden')) {
+         abrirCarrinho();
+     }
+ }
+ 
+ // Função para finalizar compra
+ function finalizarCompra() {
+     if (carrinho.length === 0) return;
+     
+     const numeroWhatsApp = '5589994077754'; // Substitua pelo número real
+     
+     // Criar mensagem detalhada
+     let mensagem = `🛍️ *PAIXAO MODAS - Pedido*\n\n`;
+     mensagem += `Olá! Gostaria de fazer um pedido com os seguintes itens:\n\n`;
+     
+     carrinho.forEach((item, index) => {
+         mensagem += `${index + 1}. *${item.nome}*\n`;
+         mensagem += `   • Tamanho: ${item.tamanho}\n`;
+         mensagem += `   • Categoria: ${item.categoria}\n`;
+         mensagem += `   • Quantidade: ${item.quantidade}\n`;
+         mensagem += `   • Preço: ${formatarPreco(item.preco)}\n`;
+         mensagem += `   • Subtotal: ${formatarPreco(item.preco * item.quantidade)}\n\n`;
+     });
+     
+     const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+     mensagem += `💰 *TOTAL: ${formatarPreco(total)}*\n\n`;
+     mensagem += `❓ *Perguntas:*\n`;
+     mensagem += `• Todos os tamanhos estão disponíveis?\n`;
+     mensagem += `• Qual o prazo de entrega?\n`;
+     mensagem += `• Formas de pagamento aceitas?\n\n`;
+     mensagem += `Aguardo retorno! 😊`;
+     
+     const mensagemCodificada = encodeURIComponent(mensagem);
+     window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`, '_blank');
+     
+     // Limpar carrinho após envio
+     carrinho = [];
+     atualizarCarrinho();
+     fecharCarrinho();
+     
+     mostrarNotificacao('Pedido enviado com sucesso!');
+ }
+
+// Função para renderizar produtos com destaque de busca
+function renderizarProdutos(produtosFiltrados) {
+    if (produtosFiltrados.length === 0) {
+        productsGrid.classList.add('hidden');
+        noProducts.classList.remove('hidden');
+        return;
+    }
+
+    productsGrid.classList.remove('hidden');
+    noProducts.classList.add('hidden');
+
+    const termoBusca = searchInput.value.toLowerCase().trim();
+
+    productsGrid.innerHTML = produtosFiltrados.map(produto => {
+        // Destacar o termo de busca no nome do produto
+        let nomeDestacado = produto.nome;
+        if (termoBusca.length > 0) {
+            const regex = new RegExp(`(${termoBusca})`, 'gi');
+            nomeDestacado = produto.nome.replace(regex, '<mark class="bg-yellow-200 text-gray-800 px-1 rounded">$1</mark>');
+        }
+
+        return `
+            <div class="card-hover bg-white rounded-xl shadow-md overflow-hidden fade-in">
+                <!-- Imagem do Produto -->
+                <div class="image-hover bg-gray-200 h-64 flex items-center justify-center">
+                    <span class="text-gray-500 font-medium">${produto.imagem}</span>
+                </div>
+                
+                <!-- Informações do Produto -->
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">${nomeDestacado}</h3>
+                    <p class="text-2xl font-bold text-rosa-escuro mb-3">${formatarPreco(produto.preco)}</p>
+                    
+                    <!-- Categoria destacada -->
+                    <div class="mb-3">
+                        <span class="px-3 py-1 bg-rosa-claro/20 text-rosa-escuro rounded-full text-xs font-medium">
+                            ${produto.categoria.charAt(0).toUpperCase() + produto.categoria.slice(1)}
+                        </span>
+                    </div>
+                    
+                    <!-- Tamanhos -->
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-600 mb-2">Tamanhos disponíveis:</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${produto.tamanhos.map(tamanho => 
+                                `<span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">${tamanho}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    
+                                                 <!-- Botão Adicionar ao Carrinho -->
+                     <button 
+                         onclick="adicionarAoCarrinho(${produto.id})"
+                         class="w-full bg-gradient-to-r from-rosa-claro to-rosa-escuro hover:from-rosa-escuro hover:to-pink-500 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                     >
+                         🛒 Adicionar ao Carrinho
+                     </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Função para filtrar produtos com busca inteligente
+function filtrarProdutos() {
+    const termoBusca = searchInput.value.toLowerCase().trim();
+    const categoriaSelecionada = categoryFilter.value;
+    
+    let produtosFiltrados = produtos;
+    
+    // Se há termo de busca, aplicar filtro inteligente
+    if (termoBusca.length > 0) {
+        produtosFiltrados = produtos.filter(produto => {
+            const nomeProduto = produto.nome.toLowerCase();
+            const categoriaProduto = produto.categoria;
+            
+            // Busca por palavra-chave no nome
+            const matchNome = nomeProduto.includes(termoBusca);
+            
+            // Busca por categoria relacionada
+            const matchCategoria = categoriaProduto.includes(termoBusca);
+            
+            // Busca por palavras-chave relacionadas
+            const palavrasChave = {
+                'vestido': ['vestido', 'dress', 'festa', 'elegante', 'longo', 'curto', 'floral'],
+                'calca': ['calça', 'calca', 'pants', 'jeans', 'skinny', 'palazzo', 'reta'],
+                'blusa': ['blusa', 'blouse', 'seda', 'crop', 'top', 'elegante', 'casual'],
+                'saia': ['saia', 'skirt', 'midi', 'plissada', 'longa', 'curta'],
+                'conjunto': ['conjunto', 'set', 'sport', 'casual', 'elegante']
+            };
+            
+            // Verificar se o termo de busca está nas palavras-chave da categoria
+            let matchPalavrasChave = false;
+            if (palavrasChave[categoriaProduto]) {
+                matchPalavrasChave = palavrasChave[categoriaProduto].some(palavra => 
+                    palavra.includes(termoBusca) || termoBusca.includes(palavra)
+                );
+            }
+            
+            // Busca por características especiais
+            const caracteristicas = ['novo', 'trending', 'exclusivo', 'premium', 'luxo', 'elegante', 'casual', 'festa'];
+            const matchCaracteristicas = caracteristicas.some(caracteristica => 
+                caracteristica.includes(termoBusca) || termoBusca.includes(caracteristica)
+            );
+            
+            return matchNome || matchCategoria || matchPalavrasChave || matchCaracteristicas;
+        });
+    }
+    
+    // Aplicar filtro de categoria se selecionado
+    if (categoriaSelecionada) {
+        produtosFiltrados = produtosFiltrados.filter(produto => 
+            produto.categoria === categoriaSelecionada
+        );
+    }
+    
+    // Ordenar resultados por relevância
+    if (termoBusca.length > 0) {
+        produtosFiltrados.sort((a, b) => {
+            const nomeA = a.nome.toLowerCase();
+            const nomeB = b.nome.toLowerCase();
+            
+            // Priorizar produtos que começam com o termo de busca
+            const aStartsWith = nomeA.startsWith(termoBusca);
+            const bStartsWith = nomeB.startsWith(termoBusca);
+            
+            if (aStartsWith && !bStartsWith) return -1;
+            if (!aStartsWith && bStartsWith) return 1;
+            
+            // Priorizar produtos com o termo no início do nome
+            const aIndex = nomeA.indexOf(termoBusca);
+            const bIndex = nomeB.indexOf(termoBusca);
+            
+            if (aIndex !== bIndex) return aIndex - bIndex;
+            
+            // Ordenar por preço (mais barato primeiro)
+            return a.preco - b.preco;
+        });
+    }
+    
+    renderizarProdutos(produtosFiltrados);
+    
+    // Mostrar contador de resultados
+    mostrarContadorResultados(produtosFiltrados.length, termoBusca);
+}
+
+// Função para mostrar contador de resultados
+function mostrarContadorResultados(total, termoBusca) {
+    let contadorElement = document.getElementById('resultadosContador');
+    
+    if (!contadorElement) {
+        contadorElement = document.createElement('div');
+        contadorElement.id = 'resultadosContador';
+        contadorElement.className = 'text-center mb-6 text-gray-600';
+        document.getElementById('productsGrid').parentNode.insertBefore(contadorElement, document.getElementById('productsGrid'));
+    }
+    
+    if (termoBusca.length > 0) {
+        if (total === 0) {
+            contadorElement.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="text-gray-400 text-6xl mb-4">🔍</div>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">Nenhum resultado encontrado</h3>
+                    <p class="text-gray-500">Não encontramos produtos para "${termoBusca}"</p>
+                    <p class="text-sm text-gray-400 mt-2">Tente usar termos como: vestido, calça, blusa, conjunto, etc.</p>
+                </div>
+            `;
+        } else {
+            contadorElement.innerHTML = `
+                <div class="flex items-center justify-center space-x-2 text-sm">
+                    <span class="text-rosa-escuro font-semibold">${total}</span>
+                    <span>produto${total > 1 ? 's' : ''} encontrado${total > 1 ? 's' : ''} para</span>
+                    <span class="text-rosa-escuro font-semibold">"${termoBusca}"</span>
+                </div>
+            `;
+        }
+    } else {
+        contadorElement.innerHTML = `
+            <div class="text-center text-sm text-gray-500">
+                Mostrando todos os ${total} produtos
+            </div>
+        `;
+    }
+}
+
+// Sistema de sugestões inteligentes
+let currentSuggestions = [];
+let selectedSuggestionIndex = -1;
+
+// Função para gerar sugestões inteligentes
+function gerarSugestoes(termo) {
+    if (termo.length < 2) return [];
+    
+    const sugestoes = [];
+    const termoLower = termo.toLowerCase();
+    
+    // Sugestões de produtos
+    produtos.forEach(produto => {
+        const nomeLower = produto.nome.toLowerCase();
+        if (nomeLower.includes(termoLower)) {
+            sugestoes.push({
+                tipo: 'produto',
+                texto: produto.nome,
+                categoria: produto.categoria,
+                preco: produto.preco,
+                termo: termo
+            });
+        }
+    });
+    
+    // Sugestões de categorias
+    const categorias = {
+        'vestido': 'Vestidos',
+        'calca': 'Calças',
+        'blusa': 'Blusas',
+        'saia': 'Saias',
+        'conjunto': 'Conjuntos'
+    };
+    
+    Object.entries(categorias).forEach(([key, value]) => {
+        if (key.includes(termoLower) || value.toLowerCase().includes(termoLower)) {
+            sugestoes.push({
+                tipo: 'categoria',
+                texto: value,
+                categoria: key,
+                termo: termo
+            });
+        }
+    });
+    
+    // Sugestões de características
+    const caracteristicas = [
+        'Elegante', 'Casual', 'Festa', 'Premium', 'Novo', 'Trending',
+        'Longo', 'Curto', 'Skinny', 'Palazzo', 'Floral', 'Seda'
+    ];
+    
+    caracteristicas.forEach(caracteristica => {
+        if (caracteristica.toLowerCase().includes(termoLower)) {
+            sugestoes.push({
+                tipo: 'caracteristica',
+                texto: caracteristica,
+                termo: termo
+            });
+        }
+    });
+    
+    // Ordenar por relevância
+    sugestoes.sort((a, b) => {
+        const aStartsWith = a.texto.toLowerCase().startsWith(termoLower);
+        const bStartsWith = b.texto.toLowerCase().startsWith(termoLower);
+        
+        if (aStartsWith && !bStartsWith) return -1;
+        if (!aStartsWith && bStartsWith) return 1;
+        
+        return a.texto.length - b.texto.length;
+    });
+    
+    return sugestoes.slice(0, 8); // Máximo 8 sugestões
+}
+
+         // Função para mostrar sugestões
+ function mostrarSugestoes(sugestoes) {
+     const suggestionsContainer = document.getElementById('searchSuggestions');
+     
+     if (sugestoes.length === 0) {
+         suggestionsContainer.classList.add('hidden');
+         return;
+     }
+     
+     const html = sugestoes.map((sugestao, index) => {
+         const textoDestacado = sugestao.texto.replace(
+             new RegExp(`(${sugestao.termo})`, 'gi'),
+             '<span class="suggestion-highlight">$1</span>'
+         );
+         
+         let categoriaTag = '';
+         if (sugestao.categoria) {
+             categoriaTag = `<span class="suggestion-category px-2 py-1 rounded-full text-xs ml-2">${sugestao.categoria}</span>`;
+         }
+         
+         let precoTag = '';
+         if (sugestao.preco) {
+             precoTag = `<span class="text-rosa-escuro font-semibold ml-2">${formatarPreco(sugestao.preco)}</span>`;
+         }
+         
+         // Adicionar foto da roupa para produtos
+         let fotoRoupa = '';
+         if (sugestao.tipo === 'produto') {
+             fotoRoupa = `
+                 <div class="foto-roupa w-12 h-12 bg-gradient-to-br from-rosa-claro to-rosa-escuro rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                     <span class="text-white font-bold text-xs">FOTO</span>
+                 </div>
+             `;
+         } else if (sugestao.tipo === 'categoria') {
+             fotoRoupa = `
+                 <div class="foto-roupa w-12 h-12 bg-gradient-to-br from-blue-200 to-purple-300 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                     <span class="text-white font-bold text-xs">📁</span>
+                 </div>
+             `;
+         } else {
+             fotoRoupa = `
+                 <div class="foto-roupa w-12 h-12 bg-gradient-to-br from-yellow-200 to-orange-300 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                     <span class="text-white font-bold text-xs">✨</span>
+                 </div>
+             `;
+         }
+         
+         return `
+             <div class="suggestion-item p-3 border-b border-gray-100 last:border-b-0 ${index === selectedSuggestionIndex ? 'selected' : ''}" 
+                  data-index="${index}" 
+                  data-tipo="${sugestao.tipo}" 
+                  data-texto="${sugestao.texto}">
+                 <div class="flex items-center">
+                     ${fotoRoupa}
+                     <div class="flex-1">
+                         <div class="flex items-center justify-between">
+                             <div class="flex items-center">
+                                 <span class="text-gray-800 font-medium">${textoDestacado}</span>
+                                 ${categoriaTag}
+                             </div>
+                             ${precoTag}
+                         </div>
+                         ${sugestao.tipo === 'produto' ? '<p class="text-xs text-gray-500 mt-1">Clique para ver detalhes</p>' : ''}
+                     </div>
+                 </div>
+             </div>
+         `;
+     }).join('');
+     
+     suggestionsContainer.innerHTML = html;
+     suggestionsContainer.classList.remove('hidden');
+     
+     // Adicionar event listeners para as sugestões
+     document.querySelectorAll('.suggestion-item').forEach((item, index) => {
+         item.addEventListener('click', () => {
+             const texto = item.getAttribute('data-texto');
+             const tipo = item.getAttribute('data-tipo');
+             
+             searchInput.value = texto;
+             suggestionsContainer.classList.add('hidden');
+             
+             // Executar busca
+             filtrarProdutos();
+             
+             // Focar na barra de pesquisa
+             searchInput.focus();
+         });
+         
+         item.addEventListener('mouseenter', () => {
+             selectedSuggestionIndex = index;
+             document.querySelectorAll('.suggestion-item').forEach(i => i.classList.remove('selected'));
+             item.classList.add('selected');
+         });
+     });
+ }
+
+// Função de debounce para otimizar a busca
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Event listeners para o sistema de sugestões
+searchInput.addEventListener('input', (e) => {
+    const termo = e.target.value.trim();
+    
+    if (termo.length >= 2) {
+        const sugestoes = gerarSugestoes(termo);
+        currentSuggestions = sugestoes;
+        mostrarSugestoes(sugestoes);
+        selectedSuggestionIndex = -1;
+    } else {
+        document.getElementById('searchSuggestions').classList.add('hidden');
+        currentSuggestions = [];
+        selectedSuggestionIndex = -1;
+    }
+    
+    // Executar busca com debounce
+    debounce(filtrarProdutos, 300)();
+});
+
+// Navegação por teclado nas sugestões
+searchInput.addEventListener('keydown', (e) => {
+    const suggestionsContainer = document.getElementById('searchSuggestions');
+    
+    if (!suggestionsContainer.classList.contains('hidden') && currentSuggestions.length > 0) {
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                selectedSuggestionIndex = Math.min(selectedSuggestionIndex + 1, currentSuggestions.length - 1);
+                atualizarSugestaoSelecionada();
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                selectedSuggestionIndex = Math.max(selectedSuggestionIndex - 1, -1);
+                atualizarSugestaoSelecionada();
+                break;
+            case 'Enter':
+                e.preventDefault();
+                if (selectedSuggestionIndex >= 0) {
+                    const sugestao = currentSuggestions[selectedSuggestionIndex];
+                    searchInput.value = sugestao.texto;
+                    suggestionsContainer.classList.add('hidden');
+                    filtrarProdutos();
+                }
+                break;
+            case 'Escape':
+                suggestionsContainer.classList.add('hidden');
+                selectedSuggestionIndex = -1;
+                searchInput.blur();
+                break;
+        }
+    }
+});
+
+// Função para atualizar a sugestão selecionada visualmente
+function atualizarSugestaoSelecionada() {
+    document.querySelectorAll('.suggestion-item').forEach((item, index) => {
+        item.classList.toggle('selected', index === selectedSuggestionIndex);
+    });
+}
+
+// Event listeners com debounce para melhor performance
+categoryFilter.addEventListener('change', filtrarProdutos);
+
+// Fechar dropdown quando clicar fora
+document.addEventListener('click', (e) => {
+    const searchContainer = searchInput.parentElement;
+    const suggestionsContainer = document.getElementById('searchSuggestions');
+    
+    if (!searchContainer.contains(e.target)) {
+        suggestionsContainer.classList.add('hidden');
+        selectedSuggestionIndex = -1;
+    }
+});
+
+// Focar na barra de pesquisa ao clicar
+searchInput.addEventListener('focus', () => {
+    const termo = searchInput.value.trim();
+    if (termo.length >= 2 && currentSuggestions.length > 0) {
+        mostrarSugestoes(currentSuggestions);
+    }
+});
+
+// Mostrar sugestões ao clicar na barra vazia
+searchInput.addEventListener('click', () => {
+    if (searchInput.value.trim().length === 0) {
+        // Mostrar sugestões populares
+        const sugestoesPopulares = [
+            { tipo: 'categoria', texto: 'Vestidos', categoria: 'vestido', termo: '' },
+            { tipo: 'categoria', texto: 'Calças', categoria: 'calca', termo: '' },
+            { tipo: 'categoria', texto: 'Blusas', categoria: 'blusa', termo: '' },
+            { tipo: 'caracteristica', texto: 'Elegante', termo: '' },
+            { tipo: 'caracteristica', texto: 'Casual', termo: '' },
+            { tipo: 'caracteristica', texto: 'Festa', termo: '' }
+        ];
+        currentSuggestions = sugestoesPopulares;
+        mostrarSugestoes(sugestoesPopulares);
+    }
+});
+
+         // Inicializar página
+ document.addEventListener('DOMContentLoaded', () => {
+     renderizarProdutos(produtos);
+     
+     // Carregar carrinho do localStorage
+     const carrinhoSalvo = localStorage.getItem('carrinho');
+     if (carrinhoSalvo) {
+         carrinho = JSON.parse(carrinhoSalvo);
+         atualizarCarrinho();
+     }
+     
+     // Adicionar animação de fade-in aos elementos
+     const observerOptions = {
+         threshold: 0.1,
+         rootMargin: '0px 0px -50px 0px'
+     };
+     
+     const observer = new IntersectionObserver((entries) => {
+         entries.forEach(entry => {
+             if (entry.isIntersecting) {
+                 entry.target.classList.add('fade-in');
+             }
+         });
+     }, observerOptions);
+     
+     // Observar todos os cards de produtos
+     document.querySelectorAll('.card-hover').forEach(card => {
+         observer.observe(card);
+     });
+     
+     // Fechar modais ao clicar fora
+     document.addEventListener('click', (e) => {
+         const sizeModal = document.getElementById('sizeModal');
+         const carrinhoModal = document.getElementById('carrinhoModal');
+         
+         if (e.target === sizeModal) {
+             fecharModalTamanho();
+         }
+         
+         if (e.target === carrinhoModal) {
+             fecharCarrinho();
+         }
+     });
+ });
+
+// Smooth scroll para links internos
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Carrossel automático dos cards de destaque
+document.addEventListener('DOMContentLoaded', () => {
+    const carouselContainer = document.getElementById('carouselContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const indicators = document.querySelectorAll('.slide-indicator');
+    
+    let currentSlide = 0;
+    const totalSlides = 4;
+    let autoPlayInterval;
+    
+    // Função para ir para um slide específico
+    function goToSlide(slideIndex) {
+        currentSlide = slideIndex;
+        const translateX = -slideIndex * 100;
+        carouselContainer.style.transform = `translateX(${translateX}%)`;
+        
+        // Atualizar indicadores
+        indicators.forEach((indicator, index) => {
+            if (index === slideIndex) {
+                indicator.classList.add('active');
+                indicator.classList.remove('bg-white/60');
+                indicator.classList.add('bg-white');
+            } else {
+                indicator.classList.remove('active');
+                indicator.classList.remove('bg-white');
+                indicator.classList.add('bg-white/60');
+            }
+        });
+    }
+    
+    // Função para próximo slide
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        goToSlide(currentSlide);
+    }
+    
+    // Função para slide anterior
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        goToSlide(currentSlide);
+    }
+    
+    // Iniciar autoplay
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(nextSlide, 2000); // 2 segundos
+    }
+    
+    // Parar autoplay
+    function stopAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+        }
+    }
+    
+    // Event listeners para botões de navegação
+    nextBtn.addEventListener('click', () => {
+        stopAutoPlay();
+        nextSlide();
+        startAutoPlay();
+    });
+    
+    prevBtn.addEventListener('click', () => {
+        stopAutoPlay();
+        prevSlide();
+        startAutoPlay();
+    });
+    
+    // Event listeners para indicadores
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            stopAutoPlay();
+            goToSlide(index);
+            startAutoPlay();
+        });
+    });
+    
+    // Pausar autoplay no hover
+    carouselContainer.addEventListener('mouseenter', stopAutoPlay);
+    carouselContainer.addEventListener('mouseleave', startAutoPlay);
+    
+    // Inicializar carrossel
+    goToSlide(0);
+    startAutoPlay();
+    
+    // Adicionar efeitos de entrada aos cards de destaque
+    const featuredCards = document.querySelectorAll('.featured-card');
+    
+    featuredCards.forEach((card, index) => {
+        // Delay escalonado para entrada dos cards
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.6, 1)';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 200);
+    });
+});
+
+  </script>
+</body>
+</html>

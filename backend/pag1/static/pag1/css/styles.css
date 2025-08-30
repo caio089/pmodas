@@ -1,0 +1,306 @@
+.fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.image-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover .image-hover {
+    transform: scale(1.05);
+}
+
+/* Estilos para os cards de destaque */
+.featured-card {
+    perspective: 1000px;
+    position: relative;
+}
+
+.featured-card .card-container {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.6, 1);
+    transform-origin: center;
+}
+
+.featured-card:hover .card-container {
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* Animações personalizadas para as tags */
+.featured-card .tag-pulse {
+    animation: customPulse 2s ease-in-out infinite;
+}
+
+.featured-card .tag-bounce {
+    animation: customBounce 1.5s ease-in-out infinite;
+}
+
+.featured-card .tag-ping {
+    animation: customPing 2s ease-in-out infinite;
+}
+
+@keyframes customPulse {
+    0%, 100% { 
+        opacity: 1; 
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.7; 
+        transform: scale(1.05);
+    }
+}
+
+@keyframes customBounce {
+    0%, 100% { 
+        transform: translateY(0); 
+    }
+    50% { 
+        transform: translateY(-8px); 
+    }
+}
+
+@keyframes customPing {
+    0% { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: scale(1.1); 
+        opacity: 0.8; 
+    }
+    100% { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
+}
+
+/* Efeito de brilho nos cards */
+.featured-card .shine-effect {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s ease-in-out;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.featured-card:hover .shine-effect {
+    left: 100%;
+}
+
+/* Melhorias no overlay */
+.featured-card .overlay {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.6, 1);
+    backdrop-filter: blur(2px);
+}
+
+/* Botões com melhor hover */
+.featured-card .action-button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.6, 1);
+    transform-origin: center;
+}
+
+.featured-card .action-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Estilos para o carrossel */
+#carouselContainer {
+    scroll-behavior: smooth;
+}
+
+.slide-indicator {
+    transition: all 0.3s ease;
+}
+
+.slide-indicator.active {
+    transform: scale(1.2);
+}
+
+.slide-indicator:hover {
+    transform: scale(1.3);
+}
+
+/* Botões de navegação com hover melhorado */
+#prevBtn, #nextBtn {
+    backdrop-filter: blur(10px);
+}
+
+#prevBtn:hover, #nextBtn:hover {
+    background-color: rgba(255, 255, 255, 0.95);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Animação sutil de movimento lateral nos cards */
+.featured-card .card-container {
+    animation: gentleSway 4s ease-in-out infinite;
+}
+
+.featured-card:nth-child(2) .card-container {
+    animation-delay: -1s;
+}
+
+.featured-card:nth-child(3) .card-container {
+    animation-delay: -2s;
+}
+
+.featured-card:nth-child(4) .card-container {
+    animation-delay: -3s;
+}
+
+@keyframes gentleSway {
+    0%, 100% { 
+        transform: translateX(0px); 
+    }
+    25% { 
+        transform: translateX(-3px); 
+    }
+    50% { 
+        transform: translateX(0px); 
+    }
+    75% { 
+        transform: translateX(3px); 
+    }
+}
+
+         /* Pausar animação no hover para melhor experiência */
+ .featured-card:hover .card-container {
+     animation-play-state: paused;
+ }
+ 
+ /* Estilos para o dropdown de sugestões */
+ .suggestion-item {
+     transition: all 0.2s ease;
+     cursor: pointer;
+ }
+ 
+ .suggestion-item:hover {
+     background-color: #fdf2f8;
+     transform: translateX(4px);
+ }
+ 
+ .suggestion-item.selected {
+     background-color: #fce7f3;
+     border-left: 3px solid #f4a6b3;
+ }
+ 
+ .suggestion-category {
+     background: linear-gradient(135deg, #f9c8d0, #f4a6b3);
+     color: white;
+     font-weight: 600;
+ }
+ 
+ .suggestion-highlight {
+     background-color: #fef3c7;
+     color: #92400e;
+     padding: 0 2px;
+     border-radius: 3px;
+     font-weight: 600;
+ }
+ 
+ /* Estilos para as fotos das roupas nas sugestões */
+ .suggestion-item .foto-roupa {
+     transition: all 0.3s ease;
+     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+ }
+ 
+ .suggestion-item:hover .foto-roupa {
+     transform: scale(1.05);
+     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+ }
+ 
+ .suggestion-item.selected .foto-roupa {
+     transform: scale(1.1);
+     box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+ }
+ 
+ /* Scrollbar personalizado para o dropdown */
+ #searchSuggestions::-webkit-scrollbar {
+     width: 6px;
+ }
+ 
+ #searchSuggestions::-webkit-scrollbar-track {
+     background: #f1f5f9;
+     border-radius: 3px;
+ }
+ 
+ #searchSuggestions::-webkit-scrollbar-thumb {
+     background: #cbd5e1;
+     border-radius: 3px;
+ }
+ 
+ #searchSuggestions::-webkit-scrollbar-thumb:hover {
+     background: #94a3b8;
+ }
+ 
+ /* Estilos para os modais */
+ .modal-backdrop {
+     backdrop-filter: blur(4px);
+ }
+ 
+ /* Animação de entrada dos modais */
+ #sizeModal > div,
+ #carrinhoModal > div {
+     animation: modalSlideIn 0.3s ease-out;
+ }
+ 
+ @keyframes modalSlideIn {
+     from {
+         opacity: 0;
+         transform: translateY(-20px) scale(0.95);
+     }
+     to {
+         opacity: 1;
+         transform: translateY(0) scale(1);
+     }
+ }
+ 
+ /* Estilos para os botões de tamanho */
+ .size-button {
+     transition: all 0.2s ease;
+ }
+ 
+ .size-button:hover {
+     transform: translateY(-2px);
+     box-shadow: 0 4px 12px rgba(244, 166, 179, 0.3);
+ }
+ 
+ /* Estilos para o carrinho flutuante */
+ #carrinhoFlutuante {
+     animation: bounceIn 0.6s ease-out;
+ }
+ 
+ @keyframes bounceIn {
+     0% {
+         opacity: 0;
+         transform: scale(0.3);
+     }
+     50% {
+         opacity: 1;
+         transform: scale(1.05);
+     }
+     70% {
+         transform: scale(0.9);
+     }
+     100% {
+         opacity: 1;
+         transform: scale(1);
+     }
+ }
