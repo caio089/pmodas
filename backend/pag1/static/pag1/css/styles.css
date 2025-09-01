@@ -304,3 +304,35 @@
          transform: scale(1);
      }
  }
+
+    /* Melhorar espaçamento entre elementos interativos */
+    .card-hover button {
+        margin-top: 0.5rem;
+    }
+
+
+/* Estilos específicos para mobile */
+@media (max-width: 768px) {
+    /* Garantir que o menu mobile seja visível */
+    #mobileMenu {
+        display: block !important;
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        margin-top: 0.5rem;
+        z-index: 1000;
+        position: relative;
+    }
+    
+    #mobileMenu.hidden {
+        display: none !important;
+    }
+    
+    /* Ajustes para sugestões mobile */
+    #searchSuggestionsMobile {
+        position: relative;
+        margin-top: 0.5rem;
+        max-height: 15rem;
+        z-index: 1001;
+    }
+}
