@@ -26,11 +26,31 @@
 <body class="bg-gray-50 font-sans">
     <!-- Cabeçalho Fixo -->
     <header class="fixed top-0 left-0 right-0 bg-white shadow-lg z-50 border-b-2 border-rosa-claro">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
-                <!-- Logo -->
+        <div class="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
+            <!-- Layout Mobile: Logo e Menu Hambúrguer -->
+            <div class="flex items-center justify-between lg:hidden">
+                <!-- Logo Mobile -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-12 h-12 bg-gradient-to-br from-rosa-claro to-rosa-escuro rounded-lg flex items-center justify-center border-2 border-white shadow-lg">
+                        <span class="text-white font-bold text-lg">LOGO</span>
+                    </div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-rosa-escuro to-pink-600 bg-clip-text text-transparent">
+                        PAIXAO MODAS
+                    </h1>
+                </div>
+                
+                <!-- Botão Menu Mobile -->
+                <button id="mobileMenuBtn" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Layout Desktop: Logo e Barra de Pesquisa -->
+            <div class="hidden lg:flex flex-row items-center justify-between space-y-0">
+                <!-- Logo Desktop -->
                 <div class="flex items-center space-x-3">
-                    <!-- Espaço para Logo da Loja -->
                     <div class="w-16 h-16 bg-gradient-to-br from-rosa-claro to-rosa-escuro rounded-xl flex items-center justify-center border-2 border-white shadow-lg">
                         <span class="text-white font-bold text-2xl">LOGO</span>
                     </div>
@@ -39,27 +59,27 @@
                     </h1>
                 </div>
                 
-                <!-- Barra de Pesquisa e Filtros -->
+                <!-- Barra de Pesquisa e Filtros Desktop -->
                 <div class="flex-1 max-w-2xl mx-6">
                     <div class="flex items-center space-x-3">
-                                                 <!-- Barra de Pesquisa -->
-                         <div class="flex-1 relative">
-                             <input 
-                                 type="text" 
-                                 id="searchInput"
-                                 placeholder="Buscar roupas..." 
-                                 class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-full focus:outline-none focus:border-rosa-claro focus:ring-2 focus:ring-rosa-claro/20 transition-all duration-300 text-lg"
-                                 autocomplete="off"
-                             >
-                             <svg class="absolute left-4 top-3 w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                             </svg>
-                             
-                             <!-- Dropdown de Sugestões -->
-                             <div id="searchSuggestions" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-80 overflow-y-auto z-50 hidden">
-                                 <!-- Sugestões serão inseridas aqui -->
-                             </div>
-                         </div>
+                        <!-- Barra de Pesquisa -->
+                        <div class="flex-1 relative">
+                            <input 
+                                type="text" 
+                                id="searchInput"
+                                placeholder="Buscar roupas..." 
+                                class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-full focus:outline-none focus:border-rosa-claro focus:ring-2 focus:ring-rosa-claro/20 transition-all duration-300 text-lg"
+                                autocomplete="off"
+                            >
+                            <svg class="absolute left-4 top-3 w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            
+                            <!-- Dropdown de Sugestões -->
+                            <div id="searchSuggestions" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-80 overflow-y-auto z-50 hidden">
+                                <!-- Sugestões serão inseridas aqui -->
+                            </div>
+                        </div>
                         
                         <!-- Filtro de Categoria -->
                         <select id="categoryFilter" class="px-6 py-3 border-2 border-gray-200 rounded-full focus:outline-none focus:border-rosa-claro focus:ring-2 focus:ring-rosa-claro/20 transition-all duration-300 text-lg bg-white min-w-[180px]">
@@ -74,58 +94,95 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Menu Mobile Expandido -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-200 shadow-lg">
+            <div class="container mx-auto px-3 py-4 space-y-4">
+                <!-- Barra de Pesquisa Mobile -->
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        id="searchInputMobile"
+                        placeholder="Buscar roupas..." 
+                        class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-full focus:outline-none focus:border-rosa-claro focus:ring-2 focus:ring-rosa-claro/20 transition-all duration-300 text-base"
+                        autocomplete="off"
+                    >
+                    <svg class="absolute left-4 top-3 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    
+                    <!-- Dropdown de Sugestões Mobile -->
+                    <div id="searchSuggestionsMobile" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-60 overflow-y-auto z-50 hidden">
+                        <!-- Sugestões serão inseridas aqui -->
+                    </div>
+                </div>
+                
+                <!-- Filtros Mobile -->
+                <div class="space-y-3">
+                    <label class="block text-sm font-medium text-gray-700">Categoria:</label>
+                    <select id="categoryFilterMobile" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-rosa-claro focus:ring-2 focus:ring-rosa-claro/20 transition-all duration-300 text-base bg-white">
+                        <option value="">Todas as categorias</option>
+                        <option value="vestido">Vestidos</option>
+                        <option value="calca">Calças</option>
+                        <option value="blusa">Blusas</option>
+                        <option value="saia">Saias</option>
+                        <option value="conjunto">Conjuntos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="pt-24 pb-16">
-        <div class="container mx-auto px-4">
-                         <!-- Seção de Destaque - Novidades -->
-             <section class="mb-20">
-                 <div class="text-center mb-12 fade-in sticky top-24 z-40 bg-gray-50 py-6 -mx-4 px-4">
-                     <h2 class="text-5xl font-bold bg-gradient-to-r from-rosa-escuro to-pink-600 bg-clip-text text-transparent mb-4 mt-16">
-                         ✨ NOVIDADES DA COLEÇÃO ✨
-                     </h2>
-                     <p class="text-xl text-gray-600 max-w-3xl mx-auto">As peças mais desejadas e tendências da temporada</p>
-                 </div>
+    <main class="pt-20 sm:pt-24 pb-16">
+        <div class="container mx-auto px-3 sm:px-4">
+            <!-- Seção de Destaque - Novidades -->
+            <section class="mb-12 sm:mb-20">
+                <div class="text-center mb-8 sm:mb-12 fade-in sticky top-20 sm:top-24 z-40 bg-gray-50 py-4 sm:py-6 -mx-3 sm:-mx-4 px-3 sm:px-4">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-rosa-escuro to-pink-600 bg-clip-text text-transparent mb-2 sm:mb-4 mt-8 sm:mt-16">
+                        ✨ NOVIDADES DA COLEÇÃO ✨
+                    </h2>
+                    <p class="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-2">As peças mais desejadas e tendências da temporada</p>
+                </div>
                 
-                                <!-- Carrossel de Cards de Destaque -->
-                <div class="relative overflow-hidden rounded-2xl mb-16">
+                <!-- Carrossel de Cards de Destaque -->
+                <div class="relative overflow-hidden rounded-xl sm:rounded-2xl mb-8 sm:mb-16">
                     <!-- Container do Carrossel -->
                     <div id="carouselContainer" class="flex transition-transform duration-700 ease-in-out">
                         <!-- Slide 1 - Vestido de Festa -->
                         <div class="featured-card group min-w-full">
-                            <div class="card-container relative overflow-hidden rounded-2xl shadow-2xl">
+                            <div class="card-container relative overflow-hidden rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl">
                                 <!-- Efeito de brilho -->
                                 <div class="shine-effect"></div>
                                 
                                 <!-- Imagem de Fundo -->
-                                <div class="h-96 bg-gradient-to-br from-rosa-claro via-pink-200 to-rosa-escuro relative">
+                                <div class="h-64 sm:h-80 md:h-96 bg-gradient-to-br from-rosa-claro via-pink-200 to-rosa-escuro relative">
                                     <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-500"></div>
                                     <div class="absolute inset-0 flex items-center justify-center">
-                                        <span class="text-white font-bold text-2xl opacity-80">VESTIDO DE FESTA</span>
+                                        <span class="text-white font-bold text-lg sm:text-xl md:text-2xl opacity-80 text-center px-4">VESTIDO DE FESTA</span>
                                     </div>
                                     <!-- Elementos decorativos flutuantes -->
-                                    <div class="absolute top-4 right-4 bg-white/90 text-rosa-escuro px-3 py-1 rounded-full text-sm font-bold tag-pulse">
+                                    <div class="absolute top-2 sm:top-4 right-2 sm:right-4 bg-white/90 text-rosa-escuro px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold tag-pulse">
                                         NOVO
                                     </div>
-                                    <div class="absolute bottom-4 left-4 bg-white/90 text-rosa-escuro px-3 py-1 rounded-full text-sm font-bold">
+                                    <div class="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 bg-white/90 text-rosa-escuro px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
                                         R$ 299,90
                                     </div>
                                 </div>
                                 
                                 <!-- Overlay com informações -->
                                 <div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100">
-                                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                                        <h3 class="text-2xl font-bold mb-2">Vestido Longo Elegante</h3>
-                                        <p class="text-white/90 mb-4">Perfeito para eventos especiais e festas</p>
-                                        <div class="flex items-center space-x-2 mb-4">
-                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">P</span>
-                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">M</span>
-                                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">G</span>
+                                    <div class="absolute bottom-0 left-0 right-0 p-3 sm:p-6 text-white">
+                                        <h3 class="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2">Vestido Longo Elegante</h3>
+                                        <p class="text-white/90 mb-2 sm:mb-4 text-sm sm:text-base">Perfeito para eventos especiais e festas</p>
+                                        <div class="flex items-center space-x-1 sm:space-x-2 mb-2 sm:mb-4">
+                                            <span class="px-2 sm:px-3 py-1 bg-white/20 rounded-full text-xs sm:text-sm">P</span>
+                                            <span class="px-2 sm:px-3 py-1 bg-white/20 rounded-full text-xs sm:text-sm">M</span>
+                                            <span class="px-2 sm:px-3 py-1 bg-white/20 rounded-full text-xs sm:text-sm">G</span>
                                         </div>
                                         <button 
                                             onclick="abrirWhatsApp('Vestido Longo Elegante')"
-                                            class="action-button bg-white text-rosa-escuro px-6 py-3 rounded-full font-bold hover:bg-rosa-claro"
+                                            class="action-button bg-white text-rosa-escuro px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold hover:bg-rosa-claro text-sm sm:text-base"
                                         >
                                             💫 Comprar Agora
                                         </button>
@@ -263,36 +320,36 @@
                     </div>
                     
                     <!-- Botões de Navegação -->
-                    <button id="prevBtn" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button id="prevBtn" class="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 sm:p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10">
+                        <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
                     </button>
                     
-                    <button id="nextBtn" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button id="nextBtn" class="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 sm:p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10">
+                        <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </button>
                     
                     <!-- Indicadores de Slide -->
-                    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-                        <button class="w-3 h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator active" data-slide="0"></button>
-                        <button class="w-3 h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator" data-slide="1"></button>
-                        <button class="w-3 h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator" data-slide="2"></button>
-                        <button class="w-3 h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator" data-slide="3"></button>
+                    <div class="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-1 sm:space-x-2 z-10">
+                        <button class="w-2 h-2 sm:w-3 sm:h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator active" data-slide="0"></button>
+                        <button class="w-2 h-2 sm:w-3 sm:h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator" data-slide="1"></button>
+                        <button class="w-2 h-2 sm:w-3 sm:h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator" data-slide="2"></button>
+                        <button class="w-2 h-2 sm:w-3 sm:h-3 bg-white/60 hover:bg-white rounded-full transition-all duration-300 slide-indicator" data-slide="3"></button>
                     </div>
                 </div>
             </section>
             
             <!-- Título da Seção -->
-            <div class="text-center mb-12 fade-in">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">Nossa Coleção</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Descubra as últimas tendências em moda feminina com qualidade e estilo incomparáveis</p>
+            <div class="text-center mb-8 sm:mb-12 fade-in">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-2 sm:mb-4">Nossa Coleção</h2>
+                <p class="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-2">Descubra as últimas tendências em moda feminina com qualidade e estilo incomparáveis</p>
             </div>
 
             <!-- Grid de Produtos -->
-            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                 <!-- Os produtos serão inseridos aqui via JavaScript -->
             </div>
 
@@ -306,64 +363,118 @@
     </main>
 
          <!-- Modal de Seleção de Tamanho -->
-     <div id="sizeModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-             <div class="flex items-center justify-between mb-4">
-                 <h3 class="text-xl font-bold text-gray-800">Selecionar Tamanho</h3>
-                 <button onclick="fecharModalTamanho()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+     <div id="sizeModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-3 sm:p-4">
+         <div class="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-md w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
+             <div class="flex items-center justify-between mb-3 sm:mb-4">
+                 <h3 class="text-lg sm:text-xl font-bold text-gray-800">Selecionar Tamanho</h3>
+                 <button onclick="fecharModalTamanho()" class="text-gray-400 hover:text-gray-600 text-xl sm:text-2xl">&times;</button>
              </div>
              
-             <div id="modalContent" class="space-y-4">
+             <div id="modalContent" class="space-y-3 sm:space-y-4">
                  <!-- Conteúdo será inserido via JavaScript -->
              </div>
          </div>
      </div>
      
      <!-- Carrinho Flutuante -->
-     <div id="carrinhoFlutuante" class="fixed bottom-6 right-6 z-40">
-         <div class="bg-white rounded-full shadow-2xl border-2 border-rosa-claro p-4 cursor-pointer hover:scale-110 transition-all duration-300" onclick="abrirCarrinho()">
+     <div id="carrinhoFlutuante" class="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-40">
+         <div class="bg-white rounded-full shadow-2xl border-2 border-rosa-claro p-3 sm:p-4 cursor-pointer hover:scale-110 transition-all duration-300" onclick="abrirCarrinho()">
              <div class="relative">
-                 <svg class="w-8 h-8 text-rosa-escuro" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <svg class="w-6 h-6 sm:w-8 sm:h-8 text-rosa-escuro" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                  </svg>
-                 <span id="carrinhoContador" class="absolute -top-2 -right-2 bg-rosa-escuro text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold">0</span>
+                 <span id="carrinhoContador" class="absolute -top-1 sm:-top-2 -right-1 sm:-right-2 bg-rosa-escuro text-white text-xs rounded-full h-5 w-5 sm:h-6 sm:w-6 flex items-center justify-center font-bold">0</span>
              </div>
          </div>
      </div>
      
      <!-- Modal do Carrinho -->
-     <div id="carrinhoModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-         <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
-             <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                 <h3 class="text-2xl font-bold text-gray-800">🛒 Seu Carrinho</h3>
-                 <button onclick="fecharCarrinho()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+     <div id="carrinhoModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-3 sm:p-4">
+         <div class="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+             <div class="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
+                 <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">🛒 Seu Carrinho</h3>
+                 <button onclick="fecharCarrinho()" class="text-gray-400 hover:text-gray-600 text-xl sm:text-2xl">&times;</button>
              </div>
              
-             <div id="carrinhoItens" class="p-6 max-h-96 overflow-y-auto">
+             <div id="carrinhoItens" class="p-3 sm:p-6 max-h-64 sm:max-h-96 overflow-y-auto">
                  <!-- Itens do carrinho serão inseridos aqui -->
              </div>
              
-             <div class="p-6 border-t border-gray-200 bg-gray-50">
-                 <div class="flex items-center justify-between mb-4">
-                     <span class="text-lg font-semibold text-gray-800">Total:</span>
-                     <span id="carrinhoTotal" class="text-2xl font-bold text-rosa-escuro">R$ 0,00</span>
+             <div class="p-4 sm:p-6 border-t border-gray-200 bg-gray-50">
+                 <div class="flex items-center justify-between mb-3 sm:mb-4">
+                     <span class="text-base sm:text-lg font-semibold text-gray-800">Total:</span>
+                     <span id="carrinhoTotal" class="text-xl sm:text-2xl font-bold text-rosa-escuro">R$ 0,00</span>
                  </div>
                  
-                 <button id="btnFinalizarCompra" onclick="finalizarCompra()" class="w-full bg-gradient-to-r from-rosa-claro to-rosa-escuro hover:from-rosa-escuro hover:to-pink-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                 <button id="btnFinalizarCompra" onclick="finalizarCompra()" class="w-full bg-gradient-to-r from-rosa-claro to-rosa-escuro hover:from-rosa-escuro hover:to-pink-500 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base">
                      💬 Finalizar Compra no WhatsApp
                  </button>
              </div>
          </div>
      </div>
      
+     <!-- Modal da Galeria de Fotos -->
+     <div id="galeriaModal" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-3 sm:p-4">
+         <div class="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl max-h-[90vh] overflow-hidden">
+             <div class="flex items-center justify-between p-3 sm:p-4 lg:p-5 border-b border-gray-200">
+                 <h3 class="text-base sm:text-lg lg:text-xl font-bold text-gray-800" id="galeriaTitulo">Galeria de Fotos</h3>
+                 <button onclick="fecharGaleria()" class="text-gray-400 hover:text-gray-600 text-lg sm:text-xl lg:text-2xl">&times;</button>
+             </div>
+             
+             <!-- Container da imagem principal -->
+             <div class="relative p-3 sm:p-4 lg:p-5">
+                 <div class="relative bg-gray-100 rounded-lg overflow-hidden" style="aspect-ratio: 4/3;">
+                     <img id="imagemPrincipal" src="" alt="" class="w-full h-full object-cover">
+                     
+                     <!-- Botões de navegação -->
+                     <button id="btnAnterior" onclick="anteriorFoto()" class="absolute left-2 sm:left-3 lg:left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 sm:p-2.5 lg:p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10">
+                         <svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                         </svg>
+                     </button>
+                     
+                     <button id="btnProximo" onclick="proximaFoto()" class="absolute right-2 sm:right-3 lg:right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 sm:p-2.5 lg:p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10">
+                         <svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                         </svg>
+                     </button>
+                     
+                     <!-- Contador de fotos -->
+                     <div class="absolute bottom-2 sm:bottom-3 lg:bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
+                         <span id="contadorFotos">1 / 1</span>
+                     </div>
+                 </div>
+                 
+                 <!-- Miniaturas -->
+                 <div id="miniaturasContainer" class="mt-3 sm:mt-4 flex space-x-2 overflow-x-auto pb-2">
+                     <!-- Miniaturas serão inseridas aqui -->
+                 </div>
+                 
+                 <!-- Informações do produto -->
+                 <div class="mt-3 sm:mt-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
+                     <h4 id="galeriaNomeProduto" class="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2"></h4>
+                     <p id="galeriaPreco" class="text-lg sm:text-xl font-bold text-rosa-escuro mb-2 sm:mb-3"></p>
+                     <div class="flex flex-wrap gap-2">
+                         <button onclick="fecharGaleria()" class="px-3 sm:px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors text-xs sm:text-sm">
+                             Fechar
+                         </button>
+                         <button id="btnComprarGaleria" onclick="comprarDaGaleria()" class="px-3 sm:px-4 py-2 bg-gradient-to-r from-rosa-claro to-rosa-escuro text-white rounded-lg hover:from-rosa-escuro hover:to-pink-500 transition-all text-xs sm:text-sm">
+                             🛒 Comprar Agora
+                         </button>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+     
      <!-- Rodapé -->
-     <footer class="bg-gray-800 text-white py-12">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+     <footer class="bg-gray-800 text-white py-8 sm:py-12">
+        <div class="container mx-auto px-3 sm:px-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
                 <!-- Sobre -->
-                <div>
-                    <h3 class="text-xl font-bold mb-4 text-rosa-claro">PAIXAO MODAS</h3>
-                    <p class="text-gray-300 leading-relaxed">
+                <div class="sm:col-span-2 md:col-span-1">
+                    <h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-rosa-claro">PAIXAO MODAS</h3>
+                    <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
                         Sua loja de confiança para roupas femininas elegantes e modernas. 
                         Qualidade e estilo em cada peça.
                     </p>
@@ -371,20 +482,20 @@
                 
                 <!-- Redes Sociais -->
                 <div>
-                    <h4 class="text-lg font-semibold mb-4 text-rosa-claro">Redes Sociais</h4>
-                    <div class="flex space-x-4">
+                    <h4 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-rosa-claro">Redes Sociais</h4>
+                    <div class="flex space-x-3 sm:space-x-4">
                         <a href="#" class="text-gray-300 hover:text-rosa-claro transition-colors duration-300">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4z"/>
                             </svg>
                         </a>
                         <a href="#" class="text-gray-300 hover:text-rosa-claro transition-colors duration-300">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
                             </svg>
                         </a>
                         <a href="#" class="text-gray-300 hover:text-rosa-claro transition-colors duration-300">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
                             </svg>
                         </a>
@@ -393,16 +504,16 @@
                 
                 <!-- Contato -->
                 <div>
-                    <h4 class="text-lg font-semibold mb-4 text-rosa-claro">Contato</h4>
-                    <p class="text-gray-300 mb-2">📧 contato@pmodas.com</p>
-                    <p class="text-gray-300 mb-2">📱 (11) 99999-9999</p>
-                    <p class="text-gray-300">📍 São Paulo, SP</p>
+                    <h4 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-rosa-claro">Contato</h4>
+                    <p class="text-gray-300 mb-2 text-sm sm:text-base">📧 contato@pmodas.com</p>
+                    <p class="text-gray-300 mb-2 text-sm sm:text-base">📱 (11) 99999-9999</p>
+                    <p class="text-gray-300 text-sm sm:text-base">📍 São Paulo, SP</p>
                 </div>
             </div>
             
             <!-- Direitos Autorais -->
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
-                <p class="text-gray-400">&copy; 2024 PAIXAO MODAS. Todos os direitos reservados.</p>
+            <div class="border-t border-gray-700 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center">
+                <p class="text-gray-400 text-xs sm:text-sm">&copy; 2024 PAIXAO MODAS. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
@@ -415,7 +526,13 @@
         preco: 89.90,
         categoria: "vestido",
         tamanhos: ["P", "M", "G", "GG"],
-        imagem: "FOTO AQUI"
+        imagem: "FOTO AQUI",
+        fotos: [
+            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=600&fit=crop",
+            "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&h=600&fit=crop",
+            "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop",
+            "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop"
+        ]
     },
     {
         id: 2,
@@ -423,7 +540,12 @@
         preco: 129.90,
         categoria: "calca",
         tamanhos: ["P", "M", "G"],
-        imagem: "FOTO AQUI"
+        imagem: "FOTO AQUI",
+        fotos: [
+            "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&h=600&fit=crop",
+            "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&h=600&fit=crop",
+            "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop"
+        ]
     },
     {
         id: 3,
@@ -431,7 +553,13 @@
         preco: 69.90,
         categoria: "blusa",
         tamanhos: ["P", "M", "G", "GG"],
-        imagem: "FOTO AQUI"
+        imagem: "FOTO AQUI",
+        fotos: [
+            "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&h=600&fit=crop",
+            "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop",
+            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=600&fit=crop",
+            "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&h=600&fit=crop"
+        ]
     },
     {
         id: 4,
@@ -557,11 +685,41 @@ function formatarPreco(preco) {
  let carrinho = [];
  let produtoSelecionado = null;
  
+ // Sistema de Galeria
+ let galeriaAtual = null;
+ let fotoAtual = 0;
+ 
+ // Função para detectar e abrir WhatsApp da melhor forma
+ function abrirWhatsAppConversa(numero, mensagem) {
+     const numeroLimpo = numero.replace(/\D/g, ''); // Remove caracteres não numéricos
+     const mensagemCodificada = encodeURIComponent(mensagem);
+     
+     // Detectar se é mobile ou desktop
+     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+     
+     if (isMobile) {
+         // Para mobile, usar wa.me que abre direto no app
+         const mobileUrl = `https://wa.me/${numeroLimpo}?text=${mensagemCodificada}`;
+         window.location.href = mobileUrl;
+     } else {
+         // Para desktop, usar WhatsApp Web
+         const webUrl = `https://web.whatsapp.com/send?phone=${numeroLimpo}&text=${mensagemCodificada}`;
+         window.open(webUrl, '_blank');
+         
+         // Fallback para wa.me se o WhatsApp Web não funcionar
+         setTimeout(() => {
+             const fallbackUrl = `https://wa.me/${numeroLimpo}?text=${mensagemCodificada}`;
+             window.open(fallbackUrl, '_blank');
+         }, 2000);
+     }
+ }
+ 
  // Função para abrir WhatsApp
  function abrirWhatsApp(nomeProduto) {
-     const mensagem = encodeURIComponent(`Olá! Tenho interesse no produto ${nomeProduto}. Pode me dar mais informações?`);
+     const mensagem = `Olá! Tenho interesse no produto ${nomeProduto}. Pode me dar mais informações?`;
      const numeroWhatsApp = '5589994077754'; // Substitua pelo número real
-     window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
+     
+     abrirWhatsAppConversa(numeroWhatsApp, mensagem);
  }
  
  // Função para adicionar produto ao carrinho
@@ -579,18 +737,18 @@ function formatarPreco(preco) {
      const modalContent = document.getElementById('modalContent');
      
      modalContent.innerHTML = `
-         <div class="text-center mb-4">
-             <h4 class="text-lg font-semibold text-gray-800 mb-2">${produtoSelecionado.nome}</h4>
-             <p class="text-2xl font-bold text-rosa-escuro">${formatarPreco(produtoSelecionado.preco)}</p>
+         <div class="text-center mb-3 sm:mb-4">
+             <h4 class="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2">${produtoSelecionado.nome}</h4>
+             <p class="text-xl sm:text-2xl font-bold text-rosa-escuro">${formatarPreco(produtoSelecionado.preco)}</p>
          </div>
          
-         <div class="mb-4">
-             <p class="text-sm text-gray-600 mb-3">Selecione o tamanho:</p>
-             <div class="grid grid-cols-2 gap-3">
+         <div class="mb-3 sm:mb-4">
+             <p class="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">Selecione o tamanho:</p>
+             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                  ${produtoSelecionado.tamanhos.map(tamanho => `
                      <button 
                          onclick="selecionarTamanho('${tamanho}')"
-                         class="py-3 px-4 border-2 border-gray-200 rounded-lg hover:border-rosa-claro hover:bg-rosa-claro/10 transition-all duration-300 text-gray-700 font-medium hover:text-rosa-escuro"
+                         class="py-2 sm:py-3 px-3 sm:px-4 border-2 border-gray-200 rounded-lg hover:border-rosa-claro hover:bg-rosa-claro/10 transition-all duration-300 text-gray-700 font-medium hover:text-rosa-escuro text-sm sm:text-base"
                      >
                          ${tamanho}
                      </button>
@@ -598,10 +756,10 @@ function formatarPreco(preco) {
              </div>
          </div>
          
-         <div class="flex space-x-3">
+         <div class="flex space-x-2 sm:space-x-3">
              <button 
                  onclick="fecharModalTamanho()"
-                 class="flex-1 py-3 px-4 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300"
+                 class="flex-1 py-2 sm:py-3 px-3 sm:px-4 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300 text-sm sm:text-base"
              >
                  Cancelar
              </button>
@@ -694,35 +852,35 @@ function formatarPreco(preco) {
      
      // Renderizar itens do carrinho
      carrinhoItens.innerHTML = carrinho.map((item, index) => `
-         <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 mb-3">
-             <div class="flex-1">
-                 <h4 class="font-semibold text-gray-800">${item.nome}</h4>
-                 <p class="text-sm text-gray-600">Tamanho: ${item.tamanho} | Categoria: ${item.categoria}</p>
-                 <p class="text-rosa-escuro font-semibold">${formatarPreco(item.preco)}</p>
+         <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-white rounded-lg border border-gray-200 mb-2 sm:mb-3">
+             <div class="flex-1 mb-2 sm:mb-0">
+                 <h4 class="font-semibold text-gray-800 text-sm sm:text-base">${item.nome}</h4>
+                 <p class="text-xs sm:text-sm text-gray-600">Tamanho: ${item.tamanho} | Categoria: ${item.categoria}</p>
+                 <p class="text-rosa-escuro font-semibold text-sm sm:text-base">${formatarPreco(item.preco)}</p>
              </div>
              
-             <div class="flex items-center space-x-3">
-                 <div class="flex items-center space-x-2">
+             <div class="flex items-center justify-between sm:justify-end space-x-2 sm:space-x-3">
+                 <div class="flex items-center space-x-1 sm:space-x-2">
                      <button 
                          onclick="alterarQuantidade(${index}, -1)"
-                         class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors duration-200"
+                         class="w-6 h-6 sm:w-8 sm:h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors duration-200"
                      >
-                         <span class="text-gray-600 font-bold">-</span>
+                         <span class="text-gray-600 font-bold text-sm sm:text-base">-</span>
                      </button>
-                     <span class="w-8 text-center font-semibold">${item.quantidade}</span>
+                     <span class="w-6 sm:w-8 text-center font-semibold text-sm sm:text-base">${item.quantidade}</span>
                      <button 
                          onclick="alterarQuantidade(${index}, 1)"
-                         class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors duration-200"
+                         class="w-6 h-6 sm:w-8 sm:h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors duration-200"
                      >
-                         <span class="text-gray-600 font-bold">+</span>
+                         <span class="text-gray-600 font-bold text-sm sm:text-base">+</span>
                      </button>
                  </div>
                  
                  <button 
                      onclick="removerItem(${index})"
-                     class="text-red-500 hover:text-red-700 transition-colors duration-200"
+                     class="text-red-500 hover:text-red-700 transition-colors duration-200 p-1"
                  >
-                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                      </svg>
                  </button>
@@ -801,8 +959,8 @@ function formatarPreco(preco) {
      mensagem += `• Formas de pagamento aceitas?\n\n`;
      mensagem += `Aguardo retorno! 😊`;
      
-     const mensagemCodificada = encodeURIComponent(mensagem);
-     window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`, '_blank');
+     // Usar função otimizada para abrir WhatsApp
+     abrirWhatsAppConversa(numeroWhatsApp, mensagem);
      
      // Limpar carrinho após envio
      carrinho = [];
@@ -811,6 +969,128 @@ function formatarPreco(preco) {
      
      mostrarNotificacao('Pedido enviado com sucesso!');
  }
+
+// Funções da Galeria de Fotos
+function abrirGaleria(produtoId) {
+    const produto = produtos.find(p => p.id === produtoId);
+    if (!produto) return;
+    
+    galeriaAtual = produto;
+    fotoAtual = 0;
+    
+    // Configurar modal
+    document.getElementById('galeriaTitulo').textContent = `Galeria - ${produto.nome}`;
+    document.getElementById('galeriaNomeProduto').textContent = produto.nome;
+    document.getElementById('galeriaPreco').textContent = formatarPreco(produto.preco);
+    
+    // Configurar botão de compra
+    document.getElementById('btnComprarGaleria').setAttribute('data-produto-id', produtoId);
+    
+    // Carregar fotos
+    carregarFotosGaleria();
+    
+    // Mostrar modal
+    document.getElementById('galeriaModal').classList.remove('hidden');
+}
+
+function fecharGaleria() {
+    document.getElementById('galeriaModal').classList.add('hidden');
+    galeriaAtual = null;
+    fotoAtual = 0;
+}
+
+function carregarFotosGaleria() {
+    if (!galeriaAtual) return;
+    
+    const fotos = galeriaAtual.fotos || [galeriaAtual.imagem];
+    const imagemPrincipal = document.getElementById('imagemPrincipal');
+    const contadorFotos = document.getElementById('contadorFotos');
+    const miniaturasContainer = document.getElementById('miniaturasContainer');
+    const btnAnterior = document.getElementById('btnAnterior');
+    const btnProximo = document.getElementById('btnProximo');
+    
+    // Carregar primeira foto
+    imagemPrincipal.src = fotos[0];
+    imagemPrincipal.alt = galeriaAtual.nome;
+    
+    // Atualizar contador
+    contadorFotos.textContent = `${fotoAtual + 1} / ${fotos.length}`;
+    
+    // Configurar botões de navegação
+    btnAnterior.style.display = fotos.length > 1 ? 'block' : 'none';
+    btnProximo.style.display = fotos.length > 1 ? 'block' : 'none';
+    
+    // Criar miniaturas
+    miniaturasContainer.innerHTML = fotos.map((foto, index) => `
+        <div class="flex-shrink-0 cursor-pointer ${index === fotoAtual ? 'ring-2 ring-rosa-escuro' : ''}" onclick="irParaFoto(${index})">
+            <img src="${foto}" alt="${galeriaAtual.nome} - Foto ${index + 1}" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border-2 ${index === fotoAtual ? 'border-rosa-escuro' : 'border-gray-200'}">
+        </div>
+    `).join('');
+}
+
+function proximaFoto() {
+    if (!galeriaAtual) return;
+    
+    const fotos = galeriaAtual.fotos || [galeriaAtual.imagem];
+    fotoAtual = (fotoAtual + 1) % fotos.length;
+    atualizarFotoAtual();
+}
+
+function anteriorFoto() {
+    if (!galeriaAtual) return;
+    
+    const fotos = galeriaAtual.fotos || [galeriaAtual.imagem];
+    fotoAtual = (fotoAtual - 1 + fotos.length) % fotos.length;
+    atualizarFotoAtual();
+}
+
+function irParaFoto(index) {
+    if (!galeriaAtual) return;
+    
+    const fotos = galeriaAtual.fotos || [galeriaAtual.imagem];
+    if (index >= 0 && index < fotos.length) {
+        fotoAtual = index;
+        atualizarFotoAtual();
+    }
+}
+
+function atualizarFotoAtual() {
+    if (!galeriaAtual) return;
+    
+    const fotos = galeriaAtual.fotos || [galeriaAtual.imagem];
+    const imagemPrincipal = document.getElementById('imagemPrincipal');
+    const contadorFotos = document.getElementById('contadorFotos');
+    const miniaturasContainer = document.getElementById('miniaturasContainer');
+    
+    // Atualizar imagem principal
+    imagemPrincipal.src = fotos[fotoAtual];
+    
+    // Atualizar contador
+    contadorFotos.textContent = `${fotoAtual + 1} / ${fotos.length}`;
+    
+    // Atualizar miniaturas
+    const miniaturas = miniaturasContainer.querySelectorAll('div');
+    miniaturas.forEach((miniatura, index) => {
+        const img = miniatura.querySelector('img');
+        if (index === fotoAtual) {
+            miniatura.classList.add('ring-2', 'ring-rosa-escuro');
+            img.classList.remove('border-gray-200');
+            img.classList.add('border-rosa-escuro');
+        } else {
+            miniatura.classList.remove('ring-2', 'ring-rosa-escuro');
+            img.classList.remove('border-rosa-escuro');
+            img.classList.add('border-gray-200');
+        }
+    });
+}
+
+function comprarDaGaleria() {
+    const produtoId = document.getElementById('btnComprarGaleria').getAttribute('data-produto-id');
+    if (produtoId) {
+        fecharGaleria();
+        adicionarAoCarrinho(parseInt(produtoId));
+    }
+}
 
 // Função para renderizar produtos com destaque de busca
 function renderizarProdutos(produtosFiltrados) {
@@ -834,41 +1114,56 @@ function renderizarProdutos(produtosFiltrados) {
         }
 
         return `
-            <div class="card-hover bg-white rounded-xl shadow-md overflow-hidden fade-in">
+            <div class="card-hover bg-white rounded-lg sm:rounded-xl shadow-md overflow-hidden fade-in">
                 <!-- Imagem do Produto -->
-                <div class="image-hover bg-gray-200 h-64 flex items-center justify-center">
-                    <span class="text-gray-500 font-medium">${produto.imagem}</span>
+                <div class="image-hover bg-gray-200 h-48 sm:h-56 md:h-64 flex items-center justify-center relative cursor-pointer" onclick="abrirGaleria(${produto.id})">
+                    <span class="text-gray-500 font-medium text-sm sm:text-base">${produto.imagem}</span>
+                    <!-- Indicador de múltiplas fotos -->
+                    <div class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs flex items-center space-x-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span>${produto.fotos ? produto.fotos.length : 1}</span>
+                    </div>
+                    <!-- Overlay de hover -->
+                    <div class="absolute inset-0 bg-black/0 hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                        <div class="opacity-0 hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-2">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Informações do Produto -->
-                <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">${nomeDestacado}</h3>
-                    <p class="text-2xl font-bold text-rosa-escuro mb-3">${formatarPreco(produto.preco)}</p>
+                <div class="p-3 sm:p-4 md:p-6">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2 line-clamp-2">${nomeDestacado}</h3>
+                    <p class="text-lg sm:text-xl md:text-2xl font-bold text-rosa-escuro mb-2 sm:mb-3">${formatarPreco(produto.preco)}</p>
                     
                     <!-- Categoria destacada -->
-                    <div class="mb-3">
-                        <span class="px-3 py-1 bg-rosa-claro/20 text-rosa-escuro rounded-full text-xs font-medium">
+                    <div class="mb-2 sm:mb-3">
+                        <span class="px-2 sm:px-3 py-1 bg-rosa-claro/20 text-rosa-escuro rounded-full text-xs font-medium">
                             ${produto.categoria.charAt(0).toUpperCase() + produto.categoria.slice(1)}
                         </span>
                     </div>
                     
                     <!-- Tamanhos -->
-                    <div class="mb-4">
-                        <p class="text-sm text-gray-600 mb-2">Tamanhos disponíveis:</p>
-                        <div class="flex flex-wrap gap-2">
+                    <div class="mb-3 sm:mb-4">
+                        <p class="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-2">Tamanhos disponíveis:</p>
+                        <div class="flex flex-wrap gap-1 sm:gap-2">
                             ${produto.tamanhos.map(tamanho => 
-                                `<span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">${tamanho}</span>`
+                                `<span class="px-2 sm:px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm font-medium">${tamanho}</span>`
                             ).join('')}
                         </div>
                     </div>
                     
-                                                 <!-- Botão Adicionar ao Carrinho -->
-                     <button 
-                         onclick="adicionarAoCarrinho(${produto.id})"
-                         class="w-full bg-gradient-to-r from-rosa-claro to-rosa-escuro hover:from-rosa-escuro hover:to-pink-500 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-                     >
-                         🛒 Adicionar ao Carrinho
-                     </button>
+                    <!-- Botão Adicionar ao Carrinho -->
+                    <button 
+                        onclick="adicionarAoCarrinho(${produto.id})"
+                        class="w-full bg-gradient-to-r from-rosa-claro to-rosa-escuro hover:from-rosa-escuro hover:to-pink-500 text-white font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-sm sm:text-base"
+                    >
+                        🛒 Adicionar ao Carrinho
+                    </button>
                 </div>
             </div>
         `;
@@ -1280,6 +1575,46 @@ searchInput.addEventListener('click', () => {
     }
 });
 
+         // Funcionalidade do Menu Mobile
+         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+         const mobileMenu = document.getElementById('mobileMenu');
+         const searchInputMobile = document.getElementById('searchInputMobile');
+         const categoryFilterMobile = document.getElementById('categoryFilterMobile');
+         
+         // Toggle do menu mobile
+         mobileMenuBtn.addEventListener('click', () => {
+             mobileMenu.classList.toggle('hidden');
+         });
+         
+         // Fechar menu mobile ao clicar fora
+         document.addEventListener('click', (e) => {
+             if (!mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                 mobileMenu.classList.add('hidden');
+             }
+         });
+         
+         // Sincronizar busca mobile com desktop
+         searchInputMobile.addEventListener('input', (e) => {
+             document.getElementById('searchInput').value = e.target.value;
+             filtrarProdutos();
+         });
+         
+         // Sincronizar filtro mobile com desktop
+         categoryFilterMobile.addEventListener('change', (e) => {
+             document.getElementById('categoryFilter').value = e.target.value;
+             filtrarProdutos();
+         });
+         
+         // Sincronizar busca desktop com mobile
+         document.getElementById('searchInput').addEventListener('input', (e) => {
+             searchInputMobile.value = e.target.value;
+         });
+         
+         // Sincronizar filtro desktop com mobile
+         document.getElementById('categoryFilter').addEventListener('change', (e) => {
+             categoryFilterMobile.value = e.target.value;
+         });
+
          // Inicializar página
  document.addEventListener('DOMContentLoaded', () => {
      renderizarProdutos(produtos);
@@ -1314,6 +1649,7 @@ searchInput.addEventListener('click', () => {
      document.addEventListener('click', (e) => {
          const sizeModal = document.getElementById('sizeModal');
          const carrinhoModal = document.getElementById('carrinhoModal');
+         const galeriaModal = document.getElementById('galeriaModal');
          
          if (e.target === sizeModal) {
              fecharModalTamanho();
@@ -1321,6 +1657,31 @@ searchInput.addEventListener('click', () => {
          
          if (e.target === carrinhoModal) {
              fecharCarrinho();
+         }
+         
+         if (e.target === galeriaModal) {
+             fecharGaleria();
+         }
+     });
+     
+     // Navegação por teclado na galeria
+     document.addEventListener('keydown', (e) => {
+         const galeriaModal = document.getElementById('galeriaModal');
+         if (!galeriaModal.classList.contains('hidden') && galeriaAtual) {
+             switch (e.key) {
+                 case 'ArrowLeft':
+                     e.preventDefault();
+                     anteriorFoto();
+                     break;
+                 case 'ArrowRight':
+                     e.preventDefault();
+                     proximaFoto();
+                     break;
+                 case 'Escape':
+                     e.preventDefault();
+                     fecharGaleria();
+                     break;
+             }
          }
      });
  });
