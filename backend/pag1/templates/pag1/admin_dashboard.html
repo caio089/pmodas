@@ -41,7 +41,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Cards de Estatísticas -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <div class="flex items-center">
                     <div class="p-3 bg-rosa-claro rounded-lg">
@@ -65,11 +65,25 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-600">Produtos Ativos</p>
-                        <p class="text-2xl font-bold text-gray-900" id="activeProducts">0</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ roupas_ativas }}</p>
                     </div>
                 </div>
             </div>
 
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-red-100 rounded-lg">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Produtos Inativos</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ roupas_inativas }}</p>
+                    </div>
+                </div>
+            </div>
 
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <div class="flex items-center">
@@ -87,31 +101,43 @@
         </div>
 
         <!-- Botões de Ação -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <button onclick="showAddProduct()" class="bg-rosa-escuro text-white p-6 rounded-xl hover:bg-rosa-hover transition-colors text-center">
-                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                </svg>
-                <h3 class="text-lg font-semibold">Adicionar Nova Roupa</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <button onclick="showAddProduct()" class="bg-rosa-escuro text-white p-6 rounded-xl hover:bg-rosa-hover transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center group">
+                <div class="flex items-center justify-center mb-3">
+                    <div class="p-3 bg-white bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all duration-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Adicionar Nova Roupa</h3>
                 <p class="text-sm opacity-90">Cadastrar novo produto no catálogo</p>
+                <div class="mt-3 inline-flex items-center text-sm opacity-75 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                    Começar agora
+                </div>
             </button>
 
-            <button onclick="showProductList()" class="bg-blue-600 text-white p-6 rounded-xl hover:bg-blue-700 transition-colors text-center">
-                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                </svg>
-                <h3 class="text-lg font-semibold">Ver Roupas Cadastradas</h3>
-                <p class="text-sm opacity-90">Gerenciar produtos existentes</p>
+            <button onclick="showProductList()" class="bg-blue-600 text-white p-6 rounded-xl hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center group">
+                <div class="flex items-center justify-center mb-3">
+                    <div class="p-3 bg-white bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all duration-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Gerenciar Produtos</h3>
+                <p class="text-sm opacity-90">Editar, ativar/desativar e excluir produtos</p>
+                <div class="mt-3 inline-flex items-center text-sm opacity-75 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                    Ver lista completa
+                </div>
             </button>
 
-            <a href="/admin/" target="_blank" class="bg-gray-600 text-white p-6 rounded-xl hover:bg-gray-700 transition-colors text-center">
-                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                <h3 class="text-lg font-semibold">Admin Django</h3>
-                <p class="text-sm opacity-90">Acessar painel administrativo do Django</p>
-            </a>
         </div>
 
         <!-- Filtros -->
@@ -131,11 +157,25 @@
                         {% endfor %}
                     </select>
                 </div>
-                <button type="submit" class="px-6 py-2 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors">
+                <div class="min-w-48">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro">
+                        <option value="">Todos os status</option>
+                        <option value="ativo" {% if status_atual == 'ativo' %}selected{% endif %}>Ativo</option>
+                        <option value="inativo" {% if status_atual == 'inativo' %}selected{% endif %}>Inativo</option>
+                    </select>
+                </div>
+                <button type="submit" class="inline-flex items-center px-6 py-2 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors duration-200 font-medium">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z"></path>
+                    </svg>
                     Filtrar
                 </button>
-                <a href="{% url 'admin_dashboard' %}" class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                    Limpar
+                <a href="{% url 'admin_dashboard' %}" class="inline-flex items-center px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 font-medium">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Limpar Filtros
                 </a>
             </form>
         </div>
@@ -151,9 +191,64 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% for roupa in page_obj %}
                         <div class="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
-                            <div class="aspect-square bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                            <div class="aspect-square bg-gray-100 rounded-lg mb-4 overflow-hidden relative group" 
+                                 id="productImage_{{ roupa.id }}"
+                                 data-img1="{{ roupa.get_imagem_principal_url_safe }}"
+                                 data-img2="{{ roupa.get_imagem_2_url_safe }}"
+                                 data-img3="{{ roupa.get_imagem_3_url_safe }}">
                                 {% if roupa.imagem_principal %}
-                                    <img src="{{ roupa.imagem_principal.url }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover">
+                                    <img src="{{ roupa.imagem_principal.url }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                    
+                                    {% if roupa.imagem_2 or roupa.imagem_3 %}
+                                        <!-- Contador de imagens -->
+                                        <div class="absolute top-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded-full flex items-center z-20">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                            {% if roupa.imagem_2 and roupa.imagem_3 %}3{% else %}2{% endif %}
+                                        </div>
+                                        
+                                        <!-- Setas de navegação -->
+                                        <button data-product-id="{{ roupa.id }}" data-direction="-1" class="navigate-product-btn absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100 z-30">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                            </svg>
+                                        </button>
+                                        
+                                        <button data-product-id="{{ roupa.id }}" data-direction="1" class="navigate-product-btn absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100 z-30">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                            </svg>
+                                        </button>
+                                    {% endif %}
+                                    
+                                    <!-- Overlay de zoom - só aparece quando não há setas -->
+                                    {% if not roupa.imagem_2 and not roupa.imagem_3 %}
+                                    <div class="open-image-modal absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center cursor-pointer" 
+                                         data-product-id="{{ roupa.id }}" 
+                                         data-img1="{{ roupa.get_imagem_principal_url_safe }}" 
+                                         data-img2="{{ roupa.get_imagem_2_url_safe }}" 
+                                         data-img3="{{ roupa.get_imagem_3_url_safe }}" 
+                                         data-product-name="{{ roupa.nome }}">
+                                        <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <!-- Botão de zoom no canto inferior esquerdo quando há múltiplas imagens -->
+                                    <button class="open-image-modal-btn absolute bottom-2 left-2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100 z-30"
+                                            data-product-id="{{ roupa.id }}" 
+                                            data-img1="{{ roupa.get_imagem_principal_url_safe }}" 
+                                            data-img2="{{ roupa.get_imagem_2_url_safe }}" 
+                                            data-img3="{{ roupa.get_imagem_3_url_safe }}" 
+                                            data-product-name="{{ roupa.nome }}">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                                        </svg>
+                                    </button>
+                                    {% endif %}
                                 {% else %}
                                     <div class="w-full h-full flex items-center justify-center text-gray-400">
                                         <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,17 +264,52 @@
                                 <p class="text-xs text-gray-500 mb-2">Tamanhos: {{ roupa.get_tamanhos_display }}</p>
                             {% endif %}
                             {% if roupa.descricao %}
-                                <p class="text-xs text-gray-400 mb-4 line-clamp-2">{{ roupa.descricao }}</p>
+                                <p class="text-xs text-gray-400 mb-2 line-clamp-2">{{ roupa.descricao }}</p>
                             {% endif %}
+                            <div class="mb-4">
+                                <span class="px-2 py-1 text-xs rounded-full {{ roupa.get_status_class }}">
+                                    {{ roupa.get_status_display }}
+                                </span>
+                            </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs text-gray-500">{{ roupa.data_criacao|date:"d/m/Y" }}</span>
                                 <div class="flex space-x-2">
-                                    <a href="{% url 'editar_roupa' roupa.id %}" class="text-blue-600 hover:text-blue-800 text-sm">
+                                    <!-- Botão Editar -->
+                                    <a href="{% url 'editar_roupa' roupa.id %}" 
+                                       class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition-colors duration-200">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
                                         Editar
                                     </a>
+                                    
+                                    <!-- Botão Ativar/Desativar -->
+                                    <form method="POST" action="{% url 'alternar_status_roupa' roupa.id %}" class="inline">
+                                        {% csrf_token %}
+                                        <button type="submit" 
+                                                class="inline-flex items-center px-3 py-1.5 {% if roupa.ativo %}bg-orange-500 hover:bg-orange-600{% else %}bg-green-500 hover:bg-green-600{% endif %} text-white text-xs font-medium rounded-lg transition-colors duration-200"
+                                                onclick="return confirm('Tem certeza que deseja {% if roupa.ativo %}desativar{% else %}ativar{% endif %} esta roupa?')">
+                                            {% if roupa.ativo %}
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
+                                                </svg>
+                                                Desativar
+                                            {% else %}
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                Ativar
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                    
+                                    <!-- Botão Excluir -->
                                     <a href="{% url 'excluir_roupa' roupa.id %}" 
-                                       onclick="return confirm('Tem certeza que deseja excluir esta roupa?')"
-                                       class="text-red-600 hover:text-red-800 text-sm">
+                                       onclick="return confirm('⚠️ ATENÇÃO! Esta ação não pode ser desfeita.\\n\\nTem certeza que deseja EXCLUIR permanentemente a roupa &quot;{{ roupa.nome }}&quot;?')"
+                                       class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-medium rounded-lg transition-colors duration-200">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
                                         Excluir
                                     </a>
                                 </div>
@@ -193,20 +323,29 @@
                     <div class="mt-6 flex justify-center">
                         <nav class="flex space-x-2">
                             {% if page_obj.has_previous %}
-                                <a href="?page={{ page_obj.previous_page_number }}{% if categoria_atual %}&categoria={{ categoria_atual }}{% endif %}{% if busca_atual %}&busca={{ busca_atual }}{% endif %}" 
-                                   class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                                <a href="?page={{ page_obj.previous_page_number }}{% if categoria_atual %}&categoria={{ categoria_atual }}{% endif %}{% if busca_atual %}&busca={{ busca_atual }}{% endif %}{% if status_atual %}&status={{ status_atual }}{% endif %}" 
+                                   class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200 font-medium">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
                                     Anterior
                                 </a>
                             {% endif %}
                             
-                            <span class="px-3 py-2 bg-rosa-escuro text-white rounded-lg">
+                            <span class="inline-flex items-center px-4 py-2 bg-rosa-escuro text-white rounded-lg font-medium">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
                                 {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
                             </span>
                             
                             {% if page_obj.has_next %}
-                                <a href="?page={{ page_obj.next_page_number }}{% if categoria_atual %}&categoria={{ categoria_atual }}{% endif %}{% if busca_atual %}&busca={{ busca_atual }}{% endif %}" 
-                                   class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                                <a href="?page={{ page_obj.next_page_number }}{% if categoria_atual %}&categoria={{ categoria_atual }}{% endif %}{% if busca_atual %}&busca={{ busca_atual }}{% endif %}{% if status_atual %}&status={{ status_atual }}{% endif %}" 
+                                   class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200 font-medium">
                                     Próxima
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
                                 </a>
                             {% endif %}
                         </nav>
@@ -219,8 +358,14 @@
                     </svg>
                     <h3 class="text-xl font-semibold text-gray-600 mb-2">Nenhuma roupa encontrada</h3>
                     <p class="text-gray-500 mb-4">Comece adicionando sua primeira roupa!</p>
-                    <button onclick="showAddProduct()" class="px-6 py-3 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors">
+                    <button onclick="showAddProduct();" class="inline-flex items-center px-6 py-3 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl font-medium">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
                         Adicionar Primeira Roupa
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
                     </button>
                 </div>
             {% endif %}
@@ -321,15 +466,89 @@
 
                 <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                     <button type="button" onclick="closeAddProduct()"
-                            class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                            class="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 font-medium">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
                         Cancelar
                     </button>
                     <button type="submit"
-                            class="px-6 py-3 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors">
+                            class="inline-flex items-center px-6 py-3 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors duration-200 font-medium">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
                         Adicionar Roupa
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal para Visualizar Imagens -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <!-- Header do Modal -->
+            <div class="p-6 border-b border-gray-200 bg-gray-50">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 id="modalProductName" class="text-2xl font-bold text-gray-800"></h2>
+                        <p id="modalImageCounter" class="text-gray-600 mt-1"></p>
+                    </div>
+                    <button onclick="closeImageModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Conteúdo do Modal -->
+            <div class="relative">
+                <!-- Imagem Principal -->
+                <div id="mainImageContainer" class="relative">
+                    <img id="mainImage" src="" alt="" class="w-full h-96 md:h-[500px] object-cover">
+                    
+                    <!-- Controles de Navegação -->
+                    <button id="prevButton" onclick="changeImage(-1)" 
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    
+                    <button id="nextButton" onclick="changeImage(1)" 
+                            class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Indicador de Zoom -->
+                    <div class="absolute bottom-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
+                        <span id="zoomIndicator">Clique para ampliar</span>
+                    </div>
+                </div>
+
+                <!-- Miniaturas -->
+                <div id="thumbnailsContainer" class="p-4 bg-gray-50 border-t border-gray-200">
+                    <div class="flex justify-center space-x-2 overflow-x-auto">
+                        <!-- Miniaturas serão inseridas aqui via JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer do Modal -->
+            <div class="p-4 bg-gray-50 border-t border-gray-200">
+                <div class="flex justify-center">
+                    <button onclick="closeImageModal()" 
+                            class="inline-flex items-center px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        Fechar
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -338,6 +557,213 @@
 
         // Array para armazenar produtos
         let products = JSON.parse(localStorage.getItem('products') || '[]');
+
+        // Variáveis para o modal de imagens
+        let currentImages = [];
+        let currentImageIndex = 0;
+        let isZoomed = false;
+
+        // Variáveis para navegação de imagens dos produtos
+        let productImageStates = {};
+
+        // Função para abrir o modal de imagens
+        function openImageModal(productId, img1, img2, img3, productName) {
+            // Coletar todas as imagens disponíveis (remover strings vazias e undefined)
+            currentImages = [img1, img2, img3].filter(img => img && img.trim() !== '');
+            
+            if (currentImages.length === 0) {
+                alert('Nenhuma imagem disponível para este produto.');
+                return;
+            }
+
+            // Configurar o modal
+            document.getElementById('modalProductName').textContent = productName;
+            document.getElementById('modalImageCounter').textContent = 
+                currentImages.length > 1 ? `Imagem 1 de ${currentImages.length}` : '1 imagem disponível';
+            
+            // Mostrar a primeira imagem
+            currentImageIndex = 0;
+            showCurrentImage();
+            
+            // Criar miniaturas
+            createThumbnails();
+            
+            // Mostrar o modal
+            document.getElementById('imageModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevenir scroll da página
+        }
+
+        // Função para fechar o modal de imagens
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Restaurar scroll da página
+            isZoomed = false;
+        }
+
+        // Função para mostrar a imagem atual
+        function showCurrentImage() {
+            const mainImage = document.getElementById('mainImage');
+            const counter = document.getElementById('modalImageCounter');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            
+            mainImage.src = currentImages[currentImageIndex];
+            mainImage.alt = document.getElementById('modalProductName').textContent;
+            
+            counter.textContent = `Imagem ${currentImageIndex + 1} de ${currentImages.length}`;
+            
+            // Atualizar estado dos botões
+            prevButton.disabled = currentImageIndex === 0;
+            nextButton.disabled = currentImageIndex === currentImages.length - 1;
+            
+            // Atualizar miniaturas ativas
+            updateActiveThumbnail();
+        }
+
+        // Função para trocar de imagem
+        function changeImage(direction) {
+            const newIndex = currentImageIndex + direction;
+            
+            if (newIndex >= 0 && newIndex < currentImages.length) {
+                currentImageIndex = newIndex;
+                showCurrentImage();
+            }
+        }
+
+        // Função para criar miniaturas
+        function createThumbnails() {
+            const container = document.getElementById('thumbnailsContainer').querySelector('div');
+            container.innerHTML = '';
+            
+            currentImages.forEach((image, index) => {
+                const thumbnail = document.createElement('div');
+                thumbnail.className = `relative w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200 ${
+                    index === currentImageIndex ? 'border-rosa-escuro' : 'border-gray-200 hover:border-gray-400'
+                }`;
+                thumbnail.onclick = () => {
+                    currentImageIndex = index;
+                    showCurrentImage();
+                };
+                
+                const img = document.createElement('img');
+                img.src = image;
+                img.alt = `Miniatura ${index + 1}`;
+                img.className = 'w-full h-full object-cover';
+                
+                thumbnail.appendChild(img);
+                container.appendChild(thumbnail);
+            });
+        }
+
+        // Função para atualizar a miniatura ativa
+        function updateActiveThumbnail() {
+            const thumbnails = document.getElementById('thumbnailsContainer').querySelectorAll('div > div');
+            thumbnails.forEach((thumb, index) => {
+                if (index === currentImageIndex) {
+                    thumb.className = thumb.className.replace('border-gray-200', 'border-rosa-escuro');
+                } else {
+                    thumb.className = thumb.className.replace('border-rosa-escuro', 'border-gray-200');
+                }
+            });
+        }
+
+        // Função para zoom da imagem
+        function toggleZoom() {
+            const mainImage = document.getElementById('mainImage');
+            const indicator = document.getElementById('zoomIndicator');
+            
+            if (isZoomed) {
+                mainImage.style.transform = 'scale(1)';
+                mainImage.style.cursor = 'zoom-in';
+                indicator.textContent = 'Clique para ampliar';
+                isZoomed = false;
+            } else {
+                mainImage.style.transform = 'scale(1.5)';
+                mainImage.style.cursor = 'zoom-out';
+                indicator.textContent = 'Clique para reduzir';
+                isZoomed = true;
+            }
+        }
+
+        // Função para navegar entre imagens de um produto específico
+        function navigateProductImage(productId, direction) {
+            // Inicializar estado do produto se não existir
+            if (!productImageStates[productId]) {
+                productImageStates[productId] = {
+                    currentIndex: 0,
+                    images: []
+                };
+            }
+            
+            const state = productImageStates[productId];
+            const container = document.getElementById(`productImage_${productId}`);
+            const imgElement = container.querySelector('img');
+            
+            if (!imgElement) {
+                console.log('Imagem não encontrada para o produto:', productId);
+                return;
+            }
+            
+            // Coletar todas as imagens disponíveis para este produto
+            if (state.images.length === 0) {
+                const img1 = container.dataset.img1 || '';
+                const img2 = container.dataset.img2 || '';
+                const img3 = container.dataset.img3 || '';
+                state.images = [img1, img2, img3].filter(img => img && img.trim() !== '');
+                console.log('Imagens encontradas para produto', productId, ':', state.images);
+            }
+            
+            // Calcular novo índice
+            const newIndex = state.currentIndex + direction;
+            
+            // Verificar limites
+            if (newIndex >= 0 && newIndex < state.images.length) {
+                state.currentIndex = newIndex;
+                
+                // Atualizar imagem
+                imgElement.src = state.images[state.currentIndex];
+                
+                // Adicionar efeito de transição
+                imgElement.style.opacity = '0.7';
+                setTimeout(() => {
+                    imgElement.style.opacity = '1';
+                }, 150);
+                
+                console.log('Navegando para imagem', newIndex + 1, 'de', state.images.length);
+            } else {
+                console.log('Limite atingido. Índice atual:', state.currentIndex, 'Novo índice:', newIndex, 'Total:', state.images.length);
+            }
+        }
+
+        // Função para inicializar os estados dos produtos
+        function initializeProductImageStates() {
+            // Esta função será chamada quando a página carregar
+            // para configurar os dados das imagens dos produtos
+        }
+
+        // Adicionar evento de clique na imagem principal
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainImage = document.getElementById('mainImage');
+            if (mainImage) {
+                mainImage.addEventListener('click', toggleZoom);
+            }
+            
+            // Adicionar eventos de teclado
+            document.addEventListener('keydown', function(e) {
+                if (!document.getElementById('imageModal').classList.contains('hidden')) {
+                    if (e.key === 'Escape') {
+                        closeImageModal();
+                    } else if (e.key === 'ArrowLeft') {
+                        changeImage(-1);
+                    } else if (e.key === 'ArrowRight') {
+                        changeImage(1);
+                    }
+                }
+            });
+            
+            // Inicializar estados dos produtos
+            initializeProductImageStates();
+        });
 
         // Atualizar estatísticas
         function updateStats() {
@@ -663,6 +1089,30 @@
         }
 
         // Logout é feito via Django
+
+        // Event listeners para navegação de imagens
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navegação de produtos
+            document.querySelectorAll('.navigate-product-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.dataset.productId;
+                    const direction = parseInt(this.dataset.direction);
+                    navigateProductImage(productId, direction);
+                });
+            });
+
+            // Abertura do modal de imagens
+            document.querySelectorAll('.open-image-modal, .open-image-modal-btn').forEach(element => {
+                element.addEventListener('click', function() {
+                    const productId = this.dataset.productId;
+                    const img1 = this.dataset.img1;
+                    const img2 = this.dataset.img2;
+                    const img3 = this.dataset.img3;
+                    const productName = this.dataset.productName;
+                    openImageModal(productId, img1, img2, img3, productName);
+                });
+            });
+        });
 
         // Inicializar
         updateStats();

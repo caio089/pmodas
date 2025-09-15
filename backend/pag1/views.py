@@ -2,8 +2,8 @@ from django.shortcuts import render
 from .models import Roupa
 
 def home(request):
-    # Carregar todas as roupas do banco de dados
-    roupas = Roupa.objects.all().order_by('-data_criacao')
+    # Carregar apenas roupas ativas do banco de dados
+    roupas = Roupa.objects.filter(ativo=True).order_by('-data_criacao')
     
     # Filtros opcionais via GET
     categoria = request.GET.get('categoria', '')

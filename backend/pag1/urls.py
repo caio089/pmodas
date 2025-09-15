@@ -24,4 +24,5 @@ urlpatterns = [
     path('painel-admin/adicionar-roupa/', views_admin.adicionar_roupa, name='adicionar_roupa'),
     path('painel-admin/editar-roupa/<int:roupa_id>/', views_admin.editar_roupa, name='editar_roupa'),
     path('painel-admin/excluir-roupa/<int:roupa_id>/', views_admin.excluir_roupa, name='excluir_roupa'),
+    path('painel-admin/alternar-status/<int:roupa_id>/', views_admin.alternar_status_roupa, name='alternar_status_roupa'),
 ]

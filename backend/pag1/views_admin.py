@@ -39,6 +39,13 @@ def admin_dashboard(request):
     # Buscar roupas do banco de dados
     roupas = Roupa.objects.all().order_by('-data_criacao')
     
+    # Filtro por status ativo/inativo
+    status = request.GET.get('status', '')
+    if status == 'ativo':
+        roupas = roupas.filter(ativo=True)
+    elif status == 'inativo':
+        roupas = roupas.filter(ativo=False)
+    
     # Filtros
     categoria = request.GET.get('categoria', '')
     busca = request.GET.get('busca', '')
@@ -58,6 +65,8 @@ def admin_dashboard(request):
     
     # Estatísticas
     total_roupas = Roupa.objects.count()
+    roupas_ativas = Roupa.objects.filter(ativo=True).count()
+    roupas_inativas = Roupa.objects.filter(ativo=False).count()
     roupas_por_categoria = {}
     for categoria_choice in Roupa.CATEGORIA_CHOICES:
         count = Roupa.objects.filter(categoria=categoria_choice[0]).count()
@@ -66,10 +75,13 @@ def admin_dashboard(request):
     context = {
         'page_obj': page_obj,
         'total_roupas': total_roupas,
+        'roupas_ativas': roupas_ativas,
+        'roupas_inativas': roupas_inativas,
         'roupas_por_categoria': roupas_por_categoria,
         'categorias': Roupa.CATEGORIA_CHOICES,
         'categoria_atual': categoria,
         'busca_atual': busca,
+        'status_atual': status,
     }
     
     return render(request, 'pag1/admin_dashboard.html', context)
@@ -146,6 +158,22 @@ def excluir_roupa(request, roupa_id):
             messages.success(request, f'Roupa "{nome_roupa}" excluída com sucesso!')
         except Exception as e:
             messages.error(request, f'Erro ao excluir roupa: {str(e)}')
+    
+    return redirect('admin_dashboard')
+
+@login_required
+def alternar_status_roupa(request, roupa_id):
+    """Alternar status ativo/inativo da roupa"""
+    roupa = get_object_or_404(Roupa, id=roupa_id)
+    
+    if request.method == 'POST':
+        try:
+            roupa.ativo = not roupa.ativo
+            roupa.save()
+            status_texto = "ativada" if roupa.ativo else "desativada"
+            messages.success(request, f'Roupa "{roupa.nome}" foi {status_texto} com sucesso!')
+        except Exception as e:
+            messages.error(request, f'Erro ao alterar status da roupa: {str(e)}')
     
     return redirect('admin_dashboard')
 

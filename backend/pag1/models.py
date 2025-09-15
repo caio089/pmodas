@@ -62,6 +62,11 @@ class Roupa(models.Model):
         null=True,
         verbose_name="Imagem 3"
     )
+    ativo = models.BooleanField(
+        default=True,
+        verbose_name="Produto Ativo",
+        help_text="Desmarque para ocultar este produto do catálogo público"
+    )
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name="Data de Criação")
     
     class Meta:
@@ -92,8 +97,48 @@ class Roupa(models.Model):
             imagens.append(self.imagem_3.url)
         return imagens
     
+    def get_imagem_principal_url_safe(self):
+        """Retorna URL da imagem principal de forma segura"""
+        try:
+            return self.imagem_principal.url if self.imagem_principal else ""
+        except ValueError:
+            return ""
+    
+    def get_imagem_2_url_safe(self):
+        """Retorna URL da imagem 2 de forma segura"""
+        try:
+            return self.imagem_2.url if self.imagem_2 else ""
+        except ValueError:
+            return ""
+    
+    def get_imagem_3_url_safe(self):
+        """Retorna URL da imagem 3 de forma segura"""
+        try:
+            return self.imagem_3.url if self.imagem_3 else ""
+        except ValueError:
+            return ""
+    
+    def get_total_imagens(self):
+        """Retorna o número total de imagens disponíveis"""
+        count = 0
+        if self.imagem_principal:
+            count += 1
+        if self.imagem_2:
+            count += 1
+        if self.imagem_3:
+            count += 1
+        return count
+    
     def get_imagem_principal_url(self):
         """Retorna URL da imagem principal ou string vazia"""
         if self.imagem_principal:
             return self.imagem_principal.url
         return ""
+    
+    def get_status_display(self):
+        """Retorna o status do produto formatado"""
+        return "Ativo" if self.ativo else "Inativo"
+    
+    def get_status_class(self):
+        """Retorna classe CSS para o status"""
+        return "bg-green-100 text-green-800" if self.ativo else "bg-red-100 text-red-800"
