@@ -283,9 +283,36 @@
  }
  
  /* Estilos para o carrinho flutuante */
- #carrinhoFlutuante {
-     animation: bounceIn 0.6s ease-out;
- }
+#carrinhoFlutuante {
+    animation: bounceIn 0.6s ease-out;
+}
+
+#carrinhoFlutuante > div {
+    background: linear-gradient(135deg, #ff6b9d, #ff8fab, #ffa8c5) !important;
+    border: 3px solid #ffffff !important;
+    box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4), 0 0 20px rgba(255, 107, 157, 0.3) !important;
+    transform: scale(1.1);
+}
+
+#carrinhoFlutuante:hover > div {
+    background: linear-gradient(135deg, #ff4d8a, #ff6b9d, #ff8fab) !important;
+    transform: scale(1.2);
+    box-shadow: 0 12px 35px rgba(255, 107, 157, 0.6), 0 0 30px rgba(255, 107, 157, 0.5) !important;
+}
+
+#carrinhoFlutuante svg {
+    color: #ffffff !important;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+#carrinhoContador {
+    background: #ff1744 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 2px 8px rgba(255, 23, 68, 0.4) !important;
+    font-weight: 900 !important;
+    animation: pulse 2s infinite;
+}
  
  @keyframes bounceIn {
      0% {
@@ -305,6 +332,7 @@
      }
  }
 
+<<<<<<< HEAD
     /* Melhorar espaçamento entre elementos interativos */
     .card-hover button {
         margin-top: 0.5rem;
@@ -335,4 +363,286 @@
         max-height: 15rem;
         z-index: 1001;
     }
+=======
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(255, 23, 68, 0.4);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 4px 15px rgba(255, 23, 68, 0.6);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(255, 23, 68, 0.4);
+    }
+}
+
+/* Efeito de brilho para a sacola */
+#carrinhoFlutuante::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff6b9d, #ff8fab, #ffa8c5, #ff6b9d);
+    border-radius: 50%;
+    z-index: -1;
+    animation: rotate 3s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Estilos específicos para mobile */
+@media (max-width: 640px) {
+    /* Melhorar legibilidade em telas pequenas */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    /* Ajustar espaçamentos para mobile */
+    .container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    
+    /* Melhorar botões para touch */
+    button, .cursor-pointer {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Ajustar modais para mobile */
+    .modal-content {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+    }
+    
+    /* Melhorar carrossel em mobile */
+    .featured-card {
+        min-height: 200px;
+    }
+    
+    /* Ajustar dropdown de sugestões */
+    #searchSuggestions, #searchSuggestionsMobile {
+        max-height: 50vh;
+        font-size: 0.875rem;
+    }
+    
+    /* Melhorar grid de produtos */
+    .grid {
+        gap: 1rem;
+    }
+    
+    /* Ajustar carrinho flutuante */
+    #carrinhoFlutuante {
+        bottom: 1rem;
+        right: 1rem;
+    }
+    
+    /* Manter visibilidade da sacola no mobile */
+    #carrinhoFlutuante > div {
+        background: linear-gradient(135deg, #ff6b9d, #ff8fab, #ffa8c5) !important;
+        border: 2px solid #ffffff !important;
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5) !important;
+        transform: scale(1.05);
+    }
+    
+    #carrinhoFlutuante:hover > div {
+        transform: scale(1.1);
+    }
+    
+    /* Melhorar navegação do carrossel */
+    #prevBtn, #nextBtn {
+        padding: 0.5rem;
+    }
+    
+    /* Ajustar indicadores do carrossel */
+    .slide-indicator {
+        width: 0.5rem;
+        height: 0.5rem;
+    }
+}
+
+/* Estilos para tablets */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .grid {
+        gap: 1.5rem;
+    }
+    
+    .featured-card {
+        min-height: 300px;
+    }
+}
+
+/* Melhorar acessibilidade touch */
+@media (hover: none) and (pointer: coarse) {
+    .card-hover:hover {
+        transform: none;
+    }
+    
+    .card-hover:active {
+        transform: scale(0.98);
+    }
+    
+    button:hover {
+        transform: none;
+    }
+    
+    button:active {
+        transform: scale(0.95);
+    }
+}
+
+/* Estilos para landscape mobile */
+@media (max-width: 896px) and (orientation: landscape) {
+    .featured-card .card-container {
+        min-height: 250px;
+    }
+    
+    #carouselContainer {
+        height: 250px;
+    }
+    
+    .modal-content {
+        max-height: 80vh;
+    }
+}
+
+/* Melhorar performance em dispositivos móveis */
+@media (max-width: 640px) {
+    .featured-card .card-container {
+        will-change: transform;
+    }
+    
+    .card-hover {
+        will-change: transform;
+    }
+    
+    /* Reduzir animações em mobile para melhor performance */
+    .featured-card .card-container {
+        animation: none;
+    }
+    
+    .featured-card:hover .card-container {
+        animation: none;
+    }
+}
+
+/* Estilos para telas muito pequenas */
+@media (max-width: 375px) {
+    .container {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    .text-2xl {
+        font-size: 1.5rem;
+    }
+    
+    .text-3xl {
+        font-size: 1.875rem;
+    }
+    
+    .text-4xl {
+        font-size: 2rem;
+    }
+    
+    .text-5xl {
+        font-size: 2.25rem;
+    }
+}
+
+/* Estilos para a Galeria de Fotos */
+#galeriaModal img {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Ajustar tamanho do modal para desktop */
+@media (min-width: 1024px) {
+    #galeriaModal .bg-white {
+        max-width: 500px;
+    }
+}
+
+@media (min-width: 1280px) {
+    #galeriaModal .bg-white {
+        max-width: 600px;
+    }
+}
+
+#galeriaModal .miniaturas img {
+    transition: all 0.2s ease;
+}
+
+#galeriaModal .miniaturas img:hover {
+    transform: scale(1.05);
+}
+
+/* Animação de entrada da galeria */
+#galeriaModal > div {
+    animation: galeriaSlideIn 0.3s ease-out;
+}
+
+@keyframes galeriaSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Estilos para miniaturas ativas */
+.miniaturas .ring-2 {
+    box-shadow: 0 0 0 2px #f4a6b3;
+}
+
+/* Melhorar responsividade da galeria */
+@media (max-width: 640px) {
+    #galeriaModal .miniaturas img {
+        width: 3rem;
+        height: 3rem;
+    }
+    
+    #galeriaModal .btn-navegacao {
+        padding: 0.5rem;
+    }
+    
+    #galeriaModal .contador-fotos {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+}
+
+/* Efeito de zoom na imagem principal */
+#imagemPrincipal {
+    cursor: zoom-in;
+}
+
+#imagemPrincipal:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+>>>>>>> 07af0c5ed17cc66db7902a6e1bfdc0a42a0ac7c8
 }
