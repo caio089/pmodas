@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Roupa - PAIXAO MODAS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rosa-claro': '#fce7f3',
+                        'rosa-escuro': '#be185d',
+                        'rosa-hover': '#ec4899'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-lg border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <img src="{% static 'pmodas.jpg' %}" alt="PAIXAO MODAS" class="h-10 w-auto">
+                    <h1 class="text-2xl font-bold text-gray-800">Editar Roupa</h1>
+                </div>
+                <a href="{% url 'admin_dashboard' %}" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                    Voltar ao Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">Editar: {{ roupa.nome }}</h2>
+            
+            <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">Nome da Roupa *</label>
+                        <input type="text" id="nome" name="nome" value="{{ roupa.nome }}" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro">
+                    </div>
+                    
+                    <div>
+                        <label for="categoria" class="block text-sm font-medium text-gray-700 mb-2">Categoria *</label>
+                        <select id="categoria" name="categoria" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro">
+                            {% for value, label in categorias %}
+                                <option value="{{ value }}" {% if roupa.categoria == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="tamanhos" class="block text-sm font-medium text-gray-700 mb-2">Tamanhos *</label>
+                        <select id="tamanhos" name="tamanhos" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro">
+                            {% for value, label in tamanhos %}
+                                <option value="{{ value }}" {% if roupa.tamanhos == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="preco" class="block text-sm font-medium text-gray-700 mb-2">Preço (R$) *</label>
+                    <input type="number" id="preco" name="preco" value="{{ roupa.preco }}" step="0.01" min="0.01" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro">
+                </div>
+                
+                <div>
+                    <label for="descricao" class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+                    <textarea id="descricao" name="descricao" rows="4"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro">{{ roupa.descricao }}</textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Imagens</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">Imagem Principal</label>
+                            {% if roupa.imagem_principal %}
+                                <div class="w-full h-32 bg-gray-100 rounded-lg overflow-hidden mb-2">
+                                    <img src="{{ roupa.imagem_principal.url }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover">
+                                </div>
+                            {% endif %}
+                            <input type="file" id="imagem_principal" name="imagem_principal" accept="image/*"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro">
+                            <p class="text-xs text-gray-500 mt-1">Deixe em branco para manter atual</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">Imagem 2</label>
+                            {% if roupa.imagem_2 %}
+                                <div class="w-full h-32 bg-gray-100 rounded-lg overflow-hidden mb-2">
+                                    <img src="{{ roupa.imagem_2.url }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover">
+                                </div>
+                            {% endif %}
+                            <input type="file" id="imagem_2" name="imagem_2" accept="image/*"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro">
+                            <p class="text-xs text-gray-500 mt-1">Opcional</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">Imagem 3</label>
+                            {% if roupa.imagem_3 %}
+                                <div class="w-full h-32 bg-gray-100 rounded-lg overflow-hidden mb-2">
+                                    <img src="{{ roupa.imagem_3.url }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover">
+                                </div>
+                            {% endif %}
+                            <input type="file" id="imagem_3" name="imagem_3" accept="image/*"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro">
+                            <p class="text-xs text-gray-500 mt-1">Opcional</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-4 pt-6">
+                    <a href="{% url 'admin_dashboard' %}" 
+                       class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                        Cancelar
+                    </a>
+                    <button type="submit" 
+                            class="px-6 py-3 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors">
+                        Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

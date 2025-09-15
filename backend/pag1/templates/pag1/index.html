@@ -1,4 +1,4 @@
-{% load static %}
+robelmas {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -325,12 +325,12 @@
 
                 <!-- Filtros Básicos -->
                 <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <form id="filtros" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <!-- Busca -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Buscar:</label>
                             <div class="relative">
-                                <input type="text" id="catalogSearch" placeholder="Nome da peça..." 
+                                <input type="text" id="catalogSearch" name="busca" value="{{ busca_atual }}" placeholder="Nome da peça..." 
                                        class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition-all">
                                 <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -341,34 +341,131 @@
                         <!-- Categoria -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Categoria:</label>
-                            <select id="catalogCategory" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition-all">
+                            <select id="catalogCategory" name="categoria" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition-all">
                                 <option value="">Todas</option>
-                                <option value="vestidos">Vestidos</option>
-                                <option value="blusas">Blusas</option>
-                                <option value="calcas">Calças</option>
-                                <option value="saias">Saias</option>
-                                <option value="conjuntos">Conjuntos</option>
-                                <option value="acessorios">Acessórios</option>
+                                {% for value, label in categorias %}
+                                    <option value="{{ value }}" {% if categoria_atual == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         
                         <!-- Preço -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Preço:</label>
-                            <select id="catalogPrice" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition-all">
+                            <select id="catalogPrice" name="preco" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-1 focus:ring-rosa-escuro transition-all">
                                 <option value="">Qualquer</option>
-                                <option value="0-50">Até R$ 50</option>
-                                <option value="50-100">R$ 50 - R$ 100</option>
-                                <option value="100-200">R$ 100 - R$ 200</option>
-                                <option value="200+">Acima de R$ 200</option>
+                                <option value="0-50" {% if preco_atual == "0-50" %}selected{% endif %}>Até R$ 50</option>
+                                <option value="50-100" {% if preco_atual == "50-100" %}selected{% endif %}>R$ 50 - R$ 100</option>
+                                <option value="100-200" {% if preco_atual == "100-200" %}selected{% endif %}>R$ 100 - R$ 200</option>
+                                <option value="200+" {% if preco_atual == "200+" %}selected{% endif %}>Acima de R$ 200</option>
                             </select>
                         </div>
+                    </form>
+                    
+                    <div class="flex justify-center mt-4">
+                        <button type="submit" form="filtros" class="px-6 py-2 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors">
+                            Filtrar
+                        </button>
+                        <a href="/" class="ml-4 px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                            Limpar
+                        </a>
                     </div>
                 </div>
 
                 <!-- Grid de Produtos do Catálogo -->
                 <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    <!-- Produtos serão carregados aqui via JavaScript -->
+                    {% for roupa in roupas %}
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                            <!-- Imagem do Produto -->
+                            <div class="aspect-square bg-gray-100 overflow-hidden relative">
+                                {% if roupa.imagem_principal %}
+                                    <img src="{{ roupa.imagem_principal.url }}" alt="{{ roupa.nome }}" 
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Indicador de múltiplas imagens -->
+                                {% if roupa.imagem_2 or roupa.imagem_3 %}
+                                    <div class="absolute top-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded-full">
+                                        +{{ roupa.get_imagens|length }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Informações do Produto -->
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-800 group-hover:text-rosa-escuro transition-colors">
+                                        {{ roupa.nome }}
+                                    </h3>
+                                    <span class="text-xs bg-rosa-claro text-rosa-escuro px-2 py-1 rounded-full">
+                                        {{ roupa.get_categoria_display_pt }}
+                                    </span>
+                                </div>
+                                
+                                {% if roupa.descricao %}
+                                    <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ roupa.descricao }}</p>
+                                {% endif %}
+                                
+                                <!-- Tamanhos -->
+                                <div class="mb-4">
+                                    <p class="text-sm text-gray-500 mb-2">Tamanhos:</p>
+                                    <div class="flex flex-wrap gap-1">
+                                        {% if roupa.tamanhos %}
+                                            {% for tamanho in roupa.tamanhos.split|slice:":4" %}
+                                                <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">{{ tamanho }}</span>
+                                            {% endfor %}
+                                            {% if roupa.tamanhos.split|length > 4 %}
+                                                <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+{{ roupa.tamanhos.split|length|add:"-4" }}</span>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">P, M, G</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Preço e Botões -->
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-2xl font-bold text-rosa-escuro">{{ roupa.get_preco_formatado }}</span>
+                                    </div>
+                                    
+                                    <div class="flex space-x-2">
+                                        <button class="btn-carrinho flex-1 bg-rosa-escuro hover:bg-rosa-hover text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+                                                data-id="{{ roupa.id }}"
+                                                data-nome="{{ roupa.nome }}"
+                                                data-preco="{{ roupa.preco }}"
+                                                data-imagem="{{ roupa.get_imagem_principal_url }}">
+                                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 11-4 0v-6m4 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                                            </svg>
+                                            Carrinho
+                                        </button>
+                                        
+                                        <a href="https://wa.me/5511999999999?text=Olá, quero saber mais sobre a roupa {{ roupa.nome }} ({{ roupa.get_tamanhos_display }})." 
+                                           target="_blank"
+                                           class="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium text-center">
+                                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                                            </svg>
+                                            WhatsApp
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-span-full text-center py-16">
+                            <div class="text-gray-400 text-8xl mb-6">👗</div>
+                            <h3 class="text-2xl font-semibold text-gray-600 mb-4">Nenhuma roupa cadastrada</h3>
+                            <p class="text-gray-500 text-lg">Acesse o painel administrativo para adicionar roupas ao catálogo</p>
+                        </div>
+                    {% endfor %}
                 </div>
 
                 <!-- Mensagem quando não há produtos -->

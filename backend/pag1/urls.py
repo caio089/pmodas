@@ -19,4 +19,9 @@ urlpatterns = [
     path('painel-admin/dashboard/', views_admin.admin_dashboard, name='admin_dashboard'),
     path('painel-admin/logout/', views_admin.admin_logout, name='admin_logout'),
     path('painel-admin/api/products/', views_admin.admin_api_products, name='admin_api_products'),
+    
+    # CRUD de Roupas
+    path('painel-admin/adicionar-roupa/', views_admin.adicionar_roupa, name='adicionar_roupa'),
+    path('painel-admin/editar-roupa/<int:roupa_id>/', views_admin.editar_roupa, name='editar_roupa'),
+    path('painel-admin/excluir-roupa/<int:roupa_id>/', views_admin.excluir_roupa, name='excluir_roupa'),
 ]

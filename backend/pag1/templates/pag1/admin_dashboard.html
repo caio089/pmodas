@@ -50,8 +50,8 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Total de Produtos</p>
-                        <p class="text-2xl font-bold text-gray-900" id="totalProducts">0</p>
+                        <p class="text-sm font-medium text-gray-600">Total de Roupas</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ total_roupas }}</p>
                     </div>
                 </div>
             </div>
@@ -104,25 +104,126 @@
                 <p class="text-sm opacity-90">Gerenciar produtos existentes</p>
             </button>
 
-            <button onclick="showSettings()" class="bg-gray-600 text-white p-6 rounded-xl hover:bg-gray-700 transition-colors text-center">
+            <a href="/admin/" target="_blank" class="bg-gray-600 text-white p-6 rounded-xl hover:bg-gray-700 transition-colors text-center">
                 <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
-                <h3 class="text-lg font-semibold">Configurações</h3>
-                <p class="text-sm opacity-90">Ajustar configurações do sistema</p>
-            </button>
+                <h3 class="text-lg font-semibold">Admin Django</h3>
+                <p class="text-sm opacity-90">Acessar painel administrativo do Django</p>
+            </a>
         </div>
 
-        <!-- Área de Conteúdo -->
-        <div id="contentArea" class="bg-white rounded-xl shadow-lg p-6">
-            <div class="text-center text-gray-500">
-                <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                <h3 class="text-xl font-semibold mb-2">Selecione uma opção acima</h3>
-                <p>Escolha uma das funcionalidades do menu para começar</p>
+        <!-- Filtros -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <form method="GET" class="flex flex-wrap gap-4 items-end">
+                <div class="flex-1 min-w-64">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Buscar</label>
+                    <input type="text" name="busca" value="{{ busca_atual }}" placeholder="Nome ou descrição..." 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro">
+                </div>
+                <div class="min-w-48">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Categoria</label>
+                    <select name="categoria" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro">
+                        <option value="">Todas as categorias</option>
+                        {% for value, label in categorias %}
+                            <option value="{{ value }}" {% if categoria_atual == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="px-6 py-2 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors">
+                    Filtrar
+                </button>
+                <a href="{% url 'admin_dashboard' %}" class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                    Limpar
+                </a>
+            </form>
+        </div>
+
+        <!-- Lista de Roupas -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Roupas Cadastradas</h2>
+                <span class="text-gray-600">{{ page_obj.paginator.count }} roupas encontradas</span>
             </div>
+            
+            {% if page_obj %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for roupa in page_obj %}
+                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
+                            <div class="aspect-square bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                                {% if roupa.imagem_principal %}
+                                    <img src="{{ roupa.imagem_principal.url }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover">
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <h3 class="font-semibold text-gray-800 mb-2">{{ roupa.nome }}</h3>
+                            <p class="text-rosa-escuro font-bold text-lg mb-2">{{ roupa.get_preco_formatado }}</p>
+                            <p class="text-sm text-gray-600 mb-2">{{ roupa.get_categoria_display_pt }}</p>
+                            {% if roupa.tamanhos %}
+                                <p class="text-xs text-gray-500 mb-2">Tamanhos: {{ roupa.get_tamanhos_display }}</p>
+                            {% endif %}
+                            {% if roupa.descricao %}
+                                <p class="text-xs text-gray-400 mb-4 line-clamp-2">{{ roupa.descricao }}</p>
+                            {% endif %}
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-500">{{ roupa.data_criacao|date:"d/m/Y" }}</span>
+                                <div class="flex space-x-2">
+                                    <a href="{% url 'editar_roupa' roupa.id %}" class="text-blue-600 hover:text-blue-800 text-sm">
+                                        Editar
+                                    </a>
+                                    <a href="{% url 'excluir_roupa' roupa.id %}" 
+                                       onclick="return confirm('Tem certeza que deseja excluir esta roupa?')"
+                                       class="text-red-600 hover:text-red-800 text-sm">
+                                        Excluir
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Paginação -->
+                {% if page_obj.has_other_pages %}
+                    <div class="mt-6 flex justify-center">
+                        <nav class="flex space-x-2">
+                            {% if page_obj.has_previous %}
+                                <a href="?page={{ page_obj.previous_page_number }}{% if categoria_atual %}&categoria={{ categoria_atual }}{% endif %}{% if busca_atual %}&busca={{ busca_atual }}{% endif %}" 
+                                   class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                                    Anterior
+                                </a>
+                            {% endif %}
+                            
+                            <span class="px-3 py-2 bg-rosa-escuro text-white rounded-lg">
+                                {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                            </span>
+                            
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}{% if categoria_atual %}&categoria={{ categoria_atual }}{% endif %}{% if busca_atual %}&busca={{ busca_atual }}{% endif %}" 
+                                   class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                                    Próxima
+                                </a>
+                            {% endif %}
+                        </nav>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-12">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">Nenhuma roupa encontrada</h3>
+                    <p class="text-gray-500 mb-4">Comece adicionando sua primeira roupa!</p>
+                    <button onclick="showAddProduct()" class="px-6 py-3 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors">
+                        Adicionar Primeira Roupa
+                    </button>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -140,98 +241,83 @@
                 </div>
             </div>
 
-            <form id="addProductForm" class="p-6 space-y-6">
+            <form method="POST" action="{% url 'adicionar_roupa' %}" enctype="multipart/form-data" class="p-6 space-y-6">
+                {% csrf_token %}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Nome da Roupa *</label>
-                        <input type="text" id="productName" required
+                        <input type="text" id="productName" name="nome" required
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
                                placeholder="Ex: Vestido Floral Elegante">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Preço (R$) *</label>
-                        <input type="number" id="productPrice" step="0.01" required
+                        <input type="number" id="productPrice" name="preco" step="0.01" required
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
                                placeholder="Ex: 89.90">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Tamanhos Disponíveis *</label>
-                        <input type="text" id="productSizes" required
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
-                               placeholder="Ex: P, M, G, GG (separados por vírgula)">
-                    </div>
-
-                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Categoria *</label>
-                        <select id="productCategory" required
+                        <select id="productCategory" name="categoria" required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20">
                             <option value="">Selecione uma categoria</option>
-                            <option value="vestidos">Vestidos</option>
-                            <option value="blusas">Blusas</option>
-                            <option value="calcas">Calças</option>
-                            <option value="saias">Saias</option>
-                            <option value="conjuntos">Conjuntos</option>
+                            <option value="vestido">Vestido</option>
+                            <option value="blusa">Blusa</option>
+                            <option value="calca">Calça</option>
+                            <option value="saia">Saia</option>
+                            <option value="conjunto">Conjunto</option>
                             <option value="acessorios">Acessórios</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tamanhos *</label>
+                        <select id="productSizes" name="tamanhos" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20">
+                            <option value="P,M,G" selected>P, M, G</option>
+                            <option value="P">P</option>
+                            <option value="M">M</option>
+                            <option value="G">G</option>
+                            <option value="GG">GG</option>
+                            <option value="P,M">P, M</option>
+                            <option value="M,G">M, G</option>
+                            <option value="G,GG">G, GG</option>
+                            <option value="M,G,GG">M, G, GG</option>
+                            <option value="P,M,G,GG">P, M, G, GG</option>
                         </select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Descrição *</label>
-                    <textarea id="productDescription" rows="3" required
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+                    <textarea id="productDescription" name="descricao" rows="3"
                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
                               placeholder="Descreva a roupa..."></textarea>
                 </div>
-
+                
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Fotos da Roupa (máximo 3) *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Imagens (máximo 3) *</label>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-rosa-escuro transition-colors">
-                            <input type="file" id="photo1" accept="image/*" class="hidden" onchange="previewImage(this, 'preview1')">
-                            <label for="photo1" class="cursor-pointer">
-                                <div id="preview1" class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
-                                    <div class="text-center">
-                                        <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                        </svg>
-                                        <p class="text-sm text-gray-500">Foto 1</p>
-                                    </div>
-                                </div>
-                            </label>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">Imagem Principal *</label>
+                            <input type="file" id="imagemPrincipal" name="imagem_principal" accept="image/*" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20">
                         </div>
-                        
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-rosa-escuro transition-colors">
-                            <input type="file" id="photo2" accept="image/*" class="hidden" onchange="previewImage(this, 'preview2')">
-                            <label for="photo2" class="cursor-pointer">
-                                <div id="preview2" class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
-                                    <div class="text-center">
-                                        <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                        </svg>
-                                        <p class="text-sm text-gray-500">Foto 2</p>
-                                    </div>
-                                </div>
-                            </label>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">Imagem 2</label>
+                            <input type="file" id="imagem2" name="imagem_2" accept="image/*"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20">
                         </div>
-                        
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-rosa-escuro transition-colors">
-                            <input type="file" id="photo3" accept="image/*" class="hidden" onchange="previewImage(this, 'preview3')">
-                            <label for="photo3" class="cursor-pointer">
-                                <div id="preview3" class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
-                                    <div class="text-center">
-                                        <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                        </svg>
-                                        <p class="text-sm text-gray-500">Foto 3</p>
-                                    </div>
-                                </div>
-                            </label>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">Imagem 3</label>
+                            <input type="file" id="imagem3" name="imagem_3" accept="image/*"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20">
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 mt-2">💡 Dica: Clique em cada área para selecionar uma foto do seu dispositivo</p>
                 </div>
+
 
                 <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                     <button type="button" onclick="closeAddProduct()"
@@ -240,7 +326,7 @@
                     </button>
                     <button type="submit"
                             class="px-6 py-3 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors">
-                        Adicionar Produto
+                        Adicionar Roupa
                     </button>
                 </div>
             </form>
@@ -278,6 +364,13 @@
         function closeAddProduct() {
             document.getElementById('addProductModal').classList.add('hidden');
             document.getElementById('addProductForm').reset();
+            
+            // Resetar estado de edição
+            editingIndex = -1;
+            
+            // Resetar título do modal
+            document.querySelector('#addProductModal h2').textContent = 'Adicionar Nova Roupa';
+            
             // Limpar previews das imagens
             document.getElementById('preview1').innerHTML = `
                 <div class="text-center">
@@ -368,9 +461,14 @@
                                 <span class="px-2 py-1 text-xs rounded-full ${product.status === 'ativo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
                                     ${product.status}
                                 </span>
-                                <button onclick="deleteProduct(${index})" class="text-red-600 hover:text-red-800 text-sm">
-                                    Excluir
-                                </button>
+                                <div class="flex space-x-2">
+                                    <button onclick="editProduct(${index})" class="text-blue-600 hover:text-blue-800 text-sm">
+                                        Editar
+                                    </button>
+                                    <button onclick="deleteProduct(${index})" class="text-red-600 hover:text-red-800 text-sm">
+                                        Excluir
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     `).join('')}
@@ -406,21 +504,42 @@
         document.getElementById('addProductForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Converter imagens para base64
+            // Converter imagens para base64 de forma síncrona
             const photos = [];
-            for (let i = 1; i <= 3; i++) {
-                const fileInput = document.getElementById(`photo${i}`);
+            const fileInputs = [
+                document.getElementById('photo1'),
+                document.getElementById('photo2'),
+                document.getElementById('photo3')
+            ];
+            
+            let processedImages = 0;
+            const totalImages = fileInputs.filter(input => input.files[0]).length;
+            
+            if (totalImages === 0) {
+                alert('Por favor, selecione pelo menos uma foto do produto.');
+                return;
+            }
+            
+            fileInputs.forEach((fileInput, index) => {
                 if (fileInput.files[0]) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         photos.push(e.target.result);
+                        processedImages++;
+                        
+                        // Quando todas as imagens forem processadas, criar o produto
+                        if (processedImages === totalImages) {
+                            createProduct(photos);
+                        }
                     };
                     reader.readAsDataURL(fileInput.files[0]);
                 }
-            }
-            
+            });
+        });
+        
+        function createProduct(photos) {
             const product = {
-                id: Date.now(),
+                id: editingIndex >= 0 ? products[editingIndex].id : Date.now(),
                 name: document.getElementById('productName').value,
                 price: document.getElementById('productPrice').value,
                 category: document.getElementById('productCategory').value,
@@ -430,20 +549,27 @@
                 photos: photos
             };
             
-            products.push(product);
+            if (editingIndex >= 0) {
+                // Editando produto existente
+                products[editingIndex] = product;
+                alert('Produto atualizado com sucesso!');
+            } else {
+                // Adicionando novo produto
+                products.push(product);
+                alert('Produto adicionado com sucesso!');
+            }
+            
             localStorage.setItem('products', JSON.stringify(products));
             
             updateStats();
+            showProductList();
             closeAddProduct();
             
             // Atualizar catálogo na página principal se estiver aberta
             if (typeof atualizarCatalogo === 'function') {
                 atualizarCatalogo();
             }
-            
-            // Mostrar notificação de sucesso
-            alert('Produto adicionado com sucesso!');
-        });
+        }
 
         // Excluir produto
         function deleteProduct(index) {
@@ -452,9 +578,79 @@
                 localStorage.setItem('products', JSON.stringify(products));
                 updateStats();
                 showProductList();
+                
+                // Atualizar catálogo na página principal se estiver aberta
+                if (typeof atualizarCatalogo === 'function') {
+                    atualizarCatalogo();
+                }
+                
+                alert('Produto excluído com sucesso!');
             }
         }
 
+        // Editar produto
+        function editProduct(index) {
+            const product = products[index];
+            editingIndex = index;
+            
+            // Preencher formulário com dados do produto
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productSizes').value = product.sizes;
+            document.getElementById('productDescription').value = product.description;
+            
+            // Limpar previews das imagens
+            document.getElementById('preview1').innerHTML = `
+                <div class="text-center">
+                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <p class="text-sm text-gray-500">Foto 1</p>
+                </div>
+            `;
+            document.getElementById('preview2').innerHTML = `
+                <div class="text-center">
+                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <p class="text-sm text-gray-500">Foto 2</p>
+                </div>
+            `;
+            document.getElementById('preview3').innerHTML = `
+                <div class="text-center">
+                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <p class="text-sm text-gray-500">Foto 3</p>
+                </div>
+            `;
+            
+            // Mostrar imagens existentes se houver
+            if (product.photos && product.photos.length > 0) {
+                product.photos.forEach((photo, photoIndex) => {
+                    if (photoIndex < 3) {
+                        const previewId = `preview${photoIndex + 1}`;
+                        document.getElementById(previewId).innerHTML = `
+                            <img src="${photo}" alt="Foto ${photoIndex + 1}" class="w-full h-full object-cover rounded-lg">
+                            <button onclick="removeImage('photo${photoIndex + 1}', '${previewId}')" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600">
+                                ×
+                            </button>
+                        `;
+                    }
+                });
+            }
+            
+            // Alterar título do modal
+            document.querySelector('#addProductModal h2').textContent = 'Editar Produto';
+            
+            // Mostrar modal
+            document.getElementById('addProductModal').classList.remove('hidden');
+        }
+        
+        // Variável para controlar se está editando
+        let editingIndex = -1;
+        
         // Exportar produtos
         function exportProducts() {
             const dataStr = JSON.stringify(products, null, 2);
