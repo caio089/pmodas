@@ -1,35 +1,59 @@
 // Sistema de Carrinho
 let carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
 
-// Inicializar carrinho quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
+// Variáveis para o modal de tamanho
+let produtoSelecionado = null;
+let tamanhoSelecionado = null;
+
+// Função para inicializar o carrinho
+function inicializarCarrinho() {
     atualizarContadorCarrinho();
     
     // Adicionar event listeners para botões do carrinho
-    setTimeout(() => {
-        const botoesCarrinho = document.querySelectorAll('.btn-carrinho');
-        
-        botoesCarrinho.forEach((button) => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const id = this.getAttribute('data-id');
-                const nome = this.getAttribute('data-nome');
-                const preco = this.getAttribute('data-preco');
-                const imagem = this.getAttribute('data-imagem');
-                
-                adicionarAoCarrinho(id, nome, preco, imagem);
-            });
+    const botoesCarrinho = document.querySelectorAll('.btn-carrinho');
+    
+    botoesCarrinho.forEach((button) => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const id = this.getAttribute('data-id');
+            const nome = this.getAttribute('data-nome');
+            const preco = this.getAttribute('data-preco');
+            const imagem = this.getAttribute('data-imagem');
+            
+            abrirModalTamanho(id, nome, preco, imagem);
         });
-    }, 1000);
+    });
+}
+
+// Aguardar o DOM estar completamente carregado
+document.addEventListener('DOMContentLoaded', function() {
+    // Aguardar um pouco mais para garantir que todos os elementos estejam renderizados
+    setTimeout(inicializarCarrinho, 100);
 });
+
+// Também tentar inicializar imediatamente se o DOM já estiver carregado
+if (document.readyState === 'loading') {
+    // DOM ainda carregando, aguardar
+     } else {
+    // DOM já carregado, inicializar imediatamente
+    setTimeout(inicializarCarrinho, 100);
+}
 
 // Função para atualizar contador do carrinho
 function atualizarContadorCarrinho() {
     const contador = document.getElementById('carrinhoContador');
+    const contadorDesktop = document.getElementById('carrinhoContadorDesktop');
+    
+    const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+    
     if (contador) {
-        const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
         contador.textContent = totalItens;
         contador.style.display = totalItens > 0 ? 'block' : 'none';
+    }
+    
+    if (contadorDesktop) {
+        contadorDesktop.textContent = totalItens;
+        contadorDesktop.style.display = totalItens > 0 ? 'block' : 'none';
     }
 }
 
@@ -48,200 +72,246 @@ function mostrarFeedbackCarrinho() {
     }, 3000);
 }
 
+// Função para abrir modal de seleção de tamanho
+function abrirModalTamanho(id, nome, preco, imagem) {
+    produtoSelecionado = { id, nome, preco, imagem };
+    tamanhoSelecionado = null;
+    
+    // Preencher informações do produto no modal
+    document.getElementById('modalProdutoImagem').src = imagem;
+    document.getElementById('modalProdutoImagem').alt = nome;
+    document.getElementById('modalProdutoNome').textContent = nome;
+    document.getElementById('modalProdutoPreco').textContent = `R$ ${parseFloat(preco).toFixed(2).replace('.', ',')}`;
+    
+    // Resetar seleção de tamanho
+    document.querySelectorAll('.tamanho-btn').forEach(btn => {
+        btn.classList.remove('border-rosa-escuro', 'bg-rosa-claro');
+        btn.classList.add('border-gray-300');
+    });
+    
+    // Desabilitar botão de confirmação
+    document.getElementById('confirmarTamanho').disabled = true;
+    
+    // Mostrar modal
+    document.getElementById('tamanhoModal').classList.remove('hidden');
+}
+
+// Função para selecionar tamanho
+function selecionarTamanho(tamanho) {
+    tamanhoSelecionado = tamanho;
+    
+    // Atualizar visual dos botões
+    document.querySelectorAll('.tamanho-btn').forEach(btn => {
+        btn.classList.remove('border-rosa-escuro', 'bg-rosa-claro');
+        btn.classList.add('border-gray-300');
+    });
+    
+    // Destacar tamanho selecionado
+    event.target.classList.remove('border-gray-300');
+    event.target.classList.add('border-rosa-escuro', 'bg-rosa-claro');
+    
+    // Habilitar botão de confirmação
+    document.getElementById('confirmarTamanho').disabled = false;
+}
+
+// Função para confirmar tamanho e adicionar ao carrinho
+function confirmarTamanho() {
+    if (produtoSelecionado && tamanhoSelecionado) {
+        adicionarAoCarrinho(produtoSelecionado.id, produtoSelecionado.nome, produtoSelecionado.preco, produtoSelecionado.imagem, tamanhoSelecionado);
+        fecharTamanhoModal();
+    }
+}
+
+// Função para fechar modal de tamanho
+function fecharTamanhoModal() {
+    document.getElementById('tamanhoModal').classList.add('hidden');
+    produtoSelecionado = null;
+    tamanhoSelecionado = null;
+}
+
 // Função para adicionar produto ao carrinho
-function adicionarAoCarrinho(id, nome, preco, imagem) {
+function adicionarAoCarrinho(id, nome, preco, imagem, tamanho) {
     const item = {
         id: parseInt(id),
         nome: nome || 'Produto sem nome',
         preco: parseFloat(preco) || 0,
         imagem: imagem || '',
-        quantidade: 1
-    };
-    
+        tamanho: tamanho || 'Único',
+             quantidade: 1
+         };
+         
     // Verificar se o item já existe no carrinho
     const itemExistente = carrinho.find(existingItem => existingItem.id === item.id);
-    
-    if (itemExistente) {
-        itemExistente.quantidade += 1;
-    } else {
+         
+         if (itemExistente) {
+             itemExistente.quantidade += 1;
+         } else {
         carrinho.push(item);
     }
-    
-    // Salvar no localStorage
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+     
+     // Salvar no localStorage
+     localStorage.setItem('carrinho', JSON.stringify(carrinho));
     
     // Mostrar feedback visual
     mostrarFeedbackCarrinho();
     
     // Atualizar contador do carrinho
     atualizarContadorCarrinho();
+    
+    // Abrir o carrinho automaticamente
+    abrirCarrinho();
 }
 
-// Sistema de Galeria
-let galeriaAtual = null;
-let fotoAtual = 0;
-
-// Função para abrir galeria
-function abrirGaleria(produto) {
-    galeriaAtual = produto;
-    fotoAtual = 0;
+// Função para abrir o carrinho
+ function abrirCarrinho() {
+     const modal = document.getElementById('carrinhoModal');
     
-    const modal = document.getElementById('galeriaModal');
-    const imagem = document.getElementById('imagemGaleria');
-    const nome = document.getElementById('nomeGaleria');
-    const preco = document.getElementById('precoGaleria');
-    const btnAnterior = document.getElementById('btnAnterior');
-    const btnProximo = document.getElementById('btnProximo');
-    
-    if (modal && imagem && nome && preco) {
-        nome.textContent = produto.nome;
-        preco.textContent = produto.preco;
-        
-        if (produto.fotos && produto.fotos.length > 0) {
-            imagem.src = produto.fotos[fotoAtual];
-            btnAnterior.style.display = produto.fotos.length > 1 ? 'block' : 'none';
-            btnProximo.style.display = produto.fotos.length > 1 ? 'block' : 'none';
-        } else {
-            imagem.src = produto.imagem || 'placeholder.jpg';
-            btnAnterior.style.display = 'none';
-            btnProximo.style.display = 'none';
-        }
-        
-        modal.classList.remove('hidden');
-    }
-}
-
-// Função para fechar galeria
-function fecharGaleria() {
-    const modal = document.getElementById('galeriaModal');
     if (modal) {
-        modal.classList.add('hidden');
+     modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        atualizarCarrinhoModal();
     }
-    galeriaAtual = null;
-    fotoAtual = 0;
-}
-
-// Função para foto anterior
-function anteriorFoto() {
-    if (galeriaAtual && galeriaAtual.fotos && galeriaAtual.fotos.length > 1) {
-        fotoAtual = (fotoAtual - 1 + galeriaAtual.fotos.length) % galeriaAtual.fotos.length;
-        const imagem = document.getElementById('imagemGaleria');
-        if (imagem) {
-            imagem.src = galeriaAtual.fotos[fotoAtual];
-        }
-    }
-}
-
-// Função para próxima foto
-function proximaFoto() {
-    if (galeriaAtual && galeriaAtual.fotos && galeriaAtual.fotos.length > 1) {
-        fotoAtual = (fotoAtual + 1) % galeriaAtual.fotos.length;
-        const imagem = document.getElementById('imagemGaleria');
-        if (imagem) {
-            imagem.src = galeriaAtual.fotos[fotoAtual];
-        }
-    }
-}
-
-// Função para comprar da galeria
-function comprarDaGaleria() {
-    if (galeriaAtual) {
-        abrirWhatsApp(galeriaAtual.nome);
-        fecharGaleria();
-    }
-}
-
-// Função para abrir WhatsApp
-function abrirWhatsApp(nomeProduto) {
-    const numero = '5511999999999'; // Substitua pelo seu número
-    const mensagem = `Olá! Gostaria de saber mais sobre a roupa: ${nomeProduto}`;
-    const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
-    window.open(url, '_blank');
-}
-
-// Sistema de Carrinho Modal
-function abrirCarrinho() {
+ }
+ 
+// Função para fechar o carrinho
+ function fecharCarrinho() {
     const modal = document.getElementById('carrinhoModal');
     if (modal) {
-        modal.classList.remove('hidden');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+// Função para atualizar o modal do carrinho
+function atualizarCarrinhoModal() {
+    const carrinhoItens = document.getElementById('carrinhoItens');
+    const carrinhoTotal = document.getElementById('carrinhoTotal');
+    const btnLimparCarrinho = document.getElementById('btnLimparCarrinho');
+    const btnFinalizarCompra = document.getElementById('btnFinalizarCompra');
+    
+    if (!carrinhoItens || !carrinhoTotal) return;
+    
+    if (carrinho.length === 0) {
+        carrinhoItens.innerHTML = `
+            <div class="text-center py-8">
+                <div class="text-6xl mb-4">🛒</div>
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">Seu carrinho está vazio</h3>
+                <p class="text-gray-500">Adicione alguns produtos para começar!</p>
+        </div>
+        `;
+        carrinhoTotal.textContent = 'R$ 0,00';
+        
+        // Ocultar botões quando carrinho vazio
+        if (btnLimparCarrinho) btnLimparCarrinho.style.display = 'none';
+        if (btnFinalizarCompra) btnFinalizarCompra.style.display = 'none';
+        return;
+    }
+
+    // Mostrar botões quando carrinho tem itens
+    if (btnLimparCarrinho) btnLimparCarrinho.style.display = 'block';
+    if (btnFinalizarCompra) btnFinalizarCompra.style.display = 'block';
+
+    let total = 0;
+    
+    const htmlItens = carrinho.map((item) => {
+        const preco = parseFloat(item.preco) || 0;
+        const subtotal = preco * item.quantidade;
+        total += subtotal;
+
+        return `
+            <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg mb-3">
+                <div class="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
+                    ${item.imagem ? 
+                        `<img src="${item.imagem}" alt="${item.nome}" class="w-full h-full object-cover">` :
+                        `<div class="w-full h-full flex items-center justify-center text-gray-400">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        </div>`
+                    }
+                    </div>
+                <div class="flex-1">
+                    <h4 class="font-semibold text-gray-800">${item.nome}</h4>
+                    <p class="text-sm text-gray-600">Tamanho: ${item.tamanho}</p>
+                    <p class="text-sm text-gray-600">R$ ${preco.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="alterarQuantidade(${item.id}, -1)" class="w-8 h-8 bg-rosa-escuro text-white rounded-full hover:bg-rosa-hover transition-colors">-</button>
+                    <span class="w-8 text-center font-semibold">${item.quantidade}</span>
+                    <button onclick="alterarQuantidade(${item.id}, 1)" class="w-8 h-8 bg-rosa-escuro text-white rounded-full hover:bg-rosa-hover transition-colors">+</button>
+                    </div>
+                <div class="text-right">
+                    <p class="font-bold text-rosa-escuro">R$ ${subtotal.toFixed(2).replace('.', ',')}</p>
+                    <button onclick="removerItem(${item.id})" class="text-red-500 hover:text-red-700 text-sm">Remover</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    carrinhoItens.innerHTML = htmlItens;
+    carrinhoTotal.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+}
+
+// Função para alterar quantidade de um item
+function alterarQuantidade(id, mudanca) {
+    const item = carrinho.find(item => item.id === id);
+    if (item) {
+        item.quantidade += mudanca;
+        if (item.quantidade <= 0) {
+            carrinho = carrinho.filter(item => item.id !== id);
+        }
+        localStorage.setItem('carrinho', JSON.stringify(carrinho));
+        atualizarContadorCarrinho();
         atualizarCarrinhoModal();
     }
 }
 
-function fecharCarrinho() {
-    const modal = document.getElementById('carrinhoModal');
-    if (modal) {
-        modal.classList.add('hidden');
-    }
-}
-
-function atualizarCarrinhoModal() {
-    const itensContainer = document.getElementById('carrinhoItens');
-    const totalElement = document.getElementById('carrinhoTotal');
-    
-    if (!itensContainer) return;
-    
-    if (carrinho.length === 0) {
-        itensContainer.innerHTML = '<p class="text-gray-500 text-center py-8">Carrinho vazio</p>';
-        if (totalElement) totalElement.textContent = 'R$ 0,00';
-        return;
-    }
-    
-    let html = '';
-    let total = 0;
-    
-    carrinho.forEach((item, index) => {
-        const subtotal = item.preco * item.quantidade;
-        total += subtotal;
-        
-        html += `
-            <div class="flex items-center space-x-4 p-4 border-b border-gray-200">
-                <img src="${item.imagem || 'placeholder.jpg'}" alt="${item.nome}" class="w-16 h-16 object-cover rounded">
-                <div class="flex-1">
-                    <h3 class="font-semibold text-gray-800">${item.nome}</h3>
-                    <p class="text-gray-600">Quantidade: ${item.quantidade}</p>
-                    <p class="text-rosa-escuro font-bold">R$ ${subtotal.toFixed(2).replace('.', ',')}</p>
-                </div>
-                <button onclick="removerDoCarrinho(${index})" class="text-red-500 hover:text-red-700">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                    </svg>
-                </button>
-            </div>
-        `;
-    });
-    
-    itensContainer.innerHTML = html;
-    
-    if (totalElement) {
-        totalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
-    }
-}
-
-function removerDoCarrinho(index) {
-    carrinho.splice(index, 1);
+// Função para remover item do carrinho
+function removerItem(id) {
+    carrinho = carrinho.filter(item => item.id !== id);
     localStorage.setItem('carrinho', JSON.stringify(carrinho));
     atualizarContadorCarrinho();
     atualizarCarrinhoModal();
 }
 
+// Função para limpar carrinho completamente
+function limparCarrinho() {
+    carrinho = [];
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    atualizarContadorCarrinho();
+    atualizarCarrinhoModal();
+}
+
+// Função para debug - limpar carrinho via console
+function debugLimparCarrinho() {
+    console.log('Carrinho antes:', carrinho);
+    limparCarrinho();
+    console.log('Carrinho depois:', carrinho);
+    console.log('Carrinho limpo com sucesso!');
+}
+
+// Função para finalizar compra
 function finalizarCompra() {
     if (carrinho.length === 0) {
-        alert('Carrinho vazio!');
-        return;
-    }
-    
-    let mensagem = 'Olá! Gostaria de finalizar a compra dos seguintes itens:\n\n';
+        alert('Seu carrinho está vazio!');
+         return;
+     }
+     
+    let mensagem = '🛍️ *PAIXAO MODAS* - Pedido\n\n';
+    let total = 0;
     
     carrinho.forEach(item => {
-        mensagem += `• ${item.nome} (${item.quantidade}x) - R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
+        const subtotal = item.preco * item.quantidade;
+        total += subtotal;
+        mensagem += `• ${item.nome} (Tamanho: ${item.tamanho})\n`;
+        mensagem += `  Quantidade: ${item.quantidade}x\n`;
+        mensagem += `  Valor: R$ ${subtotal.toFixed(2).replace('.', ',')}\n\n`;
     });
     
-    const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
-    mensagem += `\nTotal: R$ ${total.toFixed(2).replace('.', ',')}`;
+    mensagem += `💰 *TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*\n\n`;
+    mensagem += 'Por favor, confirme seu pedido e informe o endereço de entrega!';
     
-    const numero = '5511999999999'; // Substitua pelo seu número
-    const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+    const url = `https://wa.me/5511999999999?text=${encodeURIComponent(mensagem)}`;
     window.open(url, '_blank');
 }
 
@@ -261,19 +331,22 @@ function filtrarCatalogo() {
         
         let mostrar = true;
         
+        // Filtro por busca
         if (busca && !nome.includes(busca)) {
             mostrar = false;
         }
         
+        // Filtro por categoria
         if (categoria && categoriaCard !== categoria) {
             mostrar = false;
         }
         
+        // Filtro por preço
         if (preco) {
-            const [min, max] = preco.split('-').map(p => parseFloat(p) || 0);
-            if (max === 0) {
-                if (precoCard < min) mostrar = false;
-            } else {
+            if (preco === '200+') {
+                if (precoCard < 200) mostrar = false;
+        } else {
+                const [min, max] = preco.split('-').map(p => parseFloat(p) || 0);
                 if (precoCard < min || precoCard > max) mostrar = false;
             }
         }
@@ -286,9 +359,16 @@ function filtrarCatalogo() {
         }
     });
     
+    // Mostrar mensagem se não houver resultados
     const noResults = document.getElementById('catalogNoResults');
     if (noResults) {
         noResults.style.display = visiveis === 0 ? 'block' : 'none';
+    }
+    
+    // Atualizar contador de resultados
+    const resultCount = document.getElementById('resultCount');
+    if (resultCount) {
+        resultCount.textContent = `${visiveis} produto${visiveis !== 1 ? 's' : ''} encontrado${visiveis !== 1 ? 's' : ''}`;
     }
 }
 
@@ -298,7 +378,143 @@ document.addEventListener('DOMContentLoaded', function() {
     const categoryFilter = document.getElementById('catalogCategory');
     const priceFilter = document.getElementById('catalogPrice');
     
-    if (searchInput) searchInput.addEventListener('input', filtrarCatalogo);
-    if (categoryFilter) categoryFilter.addEventListener('change', filtrarCatalogo);
-    if (priceFilter) priceFilter.addEventListener('change', filtrarCatalogo);
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(filtrarCatalogo, 300));
+        searchInput.addEventListener('keyup', debounce(filtrarCatalogo, 300));
+    }
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', filtrarCatalogo);
+    }
+    if (priceFilter) {
+        priceFilter.addEventListener('change', filtrarCatalogo);
+    }
+    
+    // Executar filtro inicial
+    filtrarCatalogo();
 });
+
+// Função para atualizar o catálogo quando novos produtos forem adicionados
+function atualizarCatalogo() {
+    // Recarregar a página para mostrar novos produtos
+    location.reload();
+}
+
+// Função para filtrar produtos em tempo real
+function filtrarEmTempoReal() {
+    const searchInput = document.getElementById('catalogSearch');
+    const categoryFilter = document.getElementById('catalogCategory');
+    const priceFilter = document.getElementById('catalogPrice');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(filtrarCatalogo, 300));
+    }
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', filtrarCatalogo);
+    }
+    if (priceFilter) {
+        priceFilter.addEventListener('change', filtrarCatalogo);
+    }
+}
+
+// Função debounce para otimizar a busca
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+   // Armazena o índice atual de cada produto
+   const currentImageIndex = {};
+        
+   // Inicializa o índice para cada produto
+   function initializeImageIndex(productId) {
+       if (!currentImageIndex[productId]) {
+           currentImageIndex[productId] = 0;
+       }
+   }
+   
+   // Mostra uma imagem específica
+   function showImage(productId, imageIndex) {
+       initializeImageIndex(productId);
+       
+       // Esconde todas as imagens do produto
+       const images = document.querySelectorAll(`[id^="img-${productId}-"]`);
+       images.forEach(img => img.classList.add('hidden'));
+       
+       // Mostra a imagem selecionada
+       const targetImage = document.getElementById(`img-${productId}-${imageIndex}`);
+       if (targetImage) {
+           targetImage.classList.remove('hidden');
+           currentImageIndex[productId] = imageIndex;
+           
+           // Atualiza os indicadores
+           updateIndicators(productId, imageIndex);
+           
+           // Atualiza o contador
+           updateCounter(productId, imageIndex);
+       }
+   }
+   
+   // Próxima imagem
+   function nextImage(productId) {
+       initializeImageIndex(productId);
+       
+       const totalImages = document.querySelectorAll(`[id^="img-${productId}-"]`).length;
+       const nextIndex = (currentImageIndex[productId] + 1) % totalImages;
+       showImage(productId, nextIndex);
+   }
+   
+   // Imagem anterior
+   function previousImage(productId) {
+       initializeImageIndex(productId);
+       
+       const totalImages = document.querySelectorAll(`[id^="img-${productId}-"]`).length;
+       const prevIndex = currentImageIndex[productId] === 0 ? totalImages - 1 : currentImageIndex[productId] - 1;
+       showImage(productId, prevIndex);
+   }
+   
+   // Atualiza os indicadores de posição
+   function updateIndicators(productId, imageIndex) {
+       const indicators = document.querySelectorAll(`[class*="indicator-${productId}-"]`);
+        indicators.forEach((indicator, index) => {
+           if (index === imageIndex) {
+               indicator.classList.remove('bg-white/30');
+               indicator.classList.add('bg-white/70');
+            } else {
+               indicator.classList.remove('bg-white/70');
+               indicator.classList.add('bg-white/30');
+            }
+        });
+    }
+    
+   // Atualiza o contador de imagens
+   function updateCounter(productId, imageIndex) {
+       const counter = document.getElementById(`counter-${productId}`);
+       if (counter) {
+           counter.textContent = imageIndex + 1;
+       }
+   }
+   
+   // Inicializa todos os produtos quando a página carrega
+   document.addEventListener('DOMContentLoaded', function() {
+       // Encontra todos os produtos com múltiplas imagens
+       const productsWithMultipleImages = document.querySelectorAll('[id^="img-"][id$="-1"], [id^="img-"][id$="-2"]');
+       const productIds = new Set();
+       
+       productsWithMultipleImages.forEach(img => {
+           const productId = img.id.split('-')[1];
+           productIds.add(productId);
+       });
+       
+       // Inicializa cada produto
+       productIds.forEach(productId => {
+           initializeImageIndex(productId);
+           showImage(productId, 0);
+       });
+       
+   });

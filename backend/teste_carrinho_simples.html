@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Carrinho Simples</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-2xl font-bold mb-4">Teste do Carrinho - Versão Simples</h1>
+    
+    <!-- Produto de teste -->
+    <div class="bg-white p-4 rounded-lg shadow mb-4">
+        <h3 class="text-lg font-semibold">Produto Teste</h3>
+        <p class="text-gray-600">R$ 99,90</p>
+        <button class="btn-carrinho bg-blue-500 text-white px-4 py-2 rounded mt-2"
+                data-id="1"
+                data-nome="Produto Teste"
+                data-preco="99.90"
+                data-imagem="teste.jpg">
+            Adicionar ao Carrinho
+        </button>
+    </div>
+    
+    <!-- Carrinho flutuante -->
+    <div id="carrinhoFlutuante" class="fixed bottom-4 right-4 z-40">
+        <div class="bg-white rounded-full shadow-2xl border-2 border-blue-500 p-3 cursor-pointer" onclick="abrirCarrinho()">
+            <div class="relative">
+                <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                <span id="carrinhoContador" class="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal do Carrinho -->
+    <div id="carrinhoModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800">🛒 Seu Carrinho</h3>
+                <button onclick="fecharCarrinho()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            
+            <div id="carrinhoItens" class="p-6 max-h-96 overflow-y-auto">
+                <!-- Itens do carrinho serão inseridos aqui -->
+            </div>
+            
+            <div class="p-6 border-t border-gray-200 bg-gray-50">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-lg font-semibold text-gray-800">Total:</span>
+                    <span id="carrinhoTotal" class="text-2xl font-bold text-blue-500">R$ 0,00</span>
+                </div>
+                
+                <button onclick="finalizarCompra()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">
+                    💬 Finalizar Compra no WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Sistema de Carrinho
+        let carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+
+        // Função para inicializar o carrinho
+        function inicializarCarrinho() {
+            console.log('Inicializando carrinho...');
+            atualizarContadorCarrinho();
+            
+            // Adicionar event listeners para botões do carrinho
+            const botoesCarrinho = document.querySelectorAll('.btn-carrinho');
+            console.log('Encontrados', botoesCarrinho.length, 'botões do carrinho');
+            
+            botoesCarrinho.forEach((button, index) => {
+                console.log('Configurando botão', index, button);
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Botão clicado!', this);
+                    const id = this.getAttribute('data-id');
+                    const nome = this.getAttribute('data-nome');
+                    const preco = this.getAttribute('data-preco');
+                    const imagem = this.getAttribute('data-imagem');
+                    
+                    console.log('Dados do produto:', { id, nome, preco, imagem });
+                    adicionarAoCarrinho(id, nome, preco, imagem);
+                });
+            });
+        }
+
+        // Função para atualizar contador do carrinho
+        function atualizarContadorCarrinho() {
+            const contador = document.getElementById('carrinhoContador');
+            if (contador) {
+                const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+                contador.textContent = totalItens;
+                contador.style.display = totalItens > 0 ? 'block' : 'none';
+            }
+        }
+
+        // Função para mostrar feedback visual do carrinho
+        function mostrarFeedbackCarrinho() {
+            const feedback = document.createElement('div');
+            feedback.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+            feedback.textContent = 'Produto adicionado ao carrinho!';
+            
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => {
+                if (feedback.parentNode) {
+                    feedback.parentNode.removeChild(feedback);
+                }
+            }, 3000);
+        }
+
+        // Função para adicionar produto ao carrinho
+        function adicionarAoCarrinho(id, nome, preco, imagem) {
+            console.log('adicionarAoCarrinho chamada com:', { id, nome, preco, imagem });
+            
+            const item = {
+                id: parseInt(id),
+                nome: nome || 'Produto sem nome',
+                preco: parseFloat(preco) || 0,
+                imagem: imagem || '',
+                quantidade: 1
+            };
+            
+            console.log('Item criado:', item);
+            
+            // Verificar se o item já existe no carrinho
+            const itemExistente = carrinho.find(existingItem => existingItem.id === item.id);
+            
+            if (itemExistente) {
+                itemExistente.quantidade += 1;
+                console.log('Item existente atualizado:', itemExistente);
+            } else {
+                carrinho.push(item);
+                console.log('Novo item adicionado ao carrinho');
+            }
+            
+            console.log('Carrinho atual:', carrinho);
+            
+            // Salvar no localStorage
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+            console.log('Carrinho salvo no localStorage');
+            
+            // Mostrar feedback visual
+            mostrarFeedbackCarrinho();
+            
+            // Atualizar contador do carrinho
+            atualizarContadorCarrinho();
+        }
+
+        // Função para abrir carrinho
+        function abrirCarrinho() {
+            const modal = document.getElementById('carrinhoModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                atualizarCarrinhoModal();
+            }
+        }
+
+        // Função para fechar carrinho
+        function fecharCarrinho() {
+            const modal = document.getElementById('carrinhoModal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Função para atualizar modal do carrinho
+        function atualizarCarrinhoModal() {
+            const itensContainer = document.getElementById('carrinhoItens');
+            const totalElement = document.getElementById('carrinhoTotal');
+            
+            if (!itensContainer) return;
+            
+            if (carrinho.length === 0) {
+                itensContainer.innerHTML = '<p class="text-gray-500 text-center py-8">Carrinho vazio</p>';
+                if (totalElement) totalElement.textContent = 'R$ 0,00';
+                return;
+            }
+            
+            let html = '';
+            let total = 0;
+            
+            carrinho.forEach((item, index) => {
+                const subtotal = item.preco * item.quantidade;
+                total += subtotal;
+                
+                html += `
+                    <div class="flex items-center space-x-4 p-4 border-b border-gray-200">
+                        <img src="${item.imagem || 'placeholder.jpg'}" alt="${item.nome}" class="w-16 h-16 object-cover rounded">
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-800">${item.nome}</h3>
+                            <p class="text-gray-600">Quantidade: ${item.quantidade}</p>
+                            <p class="text-blue-500 font-bold">R$ ${subtotal.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                        <button onclick="removerDoCarrinho(${index})" class="text-red-500 hover:text-red-700">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+            });
+            
+            itensContainer.innerHTML = html;
+            
+            if (totalElement) {
+                totalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            }
+        }
+
+        // Função para remover do carrinho
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+            atualizarContadorCarrinho();
+            atualizarCarrinhoModal();
+        }
+
+        // Função para finalizar compra
+        function finalizarCompra() {
+            if (carrinho.length === 0) {
+                alert('Carrinho vazio!');
+                return;
+            }
+            
+            let mensagem = 'Olá! Gostaria de finalizar a compra dos seguintes itens:\n\n';
+            
+            carrinho.forEach(item => {
+                mensagem += `• ${item.nome} (${item.quantidade}x) - R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}\n`;
+            });
+            
+            const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+            mensagem += `\nTotal: R$ ${total.toFixed(2).replace('.', ',')}`;
+            
+            const numero = '5511999999999';
+            const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+            window.open(url, '_blank');
+        }
+
+        // Inicializar quando o DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado, inicializando carrinho...');
+            setTimeout(inicializarCarrinho, 100);
+        });
+    </script>
+</body>
+</html>

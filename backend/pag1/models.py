@@ -46,6 +46,8 @@ class Roupa(models.Model):
     )
     imagem_principal = models.ImageField(
         upload_to='roupas/', 
+        blank=True,
+        null=True,
         verbose_name="Imagem Principal"
     )
     imagem_2 = models.ImageField(
