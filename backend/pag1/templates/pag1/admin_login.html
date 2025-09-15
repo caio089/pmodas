@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -27,11 +28,21 @@
             <div class="text-center mb-8">
                 <img src="{% static 'pmodas.jpg' %}" alt="PAIXAO MODAS" class="h-16 w-auto mx-auto mb-4">
                 <h1 class="text-2xl font-bold text-gray-800">Painel Administrativo</h1>
-                <p class="text-gray-600 mt-2">Acesso restrito</p>
+                <p class="text-gray-600 mt-2">Acesso restrito ao cliente</p>
             </div>
 
+            <!-- Mensagens do Django -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-4 p-3 {% if message.tags == 'error' %}bg-red-100 border border-red-400 text-red-700{% else %}bg-green-100 border border-green-400 text-green-700{% endif %} rounded-lg">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
             <!-- Formulário de Login -->
-            <form id="loginForm" class="space-y-6">
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
                 <div>
                     <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Usuário</label>
                     <input type="text" id="username" name="username" required
@@ -51,51 +62,13 @@
                     Entrar
                 </button>
             </form>
-
-            <!-- Mensagem de Erro -->
-            <div id="errorMessage" class="hidden mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                Usuário ou senha incorretos!
-            </div>
         </div>
 
-        <!-- Informações de Acesso -->
+        <!-- Informações de Segurança -->
         <div class="mt-6 text-center text-sm text-gray-600">
-            <p>Usuário: <strong>admin</strong></p>
-            <p>Senha: <strong>123456</strong></p>
+            <p>🔒 Acesso restrito apenas ao cliente autorizado</p>
+            <p class="mt-2">Entre em contato para obter as credenciais</p>
         </div>
     </div>
-
-    <script>
-        // Credenciais de acesso (em produção, isso viria de um banco de dados)
-        const validCredentials = {
-            username: 'admin',
-            password: '123456'
-        };
-
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
-            
-            if (username === validCredentials.username && password === validCredentials.password) {
-                // Login bem-sucedido
-                localStorage.setItem('adminLoggedIn', 'true');
-                window.location.href = '/painel-admin/dashboard/';
-            } else {
-                // Login falhou
-                errorMessage.classList.remove('hidden');
-                setTimeout(() => {
-                    errorMessage.classList.add('hidden');
-                }, 3000);
-            }
-        });
-
-        // Verificar se já está logado
-        if (localStorage.getItem('adminLoggedIn') === 'true') {
-            window.location.href = '/painel-admin/dashboard/';
-        }
-    </script>
 </body>
 </html>

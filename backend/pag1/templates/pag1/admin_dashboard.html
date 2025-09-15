@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -29,10 +30,10 @@
                     <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="text-gray-600">Bem-vindo, Admin</span>
-                    <button onclick="logout()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <span class="text-gray-600">Bem-vindo, Cliente</span>
+                    <a href="{% url 'admin_logout' %}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
                         Sair
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -40,7 +41,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Cards de Estatísticas -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <div class="flex items-center">
                     <div class="p-3 bg-rosa-claro rounded-lg">
@@ -69,19 +70,6 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <div class="flex items-center">
-                    <div class="p-3 bg-blue-100 rounded-lg">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Valor Total</p>
-                        <p class="text-2xl font-bold text-gray-900" id="totalValue">R$ 0,00</p>
-                    </div>
-                </div>
-            </div>
 
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <div class="flex items-center">
@@ -169,6 +157,13 @@
                     </div>
 
                     <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tamanhos Disponíveis *</label>
+                        <input type="text" id="productSizes" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
+                               placeholder="Ex: P, M, G, GG (separados por vírgula)">
+                    </div>
+
+                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Categoria *</label>
                         <select id="productCategory" required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20">
@@ -181,54 +176,61 @@
                             <option value="acessorios">Acessórios</option>
                         </select>
                     </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Tamanhos Disponíveis *</label>
-                        <input type="text" id="productSizes" required
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
-                               placeholder="Ex: P, M, G, GG (separados por vírgula)">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Cor</label>
-                        <input type="text" id="productColor"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
-                               placeholder="Ex: Azul, Rosa, Preto">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                        <select id="productStatus"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20">
-                            <option value="ativo">Ativo</option>
-                            <option value="inativo">Inativo</option>
-                        </select>
-                    </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
-                    <textarea id="productDescription" rows="3"
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Descrição *</label>
+                    <textarea id="productDescription" rows="3" required
                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
                               placeholder="Descreva a roupa..."></textarea>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Fotos (máximo 3)</label>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                            <input type="url" id="photo1" placeholder="URL da foto 1"
-                                   class="w-full text-sm border-none outline-none">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Fotos da Roupa (máximo 3) *</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-rosa-escuro transition-colors">
+                            <input type="file" id="photo1" accept="image/*" class="hidden" onchange="previewImage(this, 'preview1')">
+                            <label for="photo1" class="cursor-pointer">
+                                <div id="preview1" class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                                    <div class="text-center">
+                                        <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                        <p class="text-sm text-gray-500">Foto 1</p>
+                                    </div>
+                                </div>
+                            </label>
                         </div>
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                            <input type="url" id="photo2" placeholder="URL da foto 2"
-                                   class="w-full text-sm border-none outline-none">
+                        
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-rosa-escuro transition-colors">
+                            <input type="file" id="photo2" accept="image/*" class="hidden" onchange="previewImage(this, 'preview2')">
+                            <label for="photo2" class="cursor-pointer">
+                                <div id="preview2" class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                                    <div class="text-center">
+                                        <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                        <p class="text-sm text-gray-500">Foto 2</p>
+                                    </div>
+                                </div>
+                            </label>
                         </div>
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                            <input type="url" id="photo3" placeholder="URL da foto 3"
-                                   class="w-full text-sm border-none outline-none">
+                        
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-rosa-escuro transition-colors">
+                            <input type="file" id="photo3" accept="image/*" class="hidden" onchange="previewImage(this, 'preview3')">
+                            <label for="photo3" class="cursor-pointer">
+                                <div id="preview3" class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                                    <div class="text-center">
+                                        <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                        <p class="text-sm text-gray-500">Foto 3</p>
+                                    </div>
+                                </div>
+                            </label>
                         </div>
                     </div>
+                    <p class="text-xs text-gray-500 mt-2">💡 Dica: Clique em cada área para selecionar uma foto do seu dispositivo</p>
                 </div>
 
                 <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
@@ -246,10 +248,7 @@
     </div>
 
     <script>
-        // Verificar se está logado
-        if (localStorage.getItem('adminLoggedIn') !== 'true') {
-            window.location.href = '/painel-admin/';
-        }
+        // Verificação de autenticação é feita pelo Django
 
         // Array para armazenar produtos
         let products = JSON.parse(localStorage.getItem('products') || '[]');
@@ -258,10 +257,6 @@
         function updateStats() {
             document.getElementById('totalProducts').textContent = products.length;
             document.getElementById('activeProducts').textContent = products.filter(p => p.status === 'ativo').length;
-            
-            const totalValue = products.reduce((sum, product) => sum + parseFloat(product.price), 0);
-            document.getElementById('totalValue').textContent = `R$ ${totalValue.toFixed(2).replace('.', ',')}`;
-            
             document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString('pt-BR');
         }
 
@@ -283,6 +278,66 @@
         function closeAddProduct() {
             document.getElementById('addProductModal').classList.add('hidden');
             document.getElementById('addProductForm').reset();
+            // Limpar previews das imagens
+            document.getElementById('preview1').innerHTML = `
+                <div class="text-center">
+                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <p class="text-sm text-gray-500">Foto 1</p>
+                </div>
+            `;
+            document.getElementById('preview2').innerHTML = `
+                <div class="text-center">
+                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <p class="text-sm text-gray-500">Foto 2</p>
+                </div>
+            `;
+            document.getElementById('preview3').innerHTML = `
+                <div class="text-center">
+                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <p class="text-sm text-gray-500">Foto 3</p>
+                </div>
+            `;
+        }
+
+        // Preview das imagens selecionadas
+        function previewImage(input, previewId) {
+            const file = input.files[0];
+            const preview = document.getElementById(previewId);
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview" class="w-full h-full object-cover rounded-lg">
+                        <button type="button" onclick="removeImage('${input.id}', '${previewId}')" 
+                                class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600">
+                            ×
+                        </button>
+                    `;
+                    preview.classList.add('relative');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Remover imagem selecionada
+        function removeImage(inputId, previewId) {
+            document.getElementById(inputId).value = '';
+            document.getElementById(previewId).innerHTML = `
+                <div class="text-center">
+                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <p class="text-sm text-gray-500">Foto ${previewId.replace('preview', '')}</p>
+                </div>
+            `;
+            document.getElementById(previewId).classList.remove('relative');
         }
 
         // Mostrar lista de produtos
@@ -301,13 +356,14 @@
                     ${products.map((product, index) => `
                         <div class="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
                             <div class="aspect-square bg-gray-100 rounded-lg mb-4 overflow-hidden">
-                                <img src="${product.photos[0] || 'https://via.placeholder.com/300x300?text=Sem+Foto'}" 
+                                <img src="${product.photos && product.photos[0] ? product.photos[0] : 'https://via.placeholder.com/300x300?text=Sem+Foto'}" 
                                      alt="${product.name}" class="w-full h-full object-cover">
                             </div>
                             <h3 class="font-semibold text-gray-800 mb-2">${product.name}</h3>
                             <p class="text-rosa-escuro font-bold text-lg mb-2">R$ ${product.price.replace('.', ',')}</p>
-                            <p class="text-sm text-gray-600 mb-2">${product.category} • ${product.color}</p>
-                            <p class="text-sm text-gray-500 mb-4">${product.sizes}</p>
+                            <p class="text-sm text-gray-600 mb-2">${product.category}</p>
+                            <p class="text-sm text-gray-500 mb-2">Tamanhos: ${product.sizes}</p>
+                            <p class="text-xs text-gray-400 mb-4 line-clamp-2">${product.description}</p>
                             <div class="flex justify-between items-center">
                                 <span class="px-2 py-1 text-xs rounded-full ${product.status === 'ativo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
                                     ${product.status}
@@ -350,20 +406,28 @@
         document.getElementById('addProductForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            // Converter imagens para base64
+            const photos = [];
+            for (let i = 1; i <= 3; i++) {
+                const fileInput = document.getElementById(`photo${i}`);
+                if (fileInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        photos.push(e.target.result);
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                }
+            }
+            
             const product = {
                 id: Date.now(),
                 name: document.getElementById('productName').value,
                 price: document.getElementById('productPrice').value,
                 category: document.getElementById('productCategory').value,
                 sizes: document.getElementById('productSizes').value,
-                color: document.getElementById('productColor').value,
-                status: document.getElementById('productStatus').value,
                 description: document.getElementById('productDescription').value,
-                photos: [
-                    document.getElementById('photo1').value,
-                    document.getElementById('photo2').value,
-                    document.getElementById('photo3').value
-                ].filter(photo => photo.trim() !== '')
+                status: 'ativo',
+                photos: photos
             };
             
             products.push(product);
@@ -371,6 +435,11 @@
             
             updateStats();
             closeAddProduct();
+            
+            // Atualizar catálogo na página principal se estiver aberta
+            if (typeof atualizarCatalogo === 'function') {
+                atualizarCatalogo();
+            }
             
             // Mostrar notificação de sucesso
             alert('Produto adicionado com sucesso!');
@@ -397,11 +466,7 @@
             link.click();
         }
 
-        // Logout
-        function logout() {
-            localStorage.removeItem('adminLoggedIn');
-            window.location.href = '/painel-admin/';
-        }
+        // Logout é feito via Django
 
         // Inicializar
         updateStats();

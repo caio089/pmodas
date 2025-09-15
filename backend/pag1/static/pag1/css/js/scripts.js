@@ -1,151 +1,92 @@
- // Dados dos produtos
- const produtos = [
-    {
-        id: 1,
-        nome: "Vestido Floral Elegante",
-        preco: 89.90,
-        categoria: "vestido",
-        tamanhos: ["P", "M", "G", "GG"],
-        imagem: "FOTO AQUI",
-        fotos: [
-            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=600&fit=crop",
-            "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&h=600&fit=crop",
-            "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop",
-            "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop"
-        ]
-    },
-    {
-        id: 2,
-        nome: "Calça Jeans Skinny",
-        preco: 129.90,
-        categoria: "calca",
-        tamanhos: ["P", "M", "G"],
-        imagem: "FOTO AQUI",
-        fotos: [
-            "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&h=600&fit=crop",
-            "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&h=600&fit=crop",
-            "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop"
-        ]
-    },
-    {
-        id: 3,
-        nome: "Blusa de Seda Premium",
-        preco: 69.90,
-        categoria: "blusa",
-        tamanhos: ["P", "M", "G", "GG"],
-        imagem: "FOTO AQUI",
-        fotos: [
-            "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&h=600&fit=crop",
-            "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop",
-            "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=600&fit=crop",
-            "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&h=600&fit=crop"
-        ]
-    },
-    {
-        id: 4,
-        nome: "Saia Midi Plissada",
-        preco: 79.90,
-        categoria: "saia",
-        tamanhos: ["P", "M", "G"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 5,
-        nome: "Conjunto Sport Elegante",
-        preco: 149.90,
-        categoria: "conjunto",
-        tamanhos: ["M", "G", "GG"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 6,
-        nome: "Vestido Longo de Festa",
-        preco: 199.90,
-        categoria: "vestido",
-        tamanhos: ["P", "M", "G"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 7,
-        nome: "Calça Palazzo Premium",
-        preco: 159.90,
-        categoria: "calca",
-        tamanhos: ["P", "M", "G", "GG"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 8,
-        nome: "Blusa Crop Top Casual",
-        preco: 49.90,
-        categoria: "blusa",
-        tamanhos: ["P", "M", "G"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 9,
-        nome: "Vestido Curto Casual",
-        preco: 119.90,
-        categoria: "vestido",
-        tamanhos: ["P", "M", "G", "GG"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 10,
-        nome: "Calça Reta Elegante",
-        preco: 139.90,
-        categoria: "calca",
-        tamanhos: ["P", "M", "G"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 11,
-        nome: "Blusa de Luxo Festiva",
-        preco: 179.90,
-        categoria: "blusa",
-        tamanhos: ["P", "M", "G", "GG"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 12,
-        nome: "Saia Longa Elegante",
-        preco: 99.90,
-        categoria: "saia",
-        tamanhos: ["P", "M", "G"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 13,
-        nome: "Conjunto de Festa",
-        preco: 229.90,
-        categoria: "conjunto",
-        tamanhos: ["M", "G", "GG"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 14,
-        nome: "Vestido de Seda",
-        preco: 159.90,
-        categoria: "vestido",
-        tamanhos: ["P", "M", "G"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 15,
-        nome: "Calça Jeans Reta",
-        preco: 119.90,
-        categoria: "calca",
-        tamanhos: ["P", "M", "G", "GG"],
-        imagem: "FOTO AQUI"
-    },
-    {
-        id: 16,
-        nome: "Blusa Crop Top Festiva",
-        preco: 89.90,
-        categoria: "blusa",
-        tamanhos: ["P", "M", "G"],
-        imagem: "FOTO AQUI"
+// Função para carregar produtos do localStorage (do dashboard) ou usar produtos padrão
+function carregarProdutos() {
+    const produtosSalvos = localStorage.getItem('products');
+    if (produtosSalvos) {
+        const produtosDashboard = JSON.parse(produtosSalvos);
+        // Converter formato do dashboard para formato do catálogo
+        return produtosDashboard.map(produto => ({
+            id: produto.id,
+            nome: produto.name,
+            preco: parseFloat(produto.price),
+            categoria: produto.category,
+            tamanhos: produto.sizes.split(',').map(s => s.trim()),
+            imagem: produto.photos && produto.photos[0] ? produto.photos[0] : "FOTO AQUI",
+            fotos: produto.photos || [produto.photos && produto.photos[0] ? produto.photos[0] : "FOTO AQUI"],
+            descricao: produto.description || ""
+        }));
     }
-];
+    
+    // Produtos padrão se não houver produtos salvos
+    return [
+        {
+            id: 1,
+            nome: "Vestido Floral Elegante",
+            preco: 89.90,
+            categoria: "vestido",
+            tamanhos: ["P", "M", "G", "GG"],
+            imagem: "FOTO AQUI",
+            fotos: [
+                "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop"
+            ],
+            descricao: "Vestido elegante com estampa floral"
+        },
+        {
+            id: 2,
+            nome: "Calça Jeans Skinny",
+            preco: 129.90,
+            categoria: "calca",
+            tamanhos: ["P", "M", "G"],
+            imagem: "FOTO AQUI",
+            fotos: [
+                "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop"
+            ],
+            descricao: "Calça jeans skinny moderna e confortável"
+        },
+        {
+            id: 3,
+            nome: "Blusa de Seda Premium",
+            preco: 69.90,
+            categoria: "blusa",
+            tamanhos: ["P", "M", "G", "GG"],
+            imagem: "FOTO AQUI",
+            fotos: [
+                "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=800&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=600&fit=crop",
+                "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&h=600&fit=crop"
+            ],
+            descricao: "Blusa de seda premium elegante e confortável"
+        },
+        {
+            id: 4,
+            nome: "Saia Midi Plissada",
+            preco: 79.90,
+            categoria: "saia",
+            tamanhos: ["P", "M", "G"],
+            imagem: "FOTO AQUI",
+            fotos: ["FOTO AQUI"],
+            descricao: "Saia midi plissada elegante e versátil"
+        },
+        {
+            id: 5,
+            nome: "Conjunto Sport Elegante",
+            preco: 149.90,
+            categoria: "conjunto",
+            tamanhos: ["M", "G", "GG"],
+            imagem: "FOTO AQUI",
+            fotos: ["FOTO AQUI"],
+            descricao: "Conjunto sport elegante para ocasiões especiais"
+        }
+    ];
+}
+
+// Carregar produtos dinamicamente
+const produtos = carregarProdutos();
 
 // Elementos do DOM
 const productsGrid = document.getElementById('productsGrid');
@@ -847,8 +788,8 @@ function gerarSugestoes(termo) {
     return sugestoes.slice(0, 8); // Máximo 8 sugestões
 }
 
-         // Função para mostrar sugestões
- function mostrarSugestoes(sugestoes) {
+// Função para mostrar sugestões
+function mostrarSugestoes(sugestoes) {
      const suggestionsContainer = document.getElementById('searchSuggestions');
      
      if (sugestoes.length === 0) {
@@ -1055,116 +996,247 @@ searchInput.addEventListener('click', () => {
     }
 });
 
-         // Funcionalidade do Menu Mobile
-         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-         const mobileMenu = document.getElementById('mobileMenu');
-         const searchInputMobile = document.getElementById('searchInputMobile');
-         const categoryFilterMobile = document.getElementById('categoryFilterMobile');
-         
-         // Toggle do menu mobile
-         mobileMenuBtn.addEventListener('click', () => {
-             mobileMenu.classList.toggle('hidden');
-         });
-         
-         // Fechar menu mobile ao clicar fora
-         document.addEventListener('click', (e) => {
-             if (!mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
-                 mobileMenu.classList.add('hidden');
-             }
-         });
-         
-         // Sincronizar busca mobile com desktop
-         searchInputMobile.addEventListener('input', (e) => {
-             document.getElementById('searchInput').value = e.target.value;
-             filtrarProdutos();
-         });
-         
-         // Sincronizar filtro mobile com desktop
-         categoryFilterMobile.addEventListener('change', (e) => {
-             document.getElementById('categoryFilter').value = e.target.value;
-             filtrarProdutos();
-         });
-         
-         // Sincronizar busca desktop com mobile
-         document.getElementById('searchInput').addEventListener('input', (e) => {
-             searchInputMobile.value = e.target.value;
-         });
-         
-         // Sincronizar filtro desktop com mobile
-         document.getElementById('categoryFilter').addEventListener('change', (e) => {
-             categoryFilterMobile.value = e.target.value;
-         });
+// Funcionalidade do Menu Mobile
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const searchInputMobile = document.getElementById('searchInputMobile');
+const categoryFilterMobile = document.getElementById('categoryFilterMobile');
 
-         // Inicializar página
- document.addEventListener('DOMContentLoaded', () => {
-     renderizarProdutos(produtos);
-     
-     // Carregar carrinho do localStorage
-     const carrinhoSalvo = localStorage.getItem('carrinho');
-     if (carrinhoSalvo) {
-         carrinho = JSON.parse(carrinhoSalvo);
-         atualizarCarrinho();
-     }
-     
-     // Adicionar animação de fade-in aos elementos
-     const observerOptions = {
-         threshold: 0.1,
-         rootMargin: '0px 0px -50px 0px'
-     };
-     
-     const observer = new IntersectionObserver((entries) => {
-         entries.forEach(entry => {
-             if (entry.isIntersecting) {
-                 entry.target.classList.add('fade-in');
-             }
-         });
-     }, observerOptions);
-     
-     // Observar todos os cards de produtos
-     document.querySelectorAll('.card-hover').forEach(card => {
-         observer.observe(card);
-     });
-     
-     // Fechar modais ao clicar fora
-     document.addEventListener('click', (e) => {
-         const sizeModal = document.getElementById('sizeModal');
-         const carrinhoModal = document.getElementById('carrinhoModal');
-         const galeriaModal = document.getElementById('galeriaModal');
-         
-         if (e.target === sizeModal) {
-             fecharModalTamanho();
-         }
-         
-         if (e.target === carrinhoModal) {
-             fecharCarrinho();
-         }
-         
-         if (e.target === galeriaModal) {
-             fecharGaleria();
-         }
-     });
-     
-     // Navegação por teclado na galeria
-     document.addEventListener('keydown', (e) => {
-         const galeriaModal = document.getElementById('galeriaModal');
-         if (!galeriaModal.classList.contains('hidden') && galeriaAtual) {
-             switch (e.key) {
-                 case 'ArrowLeft':
-                     e.preventDefault();
-                     anteriorFoto();
-                     break;
-                 case 'ArrowRight':
-                     e.preventDefault();
-                     proximaFoto();
-                     break;
-                 case 'Escape':
-                     e.preventDefault();
-                     fecharGaleria();
-                     break;
-             }
-         }
-     });
- });
+// Toggle do menu mobile
+mobileMenuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+});
+
+// Fechar menu mobile ao clicar fora
+document.addEventListener('click', (e) => {
+    if (!mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+        mobileMenu.classList.add('hidden');
+    }
+});
+
+// Sincronizar busca mobile com desktop
+searchInputMobile.addEventListener('input', (e) => {
+    document.getElementById('searchInput').value = e.target.value;
+    filtrarProdutos();
+});
+
+// Sincronizar filtro mobile com desktop
+categoryFilterMobile.addEventListener('change', (e) => {
+    document.getElementById('categoryFilter').value = e.target.value;
+    filtrarProdutos();
+});
+
+// Sincronizar busca desktop com mobile
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    searchInputMobile.value = e.target.value;
+});
+
+// Sincronizar filtro desktop com mobile
+document.getElementById('categoryFilter').addEventListener('change', (e) => {
+    categoryFilterMobile.value = e.target.value;
+});
+
+// Função para carregar catálogo
+function carregarCatalogo() {
+    const catalogGrid = document.getElementById('catalogGrid');
+    if (!catalogGrid) return;
+    
+    // Recarregar produtos do localStorage
+    const produtosAtualizados = carregarProdutos();
+    
+    if (produtosAtualizados.length === 0) {
+        catalogGrid.innerHTML = `
+            <div class="col-span-full text-center py-16">
+                <div class="text-gray-400 text-8xl mb-6">👗</div>
+                <h3 class="text-2xl font-semibold text-gray-600 mb-4">Nenhum produto cadastrado</h3>
+                <p class="text-gray-500 text-lg">Acesse o painel administrativo para adicionar produtos</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Aplicar filtros atuais se existirem
+    filtrarCatalogo();
+}
+
+// Função para atualizar catálogo (chamada quando produtos são adicionados no dashboard)
+function atualizarCatalogo() {
+    if (typeof carregarCatalogo === 'function') {
+        carregarCatalogo();
+    }
+}
+
+// Função para filtrar catálogo
+function filtrarCatalogo() {
+    const searchTerm = document.getElementById('catalogSearch')?.value.toLowerCase() || '';
+    const categoryFilter = document.getElementById('catalogCategory')?.value || '';
+    const priceFilter = document.getElementById('catalogPrice')?.value || '';
+    
+    const produtosAtualizados = carregarProdutos();
+    let produtosFiltrados = produtosAtualizados;
+    
+    // Filtro por busca
+    if (searchTerm) {
+        produtosFiltrados = produtosFiltrados.filter(produto => 
+            produto.nome.toLowerCase().includes(searchTerm) ||
+            produto.descricao.toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    // Filtro por categoria
+    if (categoryFilter) {
+        produtosFiltrados = produtosFiltrados.filter(produto => 
+            produto.categoria === categoryFilter
+        );
+    }
+    
+    // Filtro por preço
+    if (priceFilter) {
+        const [min, max] = priceFilter.split('-').map(p => parseFloat(p));
+        produtosFiltrados = produtosFiltrados.filter(produto => {
+            if (max) {
+                return produto.preco >= min && produto.preco <= max;
+            } else {
+                return produto.preco >= min;
+            }
+        });
+    }
+    
+    // Atualizar grid
+    const catalogGrid = document.getElementById('catalogGrid');
+    const noResults = document.getElementById('catalogNoResults');
+    
+    if (produtosFiltrados.length === 0) {
+        catalogGrid.innerHTML = '';
+        noResults.classList.remove('hidden');
+    } else {
+        noResults.classList.add('hidden');
+        catalogGrid.innerHTML = produtosFiltrados.map(produto => `
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                <!-- Imagem do Produto -->
+                <div class="relative aspect-square overflow-hidden cursor-pointer" onclick="abrirGaleria(${produto.id})">
+                    <img src="${produto.imagem !== 'FOTO AQUI' ? produto.imagem : 'https://via.placeholder.com/400x400?text=Sem+Foto'}" 
+                         alt="${produto.nome}" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
+                    <!-- Indicador de múltiplas fotos -->
+                    ${produto.fotos && produto.fotos.length > 1 ? `
+                        <div class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs flex items-center space-x-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>${produto.fotos.length}</span>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <!-- Informações do Produto -->
+                <div class="p-4 space-y-3">
+                    <h3 class="text-lg font-semibold text-gray-800 line-clamp-2">${produto.nome}</h3>
+                    <div class="flex items-center justify-between">
+                        <span class="text-2xl font-bold text-rosa-escuro">${formatarPreco(produto.preco)}</span>
+                        <span class="text-sm text-gray-500 capitalize">${produto.categoria}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm text-gray-600">
+                        <span>Tamanhos: ${produto.tamanhos.join(', ')}</span>
+                        <button onclick="adicionarAoCarrinho(${produto.id})" 
+                                class="px-4 py-2 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors text-sm font-medium">
+                            🛒 Adicionar
+                        </button>
+                    </div>
+                    ${produto.descricao ? `<p class="text-xs text-gray-500 line-clamp-2">${produto.descricao}</p>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+}
+
+// Inicializar página
+document.addEventListener('DOMContentLoaded', () => {
+    renderizarProdutos(produtos);
+    carregarCatalogo();
+    
+    // Adicionar event listeners para filtros do catálogo
+    const catalogSearch = document.getElementById('catalogSearch');
+    const catalogCategory = document.getElementById('catalogCategory');
+    const catalogPrice = document.getElementById('catalogPrice');
+    
+    if (catalogSearch) {
+        catalogSearch.addEventListener('input', filtrarCatalogo);
+    }
+    if (catalogCategory) {
+        catalogCategory.addEventListener('change', filtrarCatalogo);
+    }
+    if (catalogPrice) {
+        catalogPrice.addEventListener('change', filtrarCatalogo);
+    }
+    
+    // Carregar carrinho do localStorage
+    const carrinhoSalvo = localStorage.getItem('carrinho');
+    if (carrinhoSalvo) {
+        carrinho = JSON.parse(carrinhoSalvo);
+        atualizarCarrinho();
+    }
+    
+    // Adicionar animação de fade-in aos elementos
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+            }
+        });
+    }, observerOptions);
+    
+    // Observar todos os cards de produtos
+    document.querySelectorAll('.card-hover').forEach(card => {
+        observer.observe(card);
+    });
+    
+    // Fechar modais ao clicar fora
+    document.addEventListener('click', (e) => {
+        const sizeModal = document.getElementById('sizeModal');
+        const carrinhoModal = document.getElementById('carrinhoModal');
+        const galeriaModal = document.getElementById('galeriaModal');
+        
+        if (e.target === sizeModal) {
+            fecharModalTamanho();
+        }
+        
+        if (e.target === carrinhoModal) {
+            fecharCarrinho();
+        }
+        
+        if (e.target === galeriaModal) {
+            fecharGaleria();
+        }
+    });
+    
+    // Navegação por teclado na galeria
+    document.addEventListener('keydown', (e) => {
+        const galeriaModal = document.getElementById('galeriaModal');
+        if (!galeriaModal.classList.contains('hidden') && galeriaAtual) {
+            switch (e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    anteriorFoto();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    proximaFoto();
+                    break;
+                case 'Escape':
+                    e.preventDefault();
+                    fecharGaleria();
+                    break;
+            }
+        }
+    });
+});
 
 // Smooth scroll para links internos
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1281,106 +1353,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-        // Carregar produtos de exemplo no catálogo
-        function carregarProdutosCatalogo() {
-            const produtos = [
-                {
-                    id: 1,
-                    nome: "Vestido Floral Elegante",
-                    preco: 89.90,
-                    imagem: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=500&fit=crop",
-                    categoria: "vestidos",
-                    cor: "floral"
-                },
-                {
-                    id: 2,
-                    nome: "Blusa de Seda Premium",
-                    preco: 65.50,
-                    imagem: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&h=500&fit=crop",
-                    categoria: "blusas",
-                    cor: "azul"
-                },
-                {
-                    id: 3,
-                    nome: "Calça Jeans Moderna",
-                    preco: 75.00,
-                    imagem: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=500&fit=crop",
-                    categoria: "calcas",
-                    cor: "azul"
-                },
-                {
-                    id: 4,
-                    nome: "Bolsa de Couro Artesanal",
-                    preco: 120.00,
-                    imagem: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=500&fit=crop",
-                    categoria: "acessorios",
-                    cor: "preto"
-                },
-                {
-                    id: 5,
-                    nome: "Vestido de Festa Luxuoso",
-                    preco: 199.90,
-                    imagem: "https://images.unsplash.com/photo-1566479179817-c0d9ed0b5b0f?w=400&h=500&fit=crop",
-                    categoria: "vestidos",
-                    cor: "preto"
-                },
-                {
-                    id: 6,
-                    nome: "Blusa Casual Estampada",
-                    preco: 45.90,
-                    imagem: "https://images.unsplash.com/photo-1571513720906-8dd48b872135?w=400&h=500&fit=crop",
-                    categoria: "blusas",
-                    cor: "rosa"
-                },
-                {
-                    id: 7,
-                    nome: "Calça Social Elegante",
-                    preco: 85.00,
-                    imagem: "https://images.unsplash.com/photo-1506629905607-9b2b5b5b5b5b?w=400&h=500&fit=crop",
-                    categoria: "calcas",
-                    cor: "preto"
-                },
-                {
-                    id: 8,
-                    nome: "Colar de Pérolas Clássico",
-                    preco: 55.00,
-                    imagem: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=500&fit=crop",
-                    categoria: "acessorios",
-                    cor: "branco"
-                }
-            ];
-
-            const catalogGrid = document.getElementById('catalogGrid');
-            if (catalogGrid) {
-                catalogGrid.innerHTML = produtos.map(produto => `
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
-                        <!-- Imagem do Produto -->
-                        <div class="relative aspect-square overflow-hidden">
-                            <img src="${produto.imagem}" alt="${produto.nome}" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
-                        </div>
-                        
-                        <!-- Informações do Produto -->
-                        <div class="p-4 space-y-3">
-                            <h3 class="text-lg font-semibold text-gray-800 line-clamp-2">${produto.nome}</h3>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-rosa-escuro">R$ ${produto.preco.toFixed(2).replace('.', ',')}</span>
-                                <span class="text-sm text-gray-500 capitalize">${produto.categoria}</span>
-                            </div>
-                            <div class="flex items-center justify-between text-sm text-gray-600">
-                                <span class="capitalize">${produto.cor}</span>
-                                <button class="px-4 py-2 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors text-sm font-medium">
-                                    Ver Detalhes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // Carregar produtos quando a página carregar
-        document.addEventListener('DOMContentLoaded', function() {
-            carregarProdutosCatalogo();
-        });

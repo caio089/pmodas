@@ -332,12 +332,10 @@
      }
  }
 
-<<<<<<< HEAD
-    /* Melhorar espaçamento entre elementos interativos */
-    .card-hover button {
-        margin-top: 0.5rem;
-    }
-
+/* Melhorar espaçamento entre elementos interativos */
+.card-hover button {
+    margin-top: 0.5rem;
+}
 
 /* Estilos específicos para mobile */
 @media (max-width: 768px) {
@@ -363,7 +361,8 @@
         max-height: 15rem;
         z-index: 1001;
     }
-=======
+}
+
 @keyframes pulse {
     0% {
         transform: scale(1);
@@ -644,5 +643,4 @@
 #imagemPrincipal:hover {
     transform: scale(1.02);
     transition: transform 0.3s ease;
->>>>>>> 07af0c5ed17cc66db7902a6e1bfdc0a42a0ac7c8
 }
