@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PAIXAO MODAS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rosa-claro': '#fce7f3',
+                        'rosa-escuro': '#be185d',
+                        'rosa-hover': '#ec4899'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header do Dashboard -->
+    <header class="bg-white shadow-lg border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <img src="{% static 'pmodas.jpg' %}" alt="PAIXAO MODAS" class="h-10 w-auto">
+                    <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-600">Bem-vindo, Admin</span>
+                    <button onclick="logout()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Cards de Estatísticas -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-rosa-claro rounded-lg">
+                        <svg class="w-6 h-6 text-rosa-escuro" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total de Produtos</p>
+                        <p class="text-2xl font-bold text-gray-900" id="totalProducts">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-green-100 rounded-lg">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Produtos Ativos</p>
+                        <p class="text-2xl font-bold text-gray-900" id="activeProducts">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Valor Total</p>
+                        <p class="text-2xl font-bold text-gray-900" id="totalValue">R$ 0,00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-yellow-100 rounded-lg">
+                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Última Atualização</p>
+                        <p class="text-sm font-bold text-gray-900" id="lastUpdate">Hoje</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <button onclick="showAddProduct()" class="bg-rosa-escuro text-white p-6 rounded-xl hover:bg-rosa-hover transition-colors text-center">
+                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                <h3 class="text-lg font-semibold">Adicionar Nova Roupa</h3>
+                <p class="text-sm opacity-90">Cadastrar novo produto no catálogo</p>
+            </button>
+
+            <button onclick="showProductList()" class="bg-blue-600 text-white p-6 rounded-xl hover:bg-blue-700 transition-colors text-center">
+                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+                <h3 class="text-lg font-semibold">Ver Roupas Cadastradas</h3>
+                <p class="text-sm opacity-90">Gerenciar produtos existentes</p>
+            </button>
+
+            <button onclick="showSettings()" class="bg-gray-600 text-white p-6 rounded-xl hover:bg-gray-700 transition-colors text-center">
+                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <h3 class="text-lg font-semibold">Configurações</h3>
+                <p class="text-sm opacity-90">Ajustar configurações do sistema</p>
+            </button>
+        </div>
+
+        <!-- Área de Conteúdo -->
+        <div id="contentArea" class="bg-white rounded-xl shadow-lg p-6">
+            <div class="text-center text-gray-500">
+                <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <h3 class="text-xl font-semibold mb-2">Selecione uma opção acima</h3>
+                <p>Escolha uma das funcionalidades do menu para começar</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar Produto -->
+    <div id="addProductModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Adicionar Nova Roupa</h2>
+                    <button onclick="closeAddProduct()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <form id="addProductForm" class="p-6 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nome da Roupa *</label>
+                        <input type="text" id="productName" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
+                               placeholder="Ex: Vestido Floral Elegante">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Preço (R$) *</label>
+                        <input type="number" id="productPrice" step="0.01" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
+                               placeholder="Ex: 89.90">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Categoria *</label>
+                        <select id="productCategory" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20">
+                            <option value="">Selecione uma categoria</option>
+                            <option value="vestidos">Vestidos</option>
+                            <option value="blusas">Blusas</option>
+                            <option value="calcas">Calças</option>
+                            <option value="saias">Saias</option>
+                            <option value="conjuntos">Conjuntos</option>
+                            <option value="acessorios">Acessórios</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tamanhos Disponíveis *</label>
+                        <input type="text" id="productSizes" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
+                               placeholder="Ex: P, M, G, GG (separados por vírgula)">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Cor</label>
+                        <input type="text" id="productColor"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
+                               placeholder="Ex: Azul, Rosa, Preto">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select id="productStatus"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20">
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+                    <textarea id="productDescription" rows="3"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-rosa-escuro focus:ring-2 focus:ring-rosa-escuro/20"
+                              placeholder="Descreva a roupa..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Fotos (máximo 3)</label>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                            <input type="url" id="photo1" placeholder="URL da foto 1"
+                                   class="w-full text-sm border-none outline-none">
+                        </div>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                            <input type="url" id="photo2" placeholder="URL da foto 2"
+                                   class="w-full text-sm border-none outline-none">
+                        </div>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                            <input type="url" id="photo3" placeholder="URL da foto 3"
+                                   class="w-full text-sm border-none outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                    <button type="button" onclick="closeAddProduct()"
+                            class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="px-6 py-3 bg-rosa-escuro text-white rounded-lg hover:bg-rosa-hover transition-colors">
+                        Adicionar Produto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Verificar se está logado
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = '/painel-admin/';
+        }
+
+        // Array para armazenar produtos
+        let products = JSON.parse(localStorage.getItem('products') || '[]');
+
+        // Atualizar estatísticas
+        function updateStats() {
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('activeProducts').textContent = products.filter(p => p.status === 'ativo').length;
+            
+            const totalValue = products.reduce((sum, product) => sum + parseFloat(product.price), 0);
+            document.getElementById('totalValue').textContent = `R$ ${totalValue.toFixed(2).replace('.', ',')}`;
+            
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString('pt-BR');
+        }
+
+        // Mostrar formulário de adicionar produto
+        function showAddProduct() {
+            document.getElementById('addProductModal').classList.remove('hidden');
+            document.getElementById('contentArea').innerHTML = `
+                <div class="text-center text-gray-500">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-2">Formulário de Adicionar Produto</h3>
+                    <p>Preencha o formulário ao lado para adicionar uma nova roupa</p>
+                </div>
+            `;
+        }
+
+        // Fechar modal de adicionar produto
+        function closeAddProduct() {
+            document.getElementById('addProductModal').classList.add('hidden');
+            document.getElementById('addProductForm').reset();
+        }
+
+        // Mostrar lista de produtos
+        function showProductList() {
+            const content = `
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Roupas Cadastradas</h2>
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-600">Total: ${products.length} produtos</p>
+                        <button onclick="exportProducts()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            Exportar Lista
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${products.map((product, index) => `
+                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
+                            <div class="aspect-square bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                                <img src="${product.photos[0] || 'https://via.placeholder.com/300x300?text=Sem+Foto'}" 
+                                     alt="${product.name}" class="w-full h-full object-cover">
+                            </div>
+                            <h3 class="font-semibold text-gray-800 mb-2">${product.name}</h3>
+                            <p class="text-rosa-escuro font-bold text-lg mb-2">R$ ${product.price.replace('.', ',')}</p>
+                            <p class="text-sm text-gray-600 mb-2">${product.category} • ${product.color}</p>
+                            <p class="text-sm text-gray-500 mb-4">${product.sizes}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="px-2 py-1 text-xs rounded-full ${product.status === 'ativo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                    ${product.status}
+                                </span>
+                                <button onclick="deleteProduct(${index})" class="text-red-600 hover:text-red-800 text-sm">
+                                    Excluir
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('contentArea').innerHTML = content;
+        }
+
+        // Mostrar configurações
+        function showSettings() {
+            document.getElementById('contentArea').innerHTML = `
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Configurações</h2>
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">Informações da Loja</h3>
+                            <p class="text-gray-600">Configure as informações básicas da sua loja</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">Backup de Dados</h3>
+                            <p class="text-gray-600">Faça backup dos seus produtos e configurações</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">Limpar Dados</h3>
+                            <p class="text-gray-600">Remover todos os produtos cadastrados</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Adicionar produto
+        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const product = {
+                id: Date.now(),
+                name: document.getElementById('productName').value,
+                price: document.getElementById('productPrice').value,
+                category: document.getElementById('productCategory').value,
+                sizes: document.getElementById('productSizes').value,
+                color: document.getElementById('productColor').value,
+                status: document.getElementById('productStatus').value,
+                description: document.getElementById('productDescription').value,
+                photos: [
+                    document.getElementById('photo1').value,
+                    document.getElementById('photo2').value,
+                    document.getElementById('photo3').value
+                ].filter(photo => photo.trim() !== '')
+            };
+            
+            products.push(product);
+            localStorage.setItem('products', JSON.stringify(products));
+            
+            updateStats();
+            closeAddProduct();
+            
+            // Mostrar notificação de sucesso
+            alert('Produto adicionado com sucesso!');
+        });
+
+        // Excluir produto
+        function deleteProduct(index) {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                products.splice(index, 1);
+                localStorage.setItem('products', JSON.stringify(products));
+                updateStats();
+                showProductList();
+            }
+        }
+
+        // Exportar produtos
+        function exportProducts() {
+            const dataStr = JSON.stringify(products, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'produtos_paixao_modas.json';
+            link.click();
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = '/painel-admin/';
+        }
+
+        // Inicializar
+        updateStats();
+    </script>
+</body>
+</html>
