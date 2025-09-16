@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from decimal import Decimal
+from .supabase_service import SupabaseService
 
 class Roupa(models.Model):
     CATEGORIA_CHOICES = [
@@ -90,11 +91,21 @@ class Roupa(models.Model):
         """Retorna lista de imagens disponíveis"""
         imagens = []
         if self.imagem_principal:
-            imagens.append(self.imagem_principal.url)
+            # Se for URL do Supabase, usar diretamente, senão usar URL do Django
+            if self.imagem_principal.startswith('http'):
+                imagens.append(self.imagem_principal)
+            else:
+                imagens.append(self.imagem_principal.url)
         if self.imagem_2:
-            imagens.append(self.imagem_2.url)
+            if self.imagem_2.startswith('http'):
+                imagens.append(self.imagem_2)
+            else:
+                imagens.append(self.imagem_2.url)
         if self.imagem_3:
-            imagens.append(self.imagem_3.url)
+            if self.imagem_3.startswith('http'):
+                imagens.append(self.imagem_3)
+            else:
+                imagens.append(self.imagem_3.url)
         return imagens
     
     def get_imagem_principal_url_safe(self):

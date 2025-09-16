@@ -27,17 +27,8 @@ function inicializarCarrinho() {
 
 // Aguardar o DOM estar completamente carregado
 document.addEventListener('DOMContentLoaded', function() {
-    // Aguardar um pouco mais para garantir que todos os elementos estejam renderizados
     setTimeout(inicializarCarrinho, 100);
 });
-
-// Também tentar inicializar imediatamente se o DOM já estiver carregado
-if (document.readyState === 'loading') {
-    // DOM ainda carregando, aguardar
-     } else {
-    // DOM já carregado, inicializar imediatamente
-    setTimeout(inicializarCarrinho, 100);
-}
 
 // Função para atualizar contador do carrinho
 function atualizarContadorCarrinho() {
@@ -137,20 +128,20 @@ function adicionarAoCarrinho(id, nome, preco, imagem, tamanho) {
         preco: parseFloat(preco) || 0,
         imagem: imagem || '',
         tamanho: tamanho || 'Único',
-             quantidade: 1
-         };
+        quantidade: 1
+    };
          
     // Verificar se o item já existe no carrinho
     const itemExistente = carrinho.find(existingItem => existingItem.id === item.id);
          
-         if (itemExistente) {
-             itemExistente.quantidade += 1;
-         } else {
+    if (itemExistente) {
+        itemExistente.quantidade += 1;
+    } else {
         carrinho.push(item);
     }
      
-     // Salvar no localStorage
-     localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    // Salvar no localStorage
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
     
     // Mostrar feedback visual
     mostrarFeedbackCarrinho();
@@ -163,18 +154,18 @@ function adicionarAoCarrinho(id, nome, preco, imagem, tamanho) {
 }
 
 // Função para abrir o carrinho
- function abrirCarrinho() {
-     const modal = document.getElementById('carrinhoModal');
+function abrirCarrinho() {
+    const modal = document.getElementById('carrinhoModal');
     
     if (modal) {
-     modal.classList.remove('hidden');
+        modal.classList.remove('hidden');
         modal.classList.add('flex');
         atualizarCarrinhoModal();
     }
- }
- 
+}
+
 // Função para fechar o carrinho
- function fecharCarrinho() {
+function fecharCarrinho() {
     const modal = document.getElementById('carrinhoModal');
     if (modal) {
         modal.classList.add('hidden');
@@ -196,8 +187,11 @@ function atualizarCarrinhoModal() {
             <div class="text-center py-8">
                 <div class="text-6xl mb-4">🛒</div>
                 <h3 class="text-xl font-semibold text-gray-600 mb-2">Seu carrinho está vazio</h3>
-                <p class="text-gray-500">Adicione alguns produtos para começar!</p>
-        </div>
+                <p class="text-gray-500 mb-4">Adicione alguns produtos para começar!</p>
+                <button onclick="fecharCarrinho()" class="bg-rosa-escuro text-white px-6 py-2 rounded-lg hover:bg-rosa-hover transition-colors">
+                    Continuar Comprando
+                </button>
+            </div>
         `;
         carrinhoTotal.textContent = 'R$ 0,00';
         
@@ -229,19 +223,19 @@ function atualizarCarrinhoModal() {
                         </svg>
                         </div>`
                     }
-                    </div>
+                </div>
                 <div class="flex-1">
                     <h4 class="font-semibold text-gray-800">${item.nome}</h4>
                     <p class="text-sm text-gray-600">Tamanho: ${item.tamanho}</p>
                     <p class="text-sm text-gray-600">R$ ${preco.toFixed(2).replace('.', ',')}</p>
-                        </div>
+                </div>
                 <div class="flex items-center space-x-2">
                     <button onclick="alterarQuantidade(${item.id}, -1)" class="w-8 h-8 bg-rosa-escuro text-white rounded-full hover:bg-rosa-hover transition-colors">-</button>
                     <span class="w-8 text-center font-semibold">${item.quantidade}</span>
                     <button onclick="alterarQuantidade(${item.id}, 1)" class="w-8 h-8 bg-rosa-escuro text-white rounded-full hover:bg-rosa-hover transition-colors">+</button>
-                    </div>
+                </div>
                 <div class="text-right">
-                    <p class="font-bold text-rosa-escuro">R$ ${subtotal.toFixed(2).replace('.', ',')}</p>
+                    <p class="font-bold text-black">R$ ${subtotal.toFixed(2).replace('.', ',')}</p>
                     <button onclick="removerItem(${item.id})" class="text-red-500 hover:text-red-700 text-sm">Remover</button>
                 </div>
             </div>
@@ -282,36 +276,49 @@ function limparCarrinho() {
     atualizarCarrinhoModal();
 }
 
-// Função para debug - limpar carrinho via console
-function debugLimparCarrinho() {
-    console.log('Carrinho antes:', carrinho);
-    limparCarrinho();
-    console.log('Carrinho depois:', carrinho);
-    console.log('Carrinho limpo com sucesso!');
-}
+// Função para comprar produto individual via WhatsApp
+window.buyOnWhatsApp = function(productName, price, size) {
+    const message = `Olá! Gostei do produto *${productName}*, tamanho *${size}*, valor *R$ ${price.toFixed(2).replace('.', ',')}*. Gostaria de finalizar a compra.`;
+    const whatsappNumber = "5589994169377";
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+};
 
 // Função para finalizar compra
 function finalizarCompra() {
-    if (carrinho.length === 0) {
-        alert('Seu carrinho está vazio!');
-         return;
-     }
-     
-    let mensagem = '🛍️ *PAIXAO MODAS* - Pedido\n\n';
+    if (!carrinho.length) {
+        alert('Carrinho vazio!');
+        return;
+    }
+
+    // Construir mensagem simples
+    let mensagem = 'Ola! Gostaria de finalizar a compra dos seguintes itens:\n\n';
     let total = 0;
-    
-    carrinho.forEach(item => {
-        const subtotal = item.preco * item.quantidade;
-        total += subtotal;
-        mensagem += `• ${item.nome} (Tamanho: ${item.tamanho})\n`;
-        mensagem += `  Quantidade: ${item.quantidade}x\n`;
-        mensagem += `  Valor: R$ ${subtotal.toFixed(2).replace('.', ',')}\n\n`;
+
+    carrinho.forEach((item, i) => {
+        const itemTotal = item.preco * item.quantidade;
+        total += itemTotal;
+        mensagem += `${i + 1}. ${item.nome} - Tamanho: ${item.tamanho} - Qtd: ${item.quantidade} - R$ ${itemTotal.toFixed(2)}\n`;
     });
+
+    mensagem += `\nTotal: R$ ${total.toFixed(2)}`;
+
+    const numero = '5589994169377';
     
-    mensagem += `💰 *TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*\n\n`;
-    mensagem += 'Por favor, confirme seu pedido e informe o endereço de entrega!';
+    // Detectar dispositivo
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
-    const url = `https://wa.me/5511999999999?text=${encodeURIComponent(mensagem)}`;
+    // Usar apenas a URL que funciona melhor para cada dispositivo
+    let url;
+    if (isMobile) {
+        // Mobile: wa.me funciona melhor
+        url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+    } else {
+        // Desktop: usar web.whatsapp.com que funciona melhor
+        url = `https://web.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`;
+    }
+    
+    // Abrir WhatsApp
     window.open(url, '_blank');
 }
 
@@ -345,7 +352,7 @@ function filtrarCatalogo() {
         if (preco) {
             if (preco === '200+') {
                 if (precoCard < 200) mostrar = false;
-        } else {
+            } else {
                 const [min, max] = preco.split('-').map(p => parseFloat(p) || 0);
                 if (precoCard < min || precoCard > max) mostrar = false;
             }
@@ -372,6 +379,19 @@ function filtrarCatalogo() {
     }
 }
 
+// Função debounce para otimizar a busca
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 // Inicializar filtros
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('catalogSearch');
@@ -393,128 +413,92 @@ document.addEventListener('DOMContentLoaded', function() {
     filtrarCatalogo();
 });
 
-// Função para atualizar o catálogo quando novos produtos forem adicionados
-function atualizarCatalogo() {
-    // Recarregar a página para mostrar novos produtos
-    location.reload();
+// Sistema de Galeria de Imagens
+const currentImageIndex = {};
+
+// Inicializa o índice para cada produto
+function initializeImageIndex(productId) {
+    if (!currentImageIndex[productId]) {
+        currentImageIndex[productId] = 0;
+    }
 }
 
-// Função para filtrar produtos em tempo real
-function filtrarEmTempoReal() {
-    const searchInput = document.getElementById('catalogSearch');
-    const categoryFilter = document.getElementById('catalogCategory');
-    const priceFilter = document.getElementById('catalogPrice');
+// Mostra uma imagem específica
+function showImage(productId, imageIndex) {
+    initializeImageIndex(productId);
     
-    if (searchInput) {
-        searchInput.addEventListener('input', debounce(filtrarCatalogo, 300));
-    }
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', filtrarCatalogo);
-    }
-    if (priceFilter) {
-        priceFilter.addEventListener('change', filtrarCatalogo);
-    }
-}
-
-// Função debounce para otimizar a busca
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-   // Armazena o índice atual de cada produto
-   const currentImageIndex = {};
+    // Esconde todas as imagens do produto
+    const images = document.querySelectorAll(`[id^="img-${productId}-"]`);
+    images.forEach(img => img.classList.add('hidden'));
+    
+    // Mostra a imagem selecionada
+    const targetImage = document.getElementById(`img-${productId}-${imageIndex}`);
+    if (targetImage) {
+        targetImage.classList.remove('hidden');
+        currentImageIndex[productId] = imageIndex;
         
-   // Inicializa o índice para cada produto
-   function initializeImageIndex(productId) {
-       if (!currentImageIndex[productId]) {
-           currentImageIndex[productId] = 0;
-       }
-   }
-   
-   // Mostra uma imagem específica
-   function showImage(productId, imageIndex) {
-       initializeImageIndex(productId);
-       
-       // Esconde todas as imagens do produto
-       const images = document.querySelectorAll(`[id^="img-${productId}-"]`);
-       images.forEach(img => img.classList.add('hidden'));
-       
-       // Mostra a imagem selecionada
-       const targetImage = document.getElementById(`img-${productId}-${imageIndex}`);
-       if (targetImage) {
-           targetImage.classList.remove('hidden');
-           currentImageIndex[productId] = imageIndex;
-           
-           // Atualiza os indicadores
-           updateIndicators(productId, imageIndex);
-           
-           // Atualiza o contador
-           updateCounter(productId, imageIndex);
-       }
-   }
-   
-   // Próxima imagem
-   function nextImage(productId) {
-       initializeImageIndex(productId);
-       
-       const totalImages = document.querySelectorAll(`[id^="img-${productId}-"]`).length;
-       const nextIndex = (currentImageIndex[productId] + 1) % totalImages;
-       showImage(productId, nextIndex);
-   }
-   
-   // Imagem anterior
-   function previousImage(productId) {
-       initializeImageIndex(productId);
-       
-       const totalImages = document.querySelectorAll(`[id^="img-${productId}-"]`).length;
-       const prevIndex = currentImageIndex[productId] === 0 ? totalImages - 1 : currentImageIndex[productId] - 1;
-       showImage(productId, prevIndex);
-   }
-   
-   // Atualiza os indicadores de posição
-   function updateIndicators(productId, imageIndex) {
-       const indicators = document.querySelectorAll(`[class*="indicator-${productId}-"]`);
-        indicators.forEach((indicator, index) => {
-           if (index === imageIndex) {
-               indicator.classList.remove('bg-white/30');
-               indicator.classList.add('bg-white/70');
-            } else {
-               indicator.classList.remove('bg-white/70');
-               indicator.classList.add('bg-white/30');
-            }
-        });
+        // Atualiza os indicadores
+        updateIndicators(productId, imageIndex);
+        
+        // Atualiza o contador
+        updateCounter(productId, imageIndex);
     }
+}
+
+// Próxima imagem
+function nextImage(productId) {
+    initializeImageIndex(productId);
     
-   // Atualiza o contador de imagens
-   function updateCounter(productId, imageIndex) {
-       const counter = document.getElementById(`counter-${productId}`);
-       if (counter) {
-           counter.textContent = imageIndex + 1;
-       }
-   }
-   
-   // Inicializa todos os produtos quando a página carrega
-   document.addEventListener('DOMContentLoaded', function() {
-       // Encontra todos os produtos com múltiplas imagens
-       const productsWithMultipleImages = document.querySelectorAll('[id^="img-"][id$="-1"], [id^="img-"][id$="-2"]');
-       const productIds = new Set();
-       
-       productsWithMultipleImages.forEach(img => {
-           const productId = img.id.split('-')[1];
-           productIds.add(productId);
-       });
-       
-       // Inicializa cada produto
-       productIds.forEach(productId => {
-           initializeImageIndex(productId);
-           showImage(productId, 0);
-       });
-       
-   });
+    const totalImages = document.querySelectorAll(`[id^="img-${productId}-"]`).length;
+    const nextIndex = (currentImageIndex[productId] + 1) % totalImages;
+    showImage(productId, nextIndex);
+}
+
+// Imagem anterior
+function previousImage(productId) {
+    initializeImageIndex(productId);
+    
+    const totalImages = document.querySelectorAll(`[id^="img-${productId}-"]`).length;
+    const prevIndex = currentImageIndex[productId] === 0 ? totalImages - 1 : currentImageIndex[productId] - 1;
+    showImage(productId, prevIndex);
+}
+
+// Atualiza os indicadores de posição
+function updateIndicators(productId, imageIndex) {
+    const indicators = document.querySelectorAll(`[class*="indicator-${productId}-"]`);
+    indicators.forEach((indicator, index) => {
+        if (index === imageIndex) {
+            indicator.classList.remove('bg-white/30');
+            indicator.classList.add('bg-white/70');
+        } else {
+            indicator.classList.remove('bg-white/70');
+            indicator.classList.add('bg-white/30');
+        }
+    });
+}
+
+// Atualiza o contador de imagens
+function updateCounter(productId, imageIndex) {
+    const counter = document.getElementById(`counter-${productId}`);
+    if (counter) {
+        counter.textContent = imageIndex + 1;
+    }
+}
+
+// Inicializa todos os produtos quando a página carrega
+document.addEventListener('DOMContentLoaded', function() {
+    // Encontra todos os produtos com múltiplas imagens
+    const productsWithMultipleImages = document.querySelectorAll('[id^="img-"][id$="-1"], [id^="img-"][id$="-2"]');
+    const productIds = new Set();
+    
+    productsWithMultipleImages.forEach(img => {
+        const productId = img.id.split('-')[1];
+        productIds.add(productId);
+    });
+    
+    // Inicializa cada produto
+    productIds.forEach(productId => {
+        initializeImageIndex(productId);
+        showImage(productId, 0);
+    });
+});

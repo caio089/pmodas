@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Roupa
+from .supabase_service import SupabaseService
 import json
 
 def admin_login(request):
@@ -36,27 +37,44 @@ def admin_login(request):
 @login_required
 def admin_dashboard(request):
     """Dashboard do painel administrativo - Acesso restrito"""
-    # Buscar roupas do banco de dados
-    roupas = Roupa.objects.all().order_by('-data_criacao')
+    supabase_service = SupabaseService()
+    
+    # Buscar todas as roupas do Supabase
+    roupas_data = supabase_service.get_roupas()
+    
+    # Converter para objetos Roupa para compatibilidade
+    roupas = []
+    for roupas_data_item in roupas_data:
+        roupa = Roupa()
+        roupa.id = roupas_data_item['id']
+        roupa.nome = roupas_data_item['nome']
+        roupa.descricao = roupas_data_item.get('descricao', '')
+        roupa.preco = float(roupas_data_item['preco'])
+        roupa.categoria = roupas_data_item['categoria']
+        roupa.tamanhos = roupas_data_item['tamanhos']
+        roupa.imagem_principal = roupas_data_item.get('imagem_principal', '')
+        roupa.imagem_2 = roupas_data_item.get('imagem_2', '')
+        roupa.imagem_3 = roupas_data_item.get('imagem_3', '')
+        roupa.ativo = roupas_data_item['ativo']
+        roupa.data_criacao = roupas_data_item.get('data_criacao', '')
+        roupas.append(roupa)
     
     # Filtro por status ativo/inativo
     status = request.GET.get('status', '')
     if status == 'ativo':
-        roupas = roupas.filter(ativo=True)
+        roupas = [r for r in roupas if r.ativo]
     elif status == 'inativo':
-        roupas = roupas.filter(ativo=False)
+        roupas = [r for r in roupas if not r.ativo]
     
     # Filtros
     categoria = request.GET.get('categoria', '')
     busca = request.GET.get('busca', '')
     
     if categoria:
-        roupas = roupas.filter(categoria=categoria)
+        roupas = [r for r in roupas if r.categoria == categoria]
     
     if busca:
-        roupas = roupas.filter(
-            Q(nome__icontains=busca) | Q(descricao__icontains=busca)
-        )
+        roupas = [r for r in roupas if busca.lower() in r.nome.lower() or busca.lower() in r.descricao.lower()]
     
     # Paginação
     paginator = Paginator(roupas, 12)
@@ -64,12 +82,12 @@ def admin_dashboard(request):
     page_obj = paginator.get_page(page_number)
     
     # Estatísticas
-    total_roupas = Roupa.objects.count()
-    roupas_ativas = Roupa.objects.filter(ativo=True).count()
-    roupas_inativas = Roupa.objects.filter(ativo=False).count()
+    total_roupas = len(roupas_data)
+    roupas_ativas = len([r for r in roupas_data if r['ativo']])
+    roupas_inativas = len([r for r in roupas_data if not r['ativo']])
     roupas_por_categoria = {}
     for categoria_choice in Roupa.CATEGORIA_CHOICES:
-        count = Roupa.objects.filter(categoria=categoria_choice[0]).count()
+        count = len([r for r in roupas_data if r['categoria'] == categoria_choice[0]])
         roupas_por_categoria[categoria_choice[1]] = count
     
     context = {
@@ -96,17 +114,43 @@ def adicionar_roupa(request):
     """Adicionar nova roupa"""
     if request.method == 'POST':
         try:
-            roupa = Roupa.objects.create(
-                nome=request.POST.get('nome'),
-                descricao=request.POST.get('descricao', ''),
-                preco=request.POST.get('preco'),
-                categoria=request.POST.get('categoria'),
-                tamanhos=request.POST.get('tamanhos', 'P,M,G'),
-                imagem_principal=request.FILES.get('imagem_principal'),
-                imagem_2=request.FILES.get('imagem_2'),
-                imagem_3=request.FILES.get('imagem_3')
-            )
-            messages.success(request, f'Roupa "{roupa.nome}" adicionada com sucesso!')
+            supabase_service = SupabaseService()
+            
+            # Fazer upload das imagens para o Supabase Storage
+            imagem_principal_url = ''
+            imagem_2_url = ''
+            imagem_3_url = ''
+            
+            if request.FILES.get('imagem_principal'):
+                imagem_principal_url = supabase_service.upload_image(request.FILES['imagem_principal'])
+            
+            if request.FILES.get('imagem_2'):
+                imagem_2_url = supabase_service.upload_image(request.FILES['imagem_2'])
+            
+            if request.FILES.get('imagem_3'):
+                imagem_3_url = supabase_service.upload_image(request.FILES['imagem_3'])
+            
+            # Preparar dados para o Supabase
+            roupas_data = {
+                'nome': request.POST.get('nome'),
+                'descricao': request.POST.get('descricao', ''),
+                'preco': float(request.POST.get('preco')),
+                'categoria': request.POST.get('categoria'),
+                'tamanhos': request.POST.get('tamanhos', 'P,M,G'),
+                'imagem_principal': imagem_principal_url,
+                'imagem_2': imagem_2_url,
+                'imagem_3': imagem_3_url,
+                'ativo': True
+            }
+            
+            # Criar roupa no Supabase
+            roupa_criada = supabase_service.create_roupa(roupas_data)
+            
+            if roupa_criada:
+                messages.success(request, f'Roupa "{roupas_data["nome"]}" adicionada com sucesso!')
+            else:
+                messages.error(request, 'Erro ao adicionar roupa no Supabase!')
+                
             return redirect('admin_dashboard')
         except Exception as e:
             messages.error(request, f'Erro ao adicionar roupa: {str(e)}')
@@ -116,25 +160,70 @@ def adicionar_roupa(request):
 @login_required
 def editar_roupa(request, roupa_id):
     """Editar roupa existente"""
-    roupa = get_object_or_404(Roupa, id=roupa_id)
+    supabase_service = SupabaseService()
+    roupa_data = supabase_service.get_roupa_by_id(roupa_id)
+    
+    if not roupa_data:
+        messages.error(request, 'Roupa não encontrada!')
+        return redirect('admin_dashboard')
+    
+    # Converter para objeto Roupa para compatibilidade
+    roupa = Roupa()
+    roupa.id = roupa_data['id']
+    roupa.nome = roupa_data['nome']
+    roupa.descricao = roupa_data.get('descricao', '')
+    roupa.preco = float(roupa_data['preco'])
+    roupa.categoria = roupa_data['categoria']
+    roupa.tamanhos = roupa_data['tamanhos']
+    roupa.imagem_principal = roupa_data.get('imagem_principal', '')
+    roupa.imagem_2 = roupa_data.get('imagem_2', '')
+    roupa.imagem_3 = roupa_data.get('imagem_3', '')
+    roupa.ativo = roupa_data['ativo']
     
     if request.method == 'POST':
         try:
-            roupa.nome = request.POST.get('nome')
-            roupa.descricao = request.POST.get('descricao', '')
-            roupa.preco = request.POST.get('preco')
-            roupa.categoria = request.POST.get('categoria')
-            roupa.tamanhos = request.POST.get('tamanhos', 'P,M,G')
+            # Fazer upload das novas imagens se fornecidas
+            imagem_principal_url = roupa_data.get('imagem_principal', '')
+            imagem_2_url = roupa_data.get('imagem_2', '')
+            imagem_3_url = roupa_data.get('imagem_3', '')
             
             if request.FILES.get('imagem_principal'):
-                roupa.imagem_principal = request.FILES.get('imagem_principal')
-            if request.FILES.get('imagem_2'):
-                roupa.imagem_2 = request.FILES.get('imagem_2')
-            if request.FILES.get('imagem_3'):
-                roupa.imagem_3 = request.FILES.get('imagem_3')
+                # Deletar imagem antiga se existir
+                if imagem_principal_url:
+                    supabase_service.delete_image(imagem_principal_url)
+                imagem_principal_url = supabase_service.upload_image(request.FILES['imagem_principal'])
             
-            roupa.save()
-            messages.success(request, f'Roupa "{roupa.nome}" atualizada com sucesso!')
+            if request.FILES.get('imagem_2'):
+                if imagem_2_url:
+                    supabase_service.delete_image(imagem_2_url)
+                imagem_2_url = supabase_service.upload_image(request.FILES['imagem_2'])
+            
+            if request.FILES.get('imagem_3'):
+                if imagem_3_url:
+                    supabase_service.delete_image(imagem_3_url)
+                imagem_3_url = supabase_service.upload_image(request.FILES['imagem_3'])
+            
+            # Preparar dados para atualização
+            roupas_data = {
+                'nome': request.POST.get('nome'),
+                'descricao': request.POST.get('descricao', ''),
+                'preco': float(request.POST.get('preco')),
+                'categoria': request.POST.get('categoria'),
+                'tamanhos': request.POST.get('tamanhos', 'P,M,G'),
+                'imagem_principal': imagem_principal_url,
+                'imagem_2': imagem_2_url,
+                'imagem_3': imagem_3_url,
+                'ativo': roupa_data['ativo']
+            }
+            
+            # Atualizar no Supabase
+            roupa_atualizada = supabase_service.update_roupa(roupa_id, roupas_data)
+            
+            if roupa_atualizada:
+                messages.success(request, f'Roupa "{roupas_data["nome"]}" atualizada com sucesso!')
+            else:
+                messages.error(request, 'Erro ao atualizar roupa no Supabase!')
+                
             return redirect('admin_dashboard')
         except Exception as e:
             messages.error(request, f'Erro ao atualizar roupa: {str(e)}')
@@ -148,14 +237,26 @@ def editar_roupa(request, roupa_id):
 
 @login_required
 def excluir_roupa(request, roupa_id):
-    """Excluir roupa"""
-    roupa = get_object_or_404(Roupa, id=roupa_id)
-    
+    """Excluir roupa (soft delete)"""
     if request.method == 'POST':
         try:
-            nome_roupa = roupa.nome
-            roupa.delete()
-            messages.success(request, f'Roupa "{nome_roupa}" excluída com sucesso!')
+            supabase_service = SupabaseService()
+            roupa_data = supabase_service.get_roupa_by_id(roupa_id)
+            
+            if roupa_data:
+                # Deletar imagens do storage
+                if roupa_data.get('imagem_principal'):
+                    supabase_service.delete_image(roupa_data['imagem_principal'])
+                if roupa_data.get('imagem_2'):
+                    supabase_service.delete_image(roupa_data['imagem_2'])
+                if roupa_data.get('imagem_3'):
+                    supabase_service.delete_image(roupa_data['imagem_3'])
+                
+                # Marcar como inativo no Supabase
+                supabase_service.delete_roupa(roupa_id)
+                messages.success(request, f'Roupa "{roupa_data["nome"]}" excluída com sucesso!')
+            else:
+                messages.error(request, 'Roupa não encontrada!')
         except Exception as e:
             messages.error(request, f'Erro ao excluir roupa: {str(e)}')
     
@@ -164,14 +265,19 @@ def excluir_roupa(request, roupa_id):
 @login_required
 def alternar_status_roupa(request, roupa_id):
     """Alternar status ativo/inativo da roupa"""
-    roupa = get_object_or_404(Roupa, id=roupa_id)
-    
     if request.method == 'POST':
         try:
-            roupa.ativo = not roupa.ativo
-            roupa.save()
-            status_texto = "ativada" if roupa.ativo else "desativada"
-            messages.success(request, f'Roupa "{roupa.nome}" foi {status_texto} com sucesso!')
+            supabase_service = SupabaseService()
+            roupa_data = supabase_service.get_roupa_by_id(roupa_id)
+            
+            if roupa_data:
+                novo_status = not roupa_data['ativo']
+                supabase_service.update_roupa(roupa_id, {'ativo': novo_status})
+                
+                status_texto = "ativada" if novo_status else "desativada"
+                messages.success(request, f'Roupa "{roupa_data["nome"]}" foi {status_texto} com sucesso!')
+            else:
+                messages.error(request, 'Roupa não encontrada!')
         except Exception as e:
             messages.error(request, f'Erro ao alterar status da roupa: {str(e)}')
     
