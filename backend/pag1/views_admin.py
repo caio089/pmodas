@@ -74,7 +74,7 @@ def admin_dashboard(request):
         roupas = [r for r in roupas if r.categoria == categoria]
     
     if busca:
-        roupas = [r for r in roupas if busca.lower() in r.nome.lower() or busca.lower() in r.descricao.lower()]
+        roupas = [r for r in roupas if busca.lower() in r.nome.lower() or busca.lower() in (r.descricao or '').lower()]
     
     # Paginação
     paginator = Paginator(roupas, 12)

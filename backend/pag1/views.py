@@ -46,7 +46,7 @@ def home(request):
             roupas = [r for r in roupas if r.preco >= 200]
     
     if busca:
-        roupas = [r for r in roupas if busca.lower() in r.nome.lower()]
+        roupas = [r for r in roupas if busca.lower() in r.nome.lower() or busca.lower() in (r.descricao or '').lower()]
     
     context = {
         'roupas': roupas,

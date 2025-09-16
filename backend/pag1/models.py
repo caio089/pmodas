@@ -92,42 +92,69 @@ class Roupa(models.Model):
         imagens = []
         if self.imagem_principal:
             # Se for URL do Supabase, usar diretamente, senão usar URL do Django
-            if self.imagem_principal.startswith('http'):
+            if isinstance(self.imagem_principal, str) and self.imagem_principal.startswith('http'):
                 imagens.append(self.imagem_principal)
             else:
-                imagens.append(self.imagem_principal.url)
+                try:
+                    imagens.append(self.imagem_principal.url)
+                except ValueError:
+                    pass
         if self.imagem_2:
-            if self.imagem_2.startswith('http'):
+            if isinstance(self.imagem_2, str) and self.imagem_2.startswith('http'):
                 imagens.append(self.imagem_2)
             else:
-                imagens.append(self.imagem_2.url)
+                try:
+                    imagens.append(self.imagem_2.url)
+                except ValueError:
+                    pass
         if self.imagem_3:
-            if self.imagem_3.startswith('http'):
+            if isinstance(self.imagem_3, str) and self.imagem_3.startswith('http'):
                 imagens.append(self.imagem_3)
             else:
-                imagens.append(self.imagem_3.url)
+                try:
+                    imagens.append(self.imagem_3.url)
+                except ValueError:
+                    pass
         return imagens
     
     def get_imagem_principal_url_safe(self):
         """Retorna URL da imagem principal de forma segura"""
-        try:
-            return self.imagem_principal.url if self.imagem_principal else ""
-        except ValueError:
-            return ""
+        if self.imagem_principal:
+            # Se for URL do Supabase, usar diretamente
+            if isinstance(self.imagem_principal, str) and self.imagem_principal.startswith('http'):
+                return self.imagem_principal
+            # Se for ImageField do Django, usar .url
+            try:
+                return self.imagem_principal.url
+            except ValueError:
+                return ""
+        return ""
     
     def get_imagem_2_url_safe(self):
         """Retorna URL da imagem 2 de forma segura"""
-        try:
-            return self.imagem_2.url if self.imagem_2 else ""
-        except ValueError:
-            return ""
+        if self.imagem_2:
+            # Se for URL do Supabase, usar diretamente
+            if isinstance(self.imagem_2, str) and self.imagem_2.startswith('http'):
+                return self.imagem_2
+            # Se for ImageField do Django, usar .url
+            try:
+                return self.imagem_2.url
+            except ValueError:
+                return ""
+        return ""
     
     def get_imagem_3_url_safe(self):
         """Retorna URL da imagem 3 de forma segura"""
-        try:
-            return self.imagem_3.url if self.imagem_3 else ""
-        except ValueError:
-            return ""
+        if self.imagem_3:
+            # Se for URL do Supabase, usar diretamente
+            if isinstance(self.imagem_3, str) and self.imagem_3.startswith('http'):
+                return self.imagem_3
+            # Se for ImageField do Django, usar .url
+            try:
+                return self.imagem_3.url
+            except ValueError:
+                return ""
+        return ""
     
     def get_total_imagens(self):
         """Retorna o número total de imagens disponíveis"""
@@ -143,7 +170,14 @@ class Roupa(models.Model):
     def get_imagem_principal_url(self):
         """Retorna URL da imagem principal ou string vazia"""
         if self.imagem_principal:
-            return self.imagem_principal.url
+            # Se for URL do Supabase, usar diretamente
+            if isinstance(self.imagem_principal, str) and self.imagem_principal.startswith('http'):
+                return self.imagem_principal
+            # Se for ImageField do Django, usar .url
+            try:
+                return self.imagem_principal.url
+            except ValueError:
+                return ""
         return ""
     
     def get_status_display(self):

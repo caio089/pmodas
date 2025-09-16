@@ -96,7 +96,7 @@
                             <label class="block text-sm text-gray-600 mb-2">Imagem Principal</label>
                             {% if roupa.imagem_principal %}
                                 <div class="w-full h-32 bg-gray-100 rounded-lg overflow-hidden mb-2">
-                                    <img src="{{ roupa.imagem_principal.url }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover">
+                                    <img src="{{ roupa.get_imagem_principal_url_safe }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover">
                                 </div>
                             {% endif %}
                             <input type="file" id="imagem_principal" name="imagem_principal" accept="image/*"
@@ -108,7 +108,7 @@
                             <label class="block text-sm text-gray-600 mb-2">Imagem 2</label>
                             {% if roupa.imagem_2 %}
                                 <div class="w-full h-32 bg-gray-100 rounded-lg overflow-hidden mb-2">
-                                    <img src="{{ roupa.imagem_2.url }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover">
+                                    <img src="{{ roupa.get_imagem_2_url_safe }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover">
                                 </div>
                             {% endif %}
                             <input type="file" id="imagem_2" name="imagem_2" accept="image/*"
@@ -120,7 +120,7 @@
                             <label class="block text-sm text-gray-600 mb-2">Imagem 3</label>
                             {% if roupa.imagem_3 %}
                                 <div class="w-full h-32 bg-gray-100 rounded-lg overflow-hidden mb-2">
-                                    <img src="{{ roupa.imagem_3.url }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover">
+                                    <img src="{{ roupa.get_imagem_3_url_safe }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover">
                                 </div>
                             {% endif %}
                             <input type="file" id="imagem_3" name="imagem_3" accept="image/*"

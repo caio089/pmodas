@@ -203,7 +203,7 @@
                                  data-img2="{{ roupa.get_imagem_2_url_safe }}"
                                  data-img3="{{ roupa.get_imagem_3_url_safe }}">
                                 {% if roupa.imagem_principal %}
-                                    <img src="{{ roupa.imagem_principal.url }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                    <img src="{{ roupa.get_imagem_principal_url_safe }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
                                     
                                     {% if roupa.imagem_2 or roupa.imagem_3 %}
                                         <!-- Contador de imagens -->

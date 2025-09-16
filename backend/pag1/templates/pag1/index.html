@@ -322,19 +322,19 @@
                                 <div class="relative w-full h-full">
                                     <!-- Imagem Principal -->
                                     {% if roupa.imagem_principal %}
-                                        <img id="img-{{ roupa.id }}-0" src="{{ roupa.imagem_principal.url }}" alt="{{ roupa.nome }}" 
+                                        <img id="img-{{ roupa.id }}-0" src="{{ roupa.get_imagem_principal_url_safe }}" alt="{{ roupa.nome }}" 
                                              class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 block">
                                     {% endif %}
                                     
                                     <!-- Imagem 2 -->
                                     {% if roupa.imagem_2 %}
-                                        <img id="img-{{ roupa.id }}-1" src="{{ roupa.imagem_2.url }}" alt="{{ roupa.nome }} - Foto 2" 
+                                        <img id="img-{{ roupa.id }}-1" src="{{ roupa.get_imagem_2_url_safe }}" alt="{{ roupa.nome }} - Foto 2" 
                                              class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 hidden">
                                     {% endif %}
                                     
                                     <!-- Imagem 3 -->
                                     {% if roupa.imagem_3 %}
-                                        <img id="img-{{ roupa.id }}-2" src="{{ roupa.imagem_3.url }}" alt="{{ roupa.nome }} - Foto 3" 
+                                        <img id="img-{{ roupa.id }}-2" src="{{ roupa.get_imagem_3_url_safe }}" alt="{{ roupa.nome }} - Foto 3" 
                                              class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 hidden">
                                     {% endif %}
                                     
@@ -351,7 +351,7 @@
                             <!-- Controles de navegação (só aparecem se houver múltiplas imagens) -->
                             {% if roupa.imagem_2 or roupa.imagem_3 %}
                                 <!-- Botão Anterior -->
-                                <button onclick="previousImage({{ roupa.id }})" 
+                                <button onclick="previousImage('{{ roupa.id }}')" 
                                         class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full shadow-lg z-10">
                                     <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
@@ -359,7 +359,7 @@
                                 </button>
                                 
                                 <!-- Botão Próximo -->
-                                <button onclick="nextImage({{ roupa.id }})" 
+                                <button onclick="nextImage('{{ roupa.id }}')" 
                                         class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full shadow-lg z-10">
                                     <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
@@ -368,14 +368,14 @@
                                 
                                 <!-- Indicadores de posição -->
                                 <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
-                                    <button onclick="showImage({{ roupa.id }}, 0)" 
+                                    <button onclick="showImage('{{ roupa.id }}', 0)" 
                                             class="w-2 h-2 rounded-full bg-white indicator-{{ roupa.id }}-0"></button>
                                     {% if roupa.imagem_2 %}
-                                        <button onclick="showImage({{ roupa.id }}, 1)" 
+                                        <button onclick="showImage('{{ roupa.id }}', 1)" 
                                                 class="w-2 h-2 rounded-full bg-gray-400 indicator-{{ roupa.id }}-1"></button>
                                     {% endif %}
                                     {% if roupa.imagem_3 %}
-                                        <button onclick="showImage({{ roupa.id }}, 2)" 
+                                        <button onclick="showImage('{{ roupa.id }}', 2)" 
                                                 class="w-2 h-2 rounded-full bg-gray-400 indicator-{{ roupa.id }}-2"></button>
                                     {% endif %}
                                 </div>
