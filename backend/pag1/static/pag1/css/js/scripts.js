@@ -47,12 +47,14 @@ function handleCarrinhoClick(e) {
 
 // Aguardar o DOM estar completamente carregado
 document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(inicializarCarrinho, 100);
+    console.log('DOM carregado - inicializando carrinho');
+    inicializarCarrinho();
 });
 
 // Também tentar inicializar quando a página estiver totalmente carregada
 window.addEventListener('load', function() {
-    setTimeout(inicializarCarrinho, 200);
+    console.log('Página carregada - reinicializando carrinho');
+    setTimeout(inicializarCarrinho, 100);
 });
 
 // Função para atualizar contador do carrinho
