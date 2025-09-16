@@ -31,6 +31,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-&fq%u%)x0%ryoesqhxu(3t*^o)0qupm&z=w78tqfe=kk=w4^17')
 
+# Se SECRET_KEY estiver vazia, gerar uma nova
+if not SECRET_KEY or SECRET_KEY == '':
+    import secrets
+    SECRET_KEY = secrets.token_urlsafe(50)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
@@ -140,8 +145,7 @@ SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 SUPABASE_SERVICE_KEY = os.getenv('SUPABASE_SERVICE_KEY')
 
-# Configurações do WhiteNoise para produção
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Configurações do WhiteNoise para produção (removido duplicação)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -163,3 +167,18 @@ if DATABASE_URL:
 
 # Configurações de arquivos estáticos para produção
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Configurações adicionais do WhiteNoise
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+# Configurações de cache para arquivos estáticos
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Configurações para servir arquivos estáticos em produção
+if not DEBUG:
+    STATICFILES_DIRS = [
+        BASE_DIR / "static",
+    ]

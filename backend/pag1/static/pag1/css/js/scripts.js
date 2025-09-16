@@ -7,22 +7,42 @@ let tamanhoSelecionado = null;
 
 // Função para inicializar o carrinho
 function inicializarCarrinho() {
+    console.log('Inicializando carrinho...');
+    console.log('Carrinho atual:', carrinho);
+    console.log('Total de itens:', carrinho.reduce((total, item) => total + item.quantidade, 0));
+    
     atualizarContadorCarrinho();
     
     // Adicionar event listeners para botões do carrinho
     const botoesCarrinho = document.querySelectorAll('.btn-carrinho');
+    console.log(`Encontrados ${botoesCarrinho.length} botões de carrinho`);
     
-    botoesCarrinho.forEach((button) => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const id = this.getAttribute('data-id');
-            const nome = this.getAttribute('data-nome');
-            const preco = this.getAttribute('data-preco');
-            const imagem = this.getAttribute('data-imagem');
-            
-            abrirModalTamanho(id, nome, preco, imagem);
-        });
+    botoesCarrinho.forEach((button, index) => {
+        // Remover listeners existentes para evitar duplicação
+        button.removeEventListener('click', handleCarrinhoClick);
+        button.addEventListener('click', handleCarrinhoClick);
+        console.log(`Event listener adicionado ao botão ${index + 1}`);
     });
+}
+
+// Função separada para lidar com cliques no carrinho
+function handleCarrinhoClick(e) {
+    e.preventDefault();
+    console.log('Botão de carrinho clicado!');
+    
+    const id = this.getAttribute('data-id');
+    const nome = this.getAttribute('data-nome');
+    const preco = this.getAttribute('data-preco');
+    const imagem = this.getAttribute('data-imagem');
+    
+    console.log('Dados do produto:', { id, nome, preco, imagem });
+    
+    if (id && nome && preco && imagem) {
+        abrirModalTamanho(id, nome, preco, imagem);
+    } else {
+        console.error('Dados do produto incompletos:', { id, nome, preco, imagem });
+        alert('Erro: Dados do produto incompletos. Tente novamente.');
+    }
 }
 
 // Aguardar o DOM estar completamente carregado
@@ -30,21 +50,37 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(inicializarCarrinho, 100);
 });
 
+// Também tentar inicializar quando a página estiver totalmente carregada
+window.addEventListener('load', function() {
+    setTimeout(inicializarCarrinho, 200);
+});
+
 // Função para atualizar contador do carrinho
 function atualizarContadorCarrinho() {
     const contador = document.getElementById('carrinhoContador');
     const contadorDesktop = document.getElementById('carrinhoContadorDesktop');
+    const contadorMobile = document.getElementById('carrinhoContadorMobile');
     
     const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+    
+    console.log(`Atualizando contadores: ${totalItens} itens`);
     
     if (contador) {
         contador.textContent = totalItens;
         contador.style.display = totalItens > 0 ? 'block' : 'none';
+        console.log('Contador principal atualizado');
     }
     
     if (contadorDesktop) {
         contadorDesktop.textContent = totalItens;
         contadorDesktop.style.display = totalItens > 0 ? 'block' : 'none';
+        console.log('Contador desktop atualizado');
+    }
+    
+    if (contadorMobile) {
+        contadorMobile.textContent = totalItens;
+        contadorMobile.style.display = totalItens > 0 ? 'block' : 'none';
+        console.log('Contador mobile atualizado');
     }
 }
 

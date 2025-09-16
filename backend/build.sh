@@ -26,6 +26,6 @@ echo "from django.contrib.auth.models import User; User.objects.filter(username=
 
 # Verificar configurações
 echo "✅ Verificando configurações finais..."
-python verificar_render.py
+python manage.py check --deploy
 
 echo "🎉 Build concluído com sucesso!"

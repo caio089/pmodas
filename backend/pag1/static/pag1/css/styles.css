@@ -92,6 +92,78 @@
     .btn-primary:hover {
         transform: translateY(-1px);
     }
+    
+    /* Botões maiores para mobile - Carrinho */
+    .btn-carrinho {
+        padding: 16px 32px !important;
+        font-size: 18px !important;
+        min-height: 56px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Botões do WhatsApp maiores para mobile */
+    a[href*="wa.me"] {
+        padding: 16px 32px !important;
+        font-size: 18px !important;
+        min-height: 56px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Botão finalizar compra maior para mobile */
+    #btnFinalizarCompra {
+        padding: 20px 32px !important;
+        font-size: 20px !important;
+        min-height: 64px !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Botões de tamanho maiores */
+    .size-badge {
+        padding: 14px 20px !important;
+        font-size: 18px !important;
+        min-height: 52px !important;
+        min-width: 52px !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Modal de tamanho mais acessível */
+    .modal-content {
+        margin: 20px !important;
+        max-width: calc(100vw - 40px) !important;
+    }
+    
+    /* Botões do modal maiores */
+    .modal-btn {
+        padding: 20px 32px !important;
+        font-size: 20px !important;
+        min-height: 64px !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Botões de limpar carrinho maiores */
+    #btnLimparCarrinho {
+        padding: 16px 24px !important;
+        font-size: 16px !important;
+        min-height: 52px !important;
+        font-weight: 600 !important;
+    }
+}
+
+/* Estilos para contador do carrinho */
+.carrinho-contador {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
 }
 
 /* Estilos para loading */
