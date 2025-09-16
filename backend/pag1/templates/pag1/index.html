@@ -203,10 +203,58 @@
             50% { transform: translateY(-15px) translateX(5px); opacity: 0.5; }
         }
 
+        /* Ajustes para posicionamento do título */
+        .hero-title-container {
+            margin-top: 4rem !important;
+        }
+        
+        @media (min-width: 640px) {
+            .hero-title-container {
+                margin-top: 6rem !important;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .hero-title-container {
+                margin-top: 8rem !important;
+            }
+        }
+        
+        /* Reduzir espaçamento entre as palavras */
+        .hero-title {
+            margin-bottom: 0.5rem !important;
+        }
+        
+        .hero-subtitle {
+            margin-top: 0 !important;
+            margin-bottom: 1.5rem !important;
+        }
+        
+        /* Ajustar posicionamento da frase e assinatura */
+        .hero-quote {
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+        
+        .hero-quote p:first-child {
+            margin-bottom: 0.25rem !important;
+        }
+        
+        .hero-quote p:last-child {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+        
+        /* Ajustar posicionamento da descrição */
+        .hero-description {
+            margin-top: 0.5rem !important;
+            margin-bottom: 1rem !important;
+        }
+        
         /* Responsividade para mobile */
         @media (max-width: 768px) {
             .hero-sophisticated {
-                height: 70vh !important;
+                height: 100vh !important;
             }
             
             .hero-title {
@@ -221,6 +269,10 @@
             .hero-btn-secondary {
                 font-size: 1rem !important;
                 padding: 12px 24px !important;
+            }
+            
+            .hero-title-container {
+                margin-top: 3rem !important;
             }
         }
         
@@ -338,13 +390,13 @@
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="pt-24 sm:pt-28 pb-16">
+    <main class="pt-0 pb-16">
         <div class="container mx-auto px-3 sm:px-4">
             <!-- Seção de Boas-Vindas Empoderada -->
             <section class="mb-12 sm:mb-20 -mx-3 sm:-mx-4">
                 <div class="relative overflow-hidden">
                     <!-- Hero Section Sofisticada -->
-                    <div class="relative h-[70vh] sm:h-[80vh] md:h-[85vh] lg:h-[90vh] xl:h-[95vh] bg-gradient-to-br from-slate-900 via-gray-800 to-zinc-900 overflow-hidden hero-sophisticated">
+                    <div class="relative h-[100vh] sm:h-[110vh] md:h-[120vh] lg:h-[130vh] xl:h-[140vh] bg-gradient-to-br from-slate-900 via-gray-800 to-zinc-900 overflow-hidden hero-sophisticated">
                         <!-- Imagem de Fundo da Loja -->
                         <div class="absolute inset-0">
                             <img src="{% static 'pmodas.jpg' %}" alt="Paixão Modas" class="w-full h-full object-cover opacity-15 hero-image">
