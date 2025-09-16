@@ -32,9 +32,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-&fq%u%)x0%ryoesqhxu(3t*^o)0qupm&z=w78tqfe=kk=w4^17')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,.onrender.com').split(',')
+ALLOWED_HOSTS = ['*']  # Permitir todos os hosts para o Render
 
 
 # Application definition
@@ -131,9 +131,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-# Para produção no Render
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
 # Media files - agora usando Supabase Storage
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -152,7 +149,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configurações de Produção para Render
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 # Configuração do banco de dados para produção
 DATABASE_URL = os.getenv('DATABASE_URL')
@@ -161,14 +157,11 @@ if DATABASE_URL:
         'default': dj_database_url.parse(DATABASE_URL)
     }
 
-# Configurações de segurança para produção
-if not DEBUG:
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    X_FRAME_OPTIONS = 'DENY'
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+# Configurações de segurança para produção (comentadas para evitar problemas)
+# if not DEBUG:
+#     SECURE_BROWSER_XSS_FILTER = True
+#     SECURE_CONTENT_TYPE_NOSNIFF = True
+#     X_FRAME_OPTIONS = 'DENY'
 
 # Configurações de arquivos estáticos para produção
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
