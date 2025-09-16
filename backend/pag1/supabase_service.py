@@ -12,7 +12,16 @@ class SupabaseService:
         self.url = settings.SUPABASE_URL
         self.key = settings.SUPABASE_KEY
         self.service_key = settings.SUPABASE_SERVICE_KEY
-        self.supabase: Client = create_client(self.url, self.key)
+        self.supabase = None
+        
+        # Verificar se as configurações do Supabase estão disponíveis
+        if self.url and self.key:
+            try:
+                self.supabase: Client = create_client(self.url, self.key)
+            except Exception as e:
+                self.supabase = None
+        else:
+            self.supabase = None
     
     def upload_image(self, file, folder="roupas"):
         """
@@ -54,13 +63,24 @@ class SupabaseService:
     
     def get_roupas(self):
         """
-        Busca todas as roupas ativas do Supabase
+        Busca todas as roupas do Supabase (ativas e inativas) - para o dashboard
+        """
+        try:
+            response = self.supabase.table("roupas").select("*").execute()
+            return response.data
+        except Exception as e:
+            print(f"Erro ao buscar roupas: {e}")
+            return []
+    
+    def get_roupas_ativas(self):
+        """
+        Busca apenas roupas ativas do Supabase - para o site principal
         """
         try:
             response = self.supabase.table("roupas").select("*").eq("ativo", True).execute()
             return response.data
         except Exception as e:
-            print(f"Erro ao buscar roupas: {e}")
+            print(f"Erro ao buscar roupas ativas: {e}")
             return []
     
     def get_roupa_by_id(self, roupas_id):
@@ -87,10 +107,10 @@ class SupabaseService:
     
     def delete_roupa(self, roupas_id):
         """
-        Marca uma roupa como inativa (soft delete)
+        Remove uma roupa permanentemente do banco de dados (hard delete)
         """
         try:
-            response = self.supabase.table("roupas").update({"ativo": False}).eq("id", roupas_id).execute()
+            response = self.supabase.table("roupas").delete().eq("id", roupas_id).execute()
             return response.data[0] if response.data else None
         except Exception as e:
             print(f"Erro ao deletar roupa: {e}")
@@ -101,12 +121,22 @@ class SupabaseService:
         Remove uma imagem do Supabase Storage
         """
         try:
+            if not image_path or not image_path.strip():
+                return None
+                
+            
             # Extrair o caminho da imagem da URL
             if "imagens/" in image_path:
                 file_path = image_path.split("imagens/")[-1]
+                # Remover parâmetros de query se existirem
+                if "?" in file_path:
+                    file_path = file_path.split("?")[0]
+                
+                
                 response = self.supabase.storage.from_("imagens").remove([file_path])
                 return response
-            return None
+            else:
+                return None
         except Exception as e:
             print(f"Erro ao deletar imagem: {e}")
             return None

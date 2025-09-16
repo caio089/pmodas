@@ -277,8 +277,20 @@ function limparCarrinho() {
 }
 
 // Função para comprar produto individual via WhatsApp
-window.buyOnWhatsApp = function(productName, price, size) {
-    const message = `Olá! Gostei do produto *${productName}*, tamanho *${size}*, valor *R$ ${price.toFixed(2).replace('.', ',')}*. Gostaria de finalizar a compra.`;
+window.buyOnWhatsApp = function(productName, price, size, productImage) {
+    const message = `🛍️ *Olá! Vim do site da Paixão Modas* 🛍️
+
+👗 *Produto:* ${productName}
+📏 *Tamanho:* ${size}
+💰 *Valor:* R$ ${price.toFixed(2).replace('.', ',')}
+
+${productImage ? `📸 *Foto do produto:* ${productImage}` : ''}
+
+❓ *Você consegue confirmar este produto para mim?*
+✅ *Está disponível?*
+
+Obrigada! 😊`;
+    
     const whatsappNumber = "5589994169377";
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
@@ -291,17 +303,33 @@ function finalizarCompra() {
         return;
     }
 
-    // Construir mensagem simples
-    let mensagem = 'Ola! Gostaria de finalizar a compra dos seguintes itens:\n\n';
+    // Construir mensagem melhorada
+    let mensagem = `🛍️ *Olá! Vim do site da Paixão Modas* 🛍️
+
+📋 *Resumo do meu pedido:*
+
+`;
     let total = 0;
 
     carrinho.forEach((item, i) => {
         const itemTotal = item.preco * item.quantidade;
         total += itemTotal;
-        mensagem += `${i + 1}. ${item.nome} - Tamanho: ${item.tamanho} - Qtd: ${item.quantidade} - R$ ${itemTotal.toFixed(2)}\n`;
+        mensagem += `${i + 1}. 👗 *${item.nome}*
+   📏 Tamanho: ${item.tamanho}
+   🔢 Quantidade: ${item.quantidade}
+   💰 Valor: R$ ${itemTotal.toFixed(2).replace('.', ',')}
+${item.imagem ? `   📸 Foto: ${item.imagem}` : ''}
+
+`;
     });
 
-    mensagem += `\nTotal: R$ ${total.toFixed(2)}`;
+    mensagem += `💰 *TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*
+
+❓ *Você consegue confirmar este pedido para mim?*
+✅ *Todos os produtos estão disponíveis?*
+💳 *Quais as formas de pagamento?*
+
+Obrigada! 😊`;
 
     const numero = '5589994169377';
     

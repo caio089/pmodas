@@ -1,5 +1,6 @@
 ========================================
     PAIXAO MODAS - Sistema Django
+    PRONTO PARA DEPLOY NO RENDER
 ========================================
 
 ✅ SISTEMA CONFIGURADO COM SUCESSO!
@@ -18,7 +19,7 @@ O sistema foi modificado para integrar com Django conforme solicitado:
 - Admin Django: http://127.0.0.1:8000/admin/
 
 🔑 CREDENCIAIS:
-- Cliente (painel admin): cliente / pmodas2024
+- Admin (painel admin): admin / paixao10
 - Admin Django: admin / admin123
 
 📋 FUNCIONALIDADES:
@@ -51,11 +52,17 @@ O sistema foi modificado para integrar com Django conforme solicitado:
 - backend/backend/settings.py - Configurações de mídia
 - backend/backend/urls.py - Servir arquivos de mídia
 
-🚀 COMO USAR:
-1. Execute: executar_sistema.bat (ou python manage.py runserver)
+🚀 COMO USAR LOCALMENTE:
+1. Execute: python manage.py runserver
 2. Acesse: http://127.0.0.1:8000/painel-admin/
-3. Faça login com: cliente / pmodas2024
+3. Faça login com: admin / paixao10
 4. Gerencie suas roupas no dashboard
+
+🚀 DEPLOY NO RENDER:
+1. Conecte o repositório ao Render.com
+2. Configure as variáveis de ambiente
+3. O sistema será deployado automaticamente
+4. Acesse o painel admin na URL fornecida pelo Render
 
 💡 DICAS:
 - As imagens são salvas em media/roupas/

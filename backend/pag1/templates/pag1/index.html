@@ -322,19 +322,19 @@
                                 <div class="relative w-full h-full">
                                     <!-- Imagem Principal -->
                                     {% if roupa.imagem_principal %}
-                                        <img id="img-{{ roupa.id }}-0" src="{{ roupa.get_imagem_principal_url_safe }}" alt="{{ roupa.nome }}" 
+                                        <img id="img-{{ roupa.id }}-0" src="{{ roupa.imagem_principal }}" alt="{{ roupa.nome }}" 
                                              class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 block">
                                     {% endif %}
                                     
                                     <!-- Imagem 2 -->
                                     {% if roupa.imagem_2 %}
-                                        <img id="img-{{ roupa.id }}-1" src="{{ roupa.get_imagem_2_url_safe }}" alt="{{ roupa.nome }} - Foto 2" 
+                                        <img id="img-{{ roupa.id }}-1" src="{{ roupa.imagem_2 }}" alt="{{ roupa.nome }} - Foto 2" 
                                              class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 hidden">
                                     {% endif %}
                                     
                                     <!-- Imagem 3 -->
                                     {% if roupa.imagem_3 %}
-                                        <img id="img-{{ roupa.id }}-2" src="{{ roupa.get_imagem_3_url_safe }}" alt="{{ roupa.nome }} - Foto 3" 
+                                        <img id="img-{{ roupa.id }}-2" src="{{ roupa.imagem_3 }}" alt="{{ roupa.nome }} - Foto 3" 
                                              class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 hidden">
                                     {% endif %}
                                     
@@ -421,7 +421,7 @@
                                                 data-id="{{ roupa.id }}"
                                                 data-nome="{{ roupa.nome }}"
                                                 data-preco="{{ roupa.preco }}"
-                                                data-imagem="{{ roupa.get_imagem_principal_url }}"
+                                                data-imagem="{{ roupa.imagem_principal }}"
                                                 data-tamanho="{{ roupa.get_tamanhos_display }}">
                                             <svg class="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>

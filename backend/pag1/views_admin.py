@@ -18,10 +18,10 @@ def admin_login(request):
         password = request.POST.get('password')
         
         # Verificar credenciais específicas do cliente
-        if username == 'cliente' and password == 'pmodas2024':
+        if username == 'admin' and password == 'paixao10':
             # Criar usuário se não existir
-            if not User.objects.filter(username='cliente').exists():
-                User.objects.create_user(username='cliente', password='pmodas2024')
+            if not User.objects.filter(username='admin').exists():
+                User.objects.create_user(username='admin', password='paixao10')
             
             user = authenticate(request, username=username, password=password)
             if user:
@@ -39,25 +39,43 @@ def admin_dashboard(request):
     """Dashboard do painel administrativo - Acesso restrito"""
     supabase_service = SupabaseService()
     
-    # Buscar todas as roupas do Supabase
-    roupas_data = supabase_service.get_roupas()
-    
-    # Converter para objetos Roupa para compatibilidade
-    roupas = []
-    for roupas_data_item in roupas_data:
-        roupa = Roupa()
-        roupa.id = roupas_data_item['id']
-        roupa.nome = roupas_data_item['nome']
-        roupa.descricao = roupas_data_item.get('descricao', '')
-        roupa.preco = float(roupas_data_item['preco'])
-        roupa.categoria = roupas_data_item['categoria']
-        roupa.tamanhos = roupas_data_item['tamanhos']
-        roupa.imagem_principal = roupas_data_item.get('imagem_principal', '')
-        roupa.imagem_2 = roupas_data_item.get('imagem_2', '')
-        roupa.imagem_3 = roupas_data_item.get('imagem_3', '')
-        roupa.ativo = roupas_data_item['ativo']
-        roupa.data_criacao = roupas_data_item.get('data_criacao', '')
-        roupas.append(roupa)
+    # Verificar se o Supabase está disponível
+    if supabase_service.supabase:
+        # Buscar todas as roupas do Supabase
+        roupas_data = supabase_service.get_roupas()
+        
+        # Converter para objetos Roupa para compatibilidade
+        roupas = []
+        for roupas_data_item in roupas_data:
+            roupa = Roupa()
+            roupa.id = roupas_data_item['id']
+            roupa.nome = roupas_data_item['nome']
+            roupa.descricao = roupas_data_item.get('descricao', '')
+            roupa.preco = float(roupas_data_item['preco'])
+            roupa.categoria = roupas_data_item['categoria']
+            roupa.tamanhos = roupas_data_item['tamanhos']
+            roupa.imagem_principal = roupas_data_item.get('imagem_principal', '')
+            roupa.imagem_2 = roupas_data_item.get('imagem_2', '')
+            roupa.imagem_3 = roupas_data_item.get('imagem_3', '')
+            roupa.ativo = roupas_data_item['ativo']
+            roupa.data_criacao = roupas_data_item.get('data_criacao', '')
+            roupas.append(roupa)
+    else:
+        # Usar banco SQLite local como fallback
+        roupas = Roupa.objects.all()
+        roupas_data = [{
+            'id': r.id,
+            'nome': r.nome,
+            'descricao': r.descricao,
+            'preco': float(r.preco),
+            'categoria': r.categoria,
+            'tamanhos': r.tamanhos,
+            'imagem_principal': r.imagem_principal.url if r.imagem_principal else '',
+            'imagem_2': r.imagem_2.url if r.imagem_2 else '',
+            'imagem_3': r.imagem_3.url if r.imagem_3 else '',
+            'ativo': r.ativo,
+            'data_criacao': r.data_criacao
+        } for r in roupas]
     
     # Filtro por status ativo/inativo
     status = request.GET.get('status', '')
@@ -81,14 +99,27 @@ def admin_dashboard(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    # Estatísticas
-    total_roupas = len(roupas_data)
-    roupas_ativas = len([r for r in roupas_data if r['ativo']])
-    roupas_inativas = len([r for r in roupas_data if not r['ativo']])
-    roupas_por_categoria = {}
-    for categoria_choice in Roupa.CATEGORIA_CHOICES:
-        count = len([r for r in roupas_data if r['categoria'] == categoria_choice[0]])
-        roupas_por_categoria[categoria_choice[1]] = count
+    # Estatísticas - usar dados atuais do Supabase
+    if supabase_service.supabase:
+        # Buscar dados frescos do Supabase para estatísticas
+        roupas_fresh = supabase_service.get_roupas()
+        total_roupas = len(roupas_fresh)
+        roupas_ativas = len([r for r in roupas_fresh if r['ativo']])
+        roupas_inativas = len([r for r in roupas_fresh if not r['ativo']])
+        
+        roupas_por_categoria = {}
+        for categoria_choice in Roupa.CATEGORIA_CHOICES:
+            count = len([r for r in roupas_fresh if r['categoria'] == categoria_choice[0]])
+            roupas_por_categoria[categoria_choice[1]] = count
+    else:
+        # Usar dados locais para estatísticas
+        total_roupas = len(roupas_data)
+        roupas_ativas = len([r for r in roupas_data if r['ativo']])
+        roupas_inativas = len([r for r in roupas_data if not r['ativo']])
+        roupas_por_categoria = {}
+        for categoria_choice in Roupa.CATEGORIA_CHOICES:
+            count = len([r for r in roupas_data if r['categoria'] == categoria_choice[0]])
+            roupas_por_categoria[categoria_choice[1]] = count
     
     context = {
         'page_obj': page_obj,
@@ -102,7 +133,13 @@ def admin_dashboard(request):
         'status_atual': status,
     }
     
-    return render(request, 'pag1/admin_dashboard.html', context)
+    
+    response = render(request, 'pag1/admin_dashboard.html', context)
+    # Adicionar cabeçalhos para evitar cache
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    return response
 
 def admin_logout(request):
     """Logout do painel administrativo"""
@@ -116,40 +153,55 @@ def adicionar_roupa(request):
         try:
             supabase_service = SupabaseService()
             
-            # Fazer upload das imagens para o Supabase Storage
-            imagem_principal_url = ''
-            imagem_2_url = ''
-            imagem_3_url = ''
-            
-            if request.FILES.get('imagem_principal'):
-                imagem_principal_url = supabase_service.upload_image(request.FILES['imagem_principal'])
-            
-            if request.FILES.get('imagem_2'):
-                imagem_2_url = supabase_service.upload_image(request.FILES['imagem_2'])
-            
-            if request.FILES.get('imagem_3'):
-                imagem_3_url = supabase_service.upload_image(request.FILES['imagem_3'])
-            
-            # Preparar dados para o Supabase
-            roupas_data = {
-                'nome': request.POST.get('nome'),
-                'descricao': request.POST.get('descricao', ''),
-                'preco': float(request.POST.get('preco')),
-                'categoria': request.POST.get('categoria'),
-                'tamanhos': request.POST.get('tamanhos', 'P,M,G'),
-                'imagem_principal': imagem_principal_url,
-                'imagem_2': imagem_2_url,
-                'imagem_3': imagem_3_url,
-                'ativo': True
-            }
-            
-            # Criar roupa no Supabase
-            roupa_criada = supabase_service.create_roupa(roupas_data)
-            
-            if roupa_criada:
-                messages.success(request, f'Roupa "{roupas_data["nome"]}" adicionada com sucesso!')
+            if supabase_service.supabase:
+                # Fazer upload das imagens para o Supabase Storage
+                imagem_principal_url = ''
+                imagem_2_url = ''
+                imagem_3_url = ''
+                
+                if request.FILES.get('imagem_principal'):
+                    imagem_principal_url = supabase_service.upload_image(request.FILES['imagem_principal'])
+                
+                if request.FILES.get('imagem_2'):
+                    imagem_2_url = supabase_service.upload_image(request.FILES['imagem_2'])
+                
+                if request.FILES.get('imagem_3'):
+                    imagem_3_url = supabase_service.upload_image(request.FILES['imagem_3'])
+                
+                # Preparar dados para o Supabase
+                roupas_data = {
+                    'nome': request.POST.get('nome'),
+                    'descricao': request.POST.get('descricao', ''),
+                    'preco': float(request.POST.get('preco')),
+                    'categoria': request.POST.get('categoria'),
+                    'tamanhos': request.POST.get('tamanhos', 'P,M,G'),
+                    'imagem_principal': imagem_principal_url,
+                    'imagem_2': imagem_2_url,
+                    'imagem_3': imagem_3_url,
+                    'ativo': True
+                }
+                
+                # Criar roupa no Supabase
+                roupa_criada = supabase_service.create_roupa(roupas_data)
+                
+                if roupa_criada:
+                    messages.success(request, f'Roupa "{roupas_data["nome"]}" adicionada com sucesso!')
+                else:
+                    messages.error(request, 'Erro ao adicionar roupa no Supabase!')
             else:
-                messages.error(request, 'Erro ao adicionar roupa no Supabase!')
+                # Usar banco SQLite local como fallback
+                roupa = Roupa.objects.create(
+                    nome=request.POST.get('nome'),
+                    descricao=request.POST.get('descricao', ''),
+                    preco=float(request.POST.get('preco')),
+                    categoria=request.POST.get('categoria'),
+                    tamanhos=request.POST.get('tamanhos', 'P,M,G'),
+                    imagem_principal=request.FILES.get('imagem_principal'),
+                    imagem_2=request.FILES.get('imagem_2'),
+                    imagem_3=request.FILES.get('imagem_3'),
+                    ativo=True
+                )
+                messages.success(request, f'Roupa "{roupa.nome}" adicionada com sucesso!')
                 
             return redirect('admin_dashboard')
         except Exception as e:
@@ -161,24 +213,47 @@ def adicionar_roupa(request):
 def editar_roupa(request, roupa_id):
     """Editar roupa existente"""
     supabase_service = SupabaseService()
-    roupa_data = supabase_service.get_roupa_by_id(roupa_id)
     
-    if not roupa_data:
-        messages.error(request, 'Roupa não encontrada!')
-        return redirect('admin_dashboard')
-    
-    # Converter para objeto Roupa para compatibilidade
-    roupa = Roupa()
-    roupa.id = roupa_data['id']
-    roupa.nome = roupa_data['nome']
-    roupa.descricao = roupa_data.get('descricao', '')
-    roupa.preco = float(roupa_data['preco'])
-    roupa.categoria = roupa_data['categoria']
-    roupa.tamanhos = roupa_data['tamanhos']
-    roupa.imagem_principal = roupa_data.get('imagem_principal', '')
-    roupa.imagem_2 = roupa_data.get('imagem_2', '')
-    roupa.imagem_3 = roupa_data.get('imagem_3', '')
-    roupa.ativo = roupa_data['ativo']
+    # Verificar se o Supabase está disponível
+    if supabase_service.supabase:
+        roupa_data = supabase_service.get_roupa_by_id(roupa_id)
+        
+        
+        if not roupa_data:
+            messages.error(request, 'Roupa não encontrada!')
+            return redirect('admin_dashboard')
+        
+        # Converter para objeto Roupa para compatibilidade
+        roupa = Roupa()
+        roupa.id = roupa_data['id']
+        roupa.nome = roupa_data['nome']
+        roupa.descricao = roupa_data.get('descricao', '')
+        roupa.preco = float(roupa_data['preco'])
+        roupa.categoria = roupa_data['categoria']
+        roupa.tamanhos = roupa_data['tamanhos']
+        roupa.imagem_principal = roupa_data.get('imagem_principal', '')
+        roupa.imagem_2 = roupa_data.get('imagem_2', '')
+        roupa.imagem_3 = roupa_data.get('imagem_3', '')
+        roupa.ativo = roupa_data['ativo']
+    else:
+        # Usar banco SQLite local como fallback
+        try:
+            roupa = Roupa.objects.get(id=roupa_id)
+            roupa_data = {
+                'id': roupa.id,
+                'nome': roupa.nome,
+                'descricao': roupa.descricao,
+                'preco': float(roupa.preco),
+                'categoria': roupa.categoria,
+                'tamanhos': roupa.tamanhos,
+                'imagem_principal': roupa.imagem_principal.url if roupa.imagem_principal else '',
+                'imagem_2': roupa.imagem_2.url if roupa.imagem_2 else '',
+                'imagem_3': roupa.imagem_3.url if roupa.imagem_3 else '',
+                'ativo': roupa.ativo
+            }
+        except Roupa.DoesNotExist:
+            messages.error(request, 'Roupa não encontrada!')
+            return redirect('admin_dashboard')
     
     if request.method == 'POST':
         try:
@@ -216,13 +291,38 @@ def editar_roupa(request, roupa_id):
                 'ativo': roupa_data['ativo']
             }
             
-            # Atualizar no Supabase
-            roupa_atualizada = supabase_service.update_roupa(roupa_id, roupas_data)
-            
-            if roupa_atualizada:
-                messages.success(request, f'Roupa "{roupas_data["nome"]}" atualizada com sucesso!')
+            # Atualizar no Supabase ou banco local
+            if supabase_service.supabase:
+                roupa_atualizada = supabase_service.update_roupa(roupa_id, roupas_data)
+                
+                if roupa_atualizada:
+                    messages.success(request, f'Roupa "{roupas_data["nome"]}" atualizada com sucesso!')
+                else:
+                    messages.error(request, 'Erro ao atualizar roupa no Supabase!')
             else:
-                messages.error(request, 'Erro ao atualizar roupa no Supabase!')
+                # Atualizar no banco SQLite local
+                try:
+                    roupa_local = Roupa.objects.get(id=roupa_id)
+                    roupa_local.nome = roupas_data['nome']
+                    roupa_local.descricao = roupas_data['descricao']
+                    roupa_local.preco = roupas_data['preco']
+                    roupa_local.categoria = roupas_data['categoria']
+                    roupa_local.tamanhos = roupas_data['tamanhos']
+                    
+                    # Salvar imagens localmente se fornecidas
+                    if request.FILES.get('imagem_principal'):
+                        roupa_local.imagem_principal = request.FILES['imagem_principal']
+                    if request.FILES.get('imagem_2'):
+                        roupa_local.imagem_2 = request.FILES['imagem_2']
+                    if request.FILES.get('imagem_3'):
+                        roupa_local.imagem_3 = request.FILES['imagem_3']
+                    
+                    roupa_local.save()
+                    messages.success(request, f'Roupa "{roupas_data["nome"]}" atualizada com sucesso!')
+                except Roupa.DoesNotExist:
+                    messages.error(request, 'Roupa não encontrada no banco local!')
+                except Exception as e:
+                    messages.error(request, f'Erro ao atualizar roupa: {str(e)}')
                 
             return redirect('admin_dashboard')
         except Exception as e:
@@ -241,22 +341,58 @@ def excluir_roupa(request, roupa_id):
     if request.method == 'POST':
         try:
             supabase_service = SupabaseService()
-            roupa_data = supabase_service.get_roupa_by_id(roupa_id)
             
-            if roupa_data:
-                # Deletar imagens do storage
-                if roupa_data.get('imagem_principal'):
-                    supabase_service.delete_image(roupa_data['imagem_principal'])
-                if roupa_data.get('imagem_2'):
-                    supabase_service.delete_image(roupa_data['imagem_2'])
-                if roupa_data.get('imagem_3'):
-                    supabase_service.delete_image(roupa_data['imagem_3'])
+            if supabase_service.supabase:
+                roupa_data = supabase_service.get_roupa_by_id(roupa_id)
                 
-                # Marcar como inativo no Supabase
-                supabase_service.delete_roupa(roupa_id)
-                messages.success(request, f'Roupa "{roupa_data["nome"]}" excluída com sucesso!')
+                if roupa_data:
+                    # Deletar imagens do storage se existirem
+                    try:
+                        if roupa_data.get('imagem_principal') and roupa_data['imagem_principal'].strip():
+                            supabase_service.delete_image(roupa_data['imagem_principal'])
+                        
+                        if roupa_data.get('imagem_2') and roupa_data['imagem_2'].strip():
+                            supabase_service.delete_image(roupa_data['imagem_2'])
+                        
+                        if roupa_data.get('imagem_3') and roupa_data['imagem_3'].strip():
+                            supabase_service.delete_image(roupa_data['imagem_3'])
+                    except Exception as img_error:
+                        # Continuar mesmo se houver erro na exclusão de imagens
+                        pass
+                    
+                    # Deletar permanentemente do Supabase
+                    resultado_delete = supabase_service.delete_roupa(roupa_id)
+                    messages.success(request, f'Roupa "{roupa_data["nome"]}" excluída permanentemente!')
+                else:
+                    messages.error(request, 'Roupa não encontrada!')
             else:
-                messages.error(request, 'Roupa não encontrada!')
+                # Usar banco SQLite local como fallback
+                try:
+                    roupa = Roupa.objects.get(id=roupa_id)
+                    nome_roupa = roupa.nome
+                    
+                    # Deletar imagens locais se existirem
+                    if roupa.imagem_principal:
+                        try:
+                            roupa.imagem_principal.delete(save=False)
+                        except:
+                            pass
+                    if roupa.imagem_2:
+                        try:
+                            roupa.imagem_2.delete(save=False)
+                        except:
+                            pass
+                    if roupa.imagem_3:
+                        try:
+                            roupa.imagem_3.delete(save=False)
+                        except:
+                            pass
+                    
+                    # Deletar permanentemente do banco
+                    roupa.delete()
+                    messages.success(request, f'Roupa "{nome_roupa}" excluída permanentemente!')
+                except Roupa.DoesNotExist:
+                    messages.error(request, 'Roupa não encontrada!')
         except Exception as e:
             messages.error(request, f'Erro ao excluir roupa: {str(e)}')
     
@@ -268,16 +404,29 @@ def alternar_status_roupa(request, roupa_id):
     if request.method == 'POST':
         try:
             supabase_service = SupabaseService()
-            roupa_data = supabase_service.get_roupa_by_id(roupa_id)
             
-            if roupa_data:
-                novo_status = not roupa_data['ativo']
-                supabase_service.update_roupa(roupa_id, {'ativo': novo_status})
+            if supabase_service.supabase:
+                roupa_data = supabase_service.get_roupa_by_id(roupa_id)
                 
-                status_texto = "ativada" if novo_status else "desativada"
-                messages.success(request, f'Roupa "{roupa_data["nome"]}" foi {status_texto} com sucesso!')
+                if roupa_data:
+                    novo_status = not roupa_data['ativo']
+                    supabase_service.update_roupa(roupa_id, {'ativo': novo_status})
+                    
+                    status_texto = "ativada" if novo_status else "desativada"
+                    messages.success(request, f'Roupa "{roupa_data["nome"]}" foi {status_texto} com sucesso!')
+                else:
+                    messages.error(request, 'Roupa não encontrada!')
             else:
-                messages.error(request, 'Roupa não encontrada!')
+                # Usar banco SQLite local como fallback
+                try:
+                    roupa = Roupa.objects.get(id=roupa_id)
+                    roupa.ativo = not roupa.ativo
+                    roupa.save()
+                    
+                    status_texto = "ativada" if roupa.ativo else "desativada"
+                    messages.success(request, f'Roupa "{roupa.nome}" foi {status_texto} com sucesso!')
+                except Roupa.DoesNotExist:
+                    messages.error(request, 'Roupa não encontrada!')
         except Exception as e:
             messages.error(request, f'Erro ao alterar status da roupa: {str(e)}')
     

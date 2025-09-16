@@ -199,11 +199,11 @@
                         <div class="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
                             <div class="aspect-square bg-gray-100 rounded-lg mb-4 overflow-hidden relative group" 
                                  id="productImage_{{ roupa.id }}"
-                                 data-img1="{{ roupa.get_imagem_principal_url_safe }}"
-                                 data-img2="{{ roupa.get_imagem_2_url_safe }}"
-                                 data-img3="{{ roupa.get_imagem_3_url_safe }}">
+                                 data-img1="{{ roupa.imagem_principal }}"
+                                 data-img2="{{ roupa.imagem_2 }}"
+                                 data-img3="{{ roupa.imagem_3 }}">
                                 {% if roupa.imagem_principal %}
-                                    <img src="{{ roupa.get_imagem_principal_url_safe }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                    <img src="{{ roupa.imagem_principal }}" alt="{{ roupa.nome }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
                                     
                                     {% if roupa.imagem_2 or roupa.imagem_3 %}
                                         <!-- Contador de imagens -->
@@ -232,9 +232,9 @@
                                     {% if not roupa.imagem_2 and not roupa.imagem_3 %}
                                     <div class="open-image-modal absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center cursor-pointer" 
                                          data-product-id="{{ roupa.id }}" 
-                                         data-img1="{{ roupa.get_imagem_principal_url_safe }}" 
-                                         data-img2="{{ roupa.get_imagem_2_url_safe }}" 
-                                         data-img3="{{ roupa.get_imagem_3_url_safe }}" 
+                                         data-img1="{{ roupa.imagem_principal }}" 
+                                         data-img2="{{ roupa.imagem_2 }}" 
+                                         data-img3="{{ roupa.imagem_3 }}" 
                                          data-product-name="{{ roupa.nome }}">
                                         <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -246,9 +246,9 @@
                                     <!-- Botão de zoom no canto inferior esquerdo quando há múltiplas imagens -->
                                     <button class="open-image-modal-btn absolute bottom-2 left-2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100 z-30"
                                             data-product-id="{{ roupa.id }}" 
-                                            data-img1="{{ roupa.get_imagem_principal_url_safe }}" 
-                                            data-img2="{{ roupa.get_imagem_2_url_safe }}" 
-                                            data-img3="{{ roupa.get_imagem_3_url_safe }}" 
+                                            data-img1="{{ roupa.imagem_principal }}" 
+                                            data-img2="{{ roupa.imagem_2 }}" 
+                                            data-img3="{{ roupa.imagem_3 }}" 
                                             data-product-name="{{ roupa.nome }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
@@ -263,7 +263,7 @@
                                     </div>
                                 {% endif %}
                             </div>
-                            <h3 class="font-semibold text-gray-800 mb-2">{{ roupa.nome }}</h3>
+                            <h3 class="font-semibold text-gray-800 mb-2" data-product-name="{{ roupa.nome }}">{{ roupa.nome }}</h3>
                             <p class="text-rosa-escuro font-bold text-lg mb-2">{{ roupa.get_preco_formatado }}</p>
                             <p class="text-sm text-gray-600 mb-2">{{ roupa.get_categoria_display_pt }}</p>
                             {% if roupa.tamanhos %}
@@ -281,20 +281,26 @@
                                 <span class="text-xs text-gray-500">{{ roupa.data_criacao|date:"d/m/Y" }}</span>
                                 <div class="flex space-x-2">
                                     <!-- Botão Editar -->
-                                    <a href="{% url 'editar_roupa' roupa.id %}" 
-                                       class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition-colors duration-200">
+                                    <button type="button" 
+                                            data-product-id="{{ roupa.id }}" 
+                                            data-product-name="{{ roupa.nome }}"
+                                            data-edit-url="{% url 'editar_roupa' roupa.id %}"
+                                            class="edit-product-btn inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition-colors duration-200">
                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                         </svg>
                                         Editar
-                                    </a>
+                                    </button>
                                     
                                     <!-- Botão Ativar/Desativar -->
-                                    <form method="POST" action="{% url 'alternar_status_roupa' roupa.id %}" class="inline">
+                                    <form method="POST" action="{% url 'alternar_status_roupa' roupa.id %}" class="inline status-form">
                                         {% csrf_token %}
-                                        <button type="submit" 
-                                                class="inline-flex items-center px-3 py-1.5 {% if roupa.ativo %}bg-orange-500 hover:bg-orange-600{% else %}bg-green-500 hover:bg-green-600{% endif %} text-white text-xs font-medium rounded-lg transition-colors duration-200"
-                                                onclick="return confirm('Tem certeza que deseja {% if roupa.ativo %}desativar{% else %}ativar{% endif %} esta roupa?')">
+                                        <button type="button" 
+                                                data-product-id="{{ roupa.id }}" 
+                                                data-product-name="{{ roupa.nome }}"
+                                                data-current-status="{{ roupa.ativo }}"
+                                                data-status-action="{% if roupa.ativo %}desativar{% else %}ativar{% endif %}"
+                                                class="status-product-btn inline-flex items-center px-3 py-1.5 {% if roupa.ativo %}bg-orange-500 hover:bg-orange-600{% else %}bg-green-500 hover:bg-green-600{% endif %} text-white text-xs font-medium rounded-lg transition-colors duration-200">
                                             {% if roupa.ativo %}
                                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
@@ -310,14 +316,16 @@
                                     </form>
                                     
                                     <!-- Botão Excluir -->
-                                    <a href="{% url 'excluir_roupa' roupa.id %}" 
-                                       onclick="return confirm('⚠️ ATENÇÃO! Esta ação não pode ser desfeita.\\n\\nTem certeza que deseja EXCLUIR permanentemente a roupa &quot;{{ roupa.nome }}&quot;?')"
-                                       class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-medium rounded-lg transition-colors duration-200">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                        Excluir
-                                    </a>
+                                    <form method="POST" action="{% url 'excluir_roupa' roupa.id %}" class="inline">
+                                        {% csrf_token %}
+                                        <button type="submit" 
+                                                class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-medium rounded-lg transition-colors duration-200">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                            Excluir
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -703,10 +711,14 @@
             
             const state = productImageStates[productId];
             const container = document.getElementById(`productImage_${productId}`);
+            
+            if (!container) {
+                return;
+            }
+            
             const imgElement = container.querySelector('img');
             
             if (!imgElement) {
-                console.log('Imagem não encontrada para o produto:', productId);
                 return;
             }
             
@@ -716,7 +728,6 @@
                 const img2 = container.dataset.img2 || '';
                 const img3 = container.dataset.img3 || '';
                 state.images = [img1, img2, img3].filter(img => img && img.trim() !== '');
-                console.log('Imagens encontradas para produto', productId, ':', state.images);
             }
             
             // Calcular novo índice
@@ -734,10 +745,6 @@
                 setTimeout(() => {
                     imgElement.style.opacity = '1';
                 }, 150);
-                
-                console.log('Navegando para imagem', newIndex + 1, 'de', state.images.length);
-            } else {
-                console.log('Limite atingido. Índice atual:', state.currentIndex, 'Novo índice:', newIndex, 'Total:', state.images.length);
             }
         }
 
@@ -933,7 +940,9 @@
         }
 
         // Adicionar produto
-        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+        const addProductForm = document.getElementById('addProductForm');
+        if (addProductForm) {
+            addProductForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
             // Converter imagens para base64 de forma síncrona
@@ -968,6 +977,7 @@
                 }
             });
         });
+        }
         
         function createProduct(photos) {
             const product = {
@@ -1099,29 +1109,269 @@
         // Event listeners para navegação de imagens
         document.addEventListener('DOMContentLoaded', function() {
             // Navegação de produtos
-            document.querySelectorAll('.navigate-product-btn').forEach(button => {
-                button.addEventListener('click', function() {
+            const buttons = document.querySelectorAll('.navigate-product-btn');
+            
+            buttons.forEach((button) => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     const productId = this.dataset.productId;
                     const direction = parseInt(this.dataset.direction);
                     navigateProductImage(productId, direction);
                 });
             });
+            
 
             // Abertura do modal de imagens
-            document.querySelectorAll('.open-image-modal, .open-image-modal-btn').forEach(element => {
-                element.addEventListener('click', function() {
-                    const productId = this.dataset.productId;
-                    const img1 = this.dataset.img1;
-                    const img2 = this.dataset.img2;
-                    const img3 = this.dataset.img3;
-                    const productName = this.dataset.productName;
-                    openImageModal(productId, img1, img2, img3, productName);
+            const modalElements = document.querySelectorAll('.open-image-modal, .open-image-modal-btn');
+            if (modalElements.length > 0) {
+                modalElements.forEach(element => {
+                    element.addEventListener('click', function() {
+                        const productId = this.dataset.productId;
+                        const img1 = this.dataset.img1;
+                        const img2 = this.dataset.img2;
+                        const img3 = this.dataset.img3;
+                        const productName = this.dataset.productName;
+                        openImageModal(productId, img1, img2, img3, productName);
+                    });
                 });
-            });
+            }
         });
 
         // Inicializar
         updateStats();
+    </script>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="deleteConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+            <div class="flex items-center mb-4">
+                <div class="flex-shrink-0">
+                    <svg class="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 18.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-lg font-medium text-gray-900">Confirmar Exclusão</h3>
+                </div>
+            </div>
+            <div class="mb-6">
+                <p class="text-sm text-gray-500">
+                    ⚠️ <strong>ATENÇÃO!</strong> Esta ação não pode ser desfeita.
+                </p>
+                <p class="text-sm text-gray-700 mt-2">
+                    Tem certeza que deseja <strong>EXCLUIR permanentemente</strong> a roupa:
+                </p>
+                <p class="text-lg font-semibold text-red-600 mt-2" id="deleteProductName"></p>
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button type="button" id="cancelDeleteBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
+                    Cancelar
+                </button>
+                <button type="button" id="confirmDeleteBtn" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                    Sim, Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Edição -->
+    <div id="editConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+            <div class="flex items-center mb-4">
+                <div class="flex-shrink-0">
+                    <svg class="h-8 w-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-lg font-medium text-gray-900">Confirmar Edição</h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500">Deseja editar o produto <strong id="editProductName"></strong>?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button id="cancelEditBtn" type="button" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    Cancelar
+                </button>
+                <button id="confirmEditBtn" type="button" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Editar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Alteração de Status -->
+    <div id="statusConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+            <div class="flex items-center mb-4">
+                <div class="flex-shrink-0">
+                    <svg class="h-8 w-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 18.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-lg font-medium text-gray-900">Confirmar Alteração de Status</h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500">Deseja <span id="statusAction"></span> o produto <strong id="statusProductName"></strong>?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button id="cancelStatusBtn" type="button" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    Cancelar
+                </button>
+                <button id="confirmStatusBtn" type="button" class="px-4 py-2 text-sm font-medium text-white bg-yellow-600 border border-transparent rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modais de confirmação
+        let deleteForm = null;
+        let editForm = null;
+        let statusForm = null;
+        
+        // Interceptar cliques nos botões de exclusão
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('button[type="submit"]') && e.target.closest('form[action*="excluir-roupa"]')) {
+                e.preventDefault();
+                deleteForm = e.target.closest('form');
+                
+                // Extrair nome da roupa do contexto da página
+                const roupaCard = deleteForm.closest('.border');
+                const roupaNameElement = roupaCard.querySelector('h3, .text-lg, [data-product-name]');
+                const roupaName = roupaNameElement ? roupaNameElement.textContent.trim() : 'esta roupa';
+                
+                document.getElementById('deleteProductName').textContent = roupaName;
+                document.getElementById('deleteConfirmModal').classList.remove('hidden');
+            }
+        });
+
+        // Interceptar cliques nos botões de editar
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('edit-product-btn') || e.target.closest('.edit-product-btn')) {
+                e.preventDefault();
+                const button = e.target.classList.contains('edit-product-btn') ? e.target : e.target.closest('.edit-product-btn');
+                const productName = button.dataset.productName;
+                
+                document.getElementById('editProductName').textContent = productName;
+                editForm = button.dataset.editUrl;
+                document.getElementById('editConfirmModal').classList.remove('hidden');
+            }
+        });
+
+        // Interceptar cliques nos botões de status
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('status-product-btn') || e.target.closest('.status-product-btn')) {
+                e.preventDefault();
+                const button = e.target.classList.contains('status-product-btn') ? e.target : e.target.closest('.status-product-btn');
+                const productName = button.dataset.productName;
+                const statusAction = button.dataset.statusAction;
+                
+                document.getElementById('statusProductName').textContent = productName;
+                document.getElementById('statusAction').textContent = statusAction;
+                statusForm = button.closest('form');
+                document.getElementById('statusConfirmModal').classList.remove('hidden');
+            }
+        });
+        
+        // Botão cancelar
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        if (cancelDeleteBtn) {
+            cancelDeleteBtn.addEventListener('click', function() {
+                document.getElementById('deleteConfirmModal').classList.add('hidden');
+                deleteForm = null;
+            });
+        }
+        
+        // Botão confirmar
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', function() {
+                if (deleteForm) {
+                    deleteForm.submit();
+                }
+                document.getElementById('deleteConfirmModal').classList.add('hidden');
+                deleteForm = null;
+            });
+        }
+        
+        // Fechar modal clicando fora
+        const deleteConfirmModal = document.getElementById('deleteConfirmModal');
+        if (deleteConfirmModal) {
+            deleteConfirmModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                    deleteForm = null;
+                }
+            });
+        }
+
+        // Botões do modal de edição
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        if (cancelEditBtn) {
+            cancelEditBtn.addEventListener('click', function() {
+                document.getElementById('editConfirmModal').classList.add('hidden');
+                editForm = null;
+            });
+        }
+
+        const confirmEditBtn = document.getElementById('confirmEditBtn');
+        if (confirmEditBtn) {
+            confirmEditBtn.addEventListener('click', function() {
+                if (editForm) {
+                    window.location.href = editForm;
+                }
+                document.getElementById('editConfirmModal').classList.add('hidden');
+                editForm = null;
+            });
+        }
+
+        // Fechar modal de edição clicando fora
+        const editConfirmModal = document.getElementById('editConfirmModal');
+        if (editConfirmModal) {
+            editConfirmModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                    editForm = null;
+                }
+            });
+        }
+
+        // Botões do modal de status
+        const cancelStatusBtn = document.getElementById('cancelStatusBtn');
+        if (cancelStatusBtn) {
+            cancelStatusBtn.addEventListener('click', function() {
+                document.getElementById('statusConfirmModal').classList.add('hidden');
+                statusForm = null;
+            });
+        }
+
+        const confirmStatusBtn = document.getElementById('confirmStatusBtn');
+        if (confirmStatusBtn) {
+            confirmStatusBtn.addEventListener('click', function() {
+                if (statusForm) {
+                    statusForm.submit();
+                }
+                document.getElementById('statusConfirmModal').classList.add('hidden');
+                statusForm = null;
+            });
+        }
+
+        // Fechar modal de status clicando fora
+        const statusConfirmModal = document.getElementById('statusConfirmModal');
+        if (statusConfirmModal) {
+            statusConfirmModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                    statusForm = null;
+                }
+            });
+        }
     </script>
 </body>
 </html>
