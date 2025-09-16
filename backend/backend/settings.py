@@ -175,10 +175,13 @@ STATICFILES_FINDERS = [
 ]
 
 # Configurações de cache para arquivos estáticos
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Configurações para servir arquivos estáticos em produção
-if not DEBUG:
-    STATICFILES_DIRS = [
-        BASE_DIR / "static",
-    ]
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+# Configurações do WhiteNoise
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = True

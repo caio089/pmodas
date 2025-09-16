@@ -18,7 +18,7 @@ if DATABASE_URL:
 
 # Configurações de arquivos estáticos
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Garantir que STATICFILES_DIRS esteja configurado
 STATICFILES_DIRS = [
@@ -27,6 +27,11 @@ STATICFILES_DIRS = [
 
 # Configurações de mídia
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Configurações específicas do WhiteNoise para produção
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = False
+WHITENOISE_MANIFEST_STRICT = False
 
 # Logging para produção
 LOGGING = {

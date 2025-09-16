@@ -491,19 +491,22 @@
                                     <!-- Imagem Principal -->
                                     {% if roupa.imagem_principal %}
                                         <img id="img-{{ roupa.id }}-0" src="{{ roupa.imagem_principal }}" alt="{{ roupa.nome }}" 
-                                             class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 block">
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 block"
+                                             onerror="this.src='{% static 'pmodas.jpg' %}'; this.alt='Imagem não disponível';">
                                     {% endif %}
                                     
                                     <!-- Imagem 2 -->
                                     {% if roupa.imagem_2 %}
                                         <img id="img-{{ roupa.id }}-1" src="{{ roupa.imagem_2 }}" alt="{{ roupa.nome }} - Foto 2" 
-                                             class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 hidden">
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 hidden"
+                                             onerror="this.src='{% static 'pmodas.jpg' %}'; this.alt='Imagem não disponível';">
                                     {% endif %}
                                     
                                     <!-- Imagem 3 -->
                                     {% if roupa.imagem_3 %}
                                         <img id="img-{{ roupa.id }}-2" src="{{ roupa.imagem_3 }}" alt="{{ roupa.nome }} - Foto 3" 
-                                             class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 hidden">
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 hidden"
+                                             onerror="this.src='{% static 'pmodas.jpg' %}'; this.alt='Imagem não disponível';">
                                     {% endif %}
                                     
                                     <!-- Placeholder se não houver imagens -->
@@ -865,8 +868,44 @@
         </div>
     </div>
 
-    <script src="{% static 'pag1/css/js/scripts.js' %}?v=4.5"></script>
+    <script src="{% static 'pag1/js/scripts.js' %}?v=4.7"></script>
     
+    <!-- Script de debug e fallback para buyOnWhatsApp -->
+    <script>
+        // Verificar se a função foi carregada
+        console.log('Verificando se buyOnWhatsApp está definida:', typeof window.buyOnWhatsApp);
+        
+        // Se não estiver definida, definir uma versão de fallback
+        if (typeof window.buyOnWhatsApp === 'undefined') {
+            console.log('buyOnWhatsApp não está definida, criando fallback...');
+            
+            window.buyOnWhatsApp = function(productName, price, size, productImage) {
+                console.log('Executando buyOnWhatsApp fallback:', { productName, price, size, productImage });
+                
+                const message = `🛍️ *Olá! Vim do site da Paixão Modas* 🛍️
+
+👗 *Produto:* ${productName}
+📏 *Tamanho:* ${size}
+💰 *Valor:* R$ ${parseFloat(price).toFixed(2).replace('.', ',')}
+
+${productImage ? `📸 *Foto do produto:* ${productImage}` : ''}
+
+❓ *Você consegue confirmar este produto para mim?*
+✅ *Está disponível?*
+
+Obrigada! 😊`;
+                
+                const whatsappNumber = "5589994169377";
+                const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            };
+            
+            console.log('Fallback buyOnWhatsApp criado com sucesso');
+        }
+        
+        // Verificar novamente após definir o fallback
+        console.log('buyOnWhatsApp final:', typeof window.buyOnWhatsApp);
+    </script>
 
 </body>
 </html>
